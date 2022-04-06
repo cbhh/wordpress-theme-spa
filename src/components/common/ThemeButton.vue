@@ -1,0 +1,104 @@
+<script setup>
+import { computed, nextTick, onMounted, ref } from "vue";
+const props = defineProps({
+    /**
+     * 文字内容，必填
+     */
+    text: {
+        type: String,
+        required: true,
+    },
+    /**
+     * 是否需要背景
+     */
+    bg: {
+        type: Boolean,
+        required: false,
+    },
+    /**
+     * 是否为装饰按钮（无法点击交互）
+     */
+    deco: {
+        type: Boolean,
+        required: false,
+    },
+    /**
+     * 是否为圆形按钮
+     */
+    circle: {
+        type: Boolean,
+        required: false,
+    },
+});
+//此处模板引用参考：https://v3.cn.vuejs.org/guide/composition-api-template-refs.html#模板引用
+const buttonBody = ref(null),
+    buttonHeight = ref(0),
+    buttonHeightPx = computed(() => {
+        return buttonHeight.value ? buttonHeight.value - 4 + "px" : "auto";
+    });
+onMounted(() => {
+    //若设为圆形按钮，则在dom渲染完毕后根据按钮宽度计算按钮高度
+    if (props.circle) {
+        nextTick().then(() => {
+            /**
+             * @type HTMLDivElement
+             */
+            var el = buttonBody.value;
+            buttonHeight.value = el.getBoundingClientRect().width;
+        });
+    }
+});
+</script>
+
+<template>
+    <button
+        class="theme-button"
+        :class="{ 'has-bg': props.bg, circle: props.circle }"
+        :disabled="props.deco"
+    >
+        <div
+            class="button-body"
+            ref="buttonBody"
+            :style="{ height: buttonHeightPx }"
+        >
+            {{ props.text }}
+        </div>
+    </button>
+</template>
+
+<style lang="scss" scoped>
+.theme-button {
+    cursor: pointer;
+    border: 1px solid var(--theme-color);
+    box-sizing: content-box;
+    background: #fff;
+    transition: var(--theme-transition);
+    > .button-body {
+        color: var(--theme-color-dark);
+        margin: 3px;
+        padding: 2px 4px;
+        border-radius: inherit;
+        box-sizing: inherit;
+    }
+    &:hover {
+        box-shadow: var(--theme-shadow);
+    }
+    &.has-bg {
+        > .button-body {
+            background: url(../../assets/7933259ae51d7b49d5291e7a1759d6f2.jpeg)
+                repeat;
+            background-size: contain;
+        }
+    }
+    &.circle {
+        border-radius: 50%;
+        > .button-body {
+            display: flex;
+            align-items: center;
+        }
+    }
+    &[disabled] {
+        cursor: not-allowed;
+    }
+}
+</style>
