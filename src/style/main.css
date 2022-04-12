@@ -1,0 +1,55 @@
+html,
+body,
+div,
+a,
+ul,
+li,
+button,
+p,
+h1 {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    color: #333;
+    font-family: Avenir,
+        Helvetica,
+        Arial,
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+    transition: var(--theme-transition);
+}
+
+img {
+    display: block;
+}
+
+ul,
+li {
+    list-style-type: none;
+}
+
+ol>li {
+    list-style-type: inherit;
+}
+
+:root {
+    --theme-font-compatible: Avenir, Tahoma, "Kai", "KaiTi", sans-serif;
+    --theme-font: "Kai", "KaiTi", sans-serif;
+    --theme-color-dark: #666;
+    --theme-color-gray: #888;
+    --theme-color: #bd9f6f;
+    --theme-color-pale: #deb887;
+    --theme-color-dark-red: #96655c;
+    --theme-color-palest: #f7f1e5;
+    --theme-transition: all 0.2s linear;
+    --theme-shadow: 0 0 3px var(--theme-color);
+    --theme-shadow-dark: 0 0 8px var(--theme-color-gray);
+}

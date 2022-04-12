@@ -1,0 +1,220 @@
+@mixin flex-justify-center {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+@mixin flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+@mixin column-flex-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+@mixin vertical-middle {
+    display: inline-block;
+    vertical-align: middle;
+}
+@mixin hide-more-words {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+@mixin middle-separate-line($background, $color) {
+    > div {
+        @include vertical-middle;
+        &:first-child,
+        &:last-child {
+            height: 1px;
+            width: 35%;
+        }
+        &:first-child {
+            background: linear-gradient(to right, transparent, $background);
+        }
+        &:last-child {
+            background: linear-gradient(to right, $background, transparent);
+        }
+        &:nth-child(2) {
+            color: $color;
+            margin: 0 6px;
+        }
+    }
+}
+@mixin meddle-separate-line-pro($background, $color) {
+    @include flex-center;
+    > .l,
+    .r {
+        @include flex-center;
+        width: 40%;
+    }
+    > div:nth-child(2) {
+        color: $color;
+    }
+    .circle {
+        width: 8px;
+        height: 4px;
+        box-sizing: border-box;
+        border: 1px solid $background;
+        border-radius: 50%;
+    }
+    .dot {
+        width: 5px;
+        height: 3px;
+        background: $background;
+        border-radius: 50%;
+    }
+    .line {
+        height: 1px;
+        width: 90%;
+    }
+    .l > .line {
+        background: linear-gradient(to left, $background, transparent);
+    }
+    .r > .line {
+        background: linear-gradient(to right, $background, transparent);
+    }
+}
+@mixin block-corner-deco($color, $horizontal-gap, $vertical-gap) {
+    position: absolute;
+    color: $color;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    > span {
+        position: absolute;
+        box-sizing: border-box;
+        &.tl {
+            left: $horizontal-gap;
+            top: $vertical-gap;
+        }
+        &.tr {
+            right: $horizontal-gap;
+            top: $vertical-gap;
+        }
+        &.bl {
+            left: $horizontal-gap;
+            bottom: $vertical-gap;
+        }
+        &.br {
+            right: $horizontal-gap;
+            bottom: $vertical-gap;
+        }
+    }
+}
+@mixin block-edge-deco($color) {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    > span {
+        position: absolute;
+        box-sizing: border-box;
+        &.t {
+            width: calc(100% - 40px);
+            height: 15px;
+            left: 20px;
+            top: 5px;
+            border-top: 1px solid $color;
+            border-left: 1px solid $color;
+            border-right: 1px solid $color;
+        }
+        &.r {
+            width: 15px;
+            height: calc(100% - 40px);
+            top: 20px;
+            right: 5px;
+            border-top: 1px solid $color;
+            border-bottom: 1px solid $color;
+            border-right: 1px solid $color;
+        }
+        &.b {
+            width: calc(100% - 40px);
+            height: 15px;
+            left: 20px;
+            bottom: 5px;
+            border-bottom: 1px solid $color;
+            border-left: 1px solid $color;
+            border-right: 1px solid $color;
+        }
+        &.l {
+            width: 15px;
+            height: calc(100% - 40px);
+            top: 20px;
+            left: 5px;
+            border-top: 1px solid $color;
+            border-bottom: 1px solid $color;
+            border-left: 1px solid $color;
+        }
+    }
+    &.arc {
+        > .t {
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        > .r {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        > .b {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        > .l {
+            border-bottom-left-radius: 10px;
+            border-top-left-radius: 10px;
+        }
+    }
+}
+@mixin block-line-deco($color, $horizontal-gap, $vertical-gap, $weight) {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    > span {
+        position: absolute;
+        background: $color;
+        &.t {
+            width: calc(100% - 40px);
+            height: $weight;
+            left: 20px;
+            top: $vertical-gap;
+        }
+        &.r {
+            height: calc(100% - 40px);
+            width: $weight;
+            top: 20px;
+            right: $horizontal-gap;
+        }
+        &.b {
+            width: calc(100% - 40px);
+            height: $weight;
+            left: 20px;
+            bottom: $vertical-gap;
+        }
+        &.l {
+            height: calc(100% - 40px);
+            width: $weight;
+            top: 20px;
+            left: $horizontal-gap;
+        }
+    }
+}
+@mixin has-dual-same-pseudo-els($content, $zindex: unset) {
+    position: relative;
+    &::before,
+    &::after {
+        position: absolute;
+        content: $content;
+        z-index: $zindex;
+    }
+}
+@mixin has-single-pseudo-el($pos, $content) {
+    position: relative;
+    &::#{$pos} {
+        position: absolute;
+        content: $content;
+    }
+}

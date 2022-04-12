@@ -1,0 +1,28 @@
+$header-height: 80px;
+
+$sidebar-edge-gap: 15px;
+$sidebar-width: 0.19;
+//sidebar宽度，百分比，包含horizontal-margin
+$sidebar-width-percentage: percentage($sidebar-width);
+//sidebar网格宽度
+$sidebar-grid-width: percentage($sidebar-width);
+//sidebar最小宽度，像素，不含horizontal-margin
+$sidebar-min-width-px: 180px;
+//content网格宽度
+$content-grid-width: percentage(1 - $sidebar-width * 2);
+//content区域宽度，百分比，不含horizontal-margin
+$content-width-percentage: 100% - 2 * $sidebar-width-percentage;
+//horizontal-margin大小
+$site-content-horizontal-margin: 20px;
+//适用于@media规则，当width小于该值时需要调整布局尺寸，当前为1053px
+$body-min-width-px: ceil(
+    calc(
+        ($sidebar-min-width-px + $site-content-horizontal-margin) /
+            $sidebar-width
+    )
+);
+$media-small-size: 900px;
+$media-smaller-size: 768px;
+$media-smallest-size: 600px;
+$media-mini-size: 500px;
+$media-minier-size: 400px;

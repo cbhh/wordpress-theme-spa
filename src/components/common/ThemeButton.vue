@@ -2,13 +2,6 @@
 import { computed, nextTick, onMounted, ref } from "vue";
 const props = defineProps({
     /**
-     * 文字内容，必填
-     */
-    text: {
-        type: String,
-        required: true,
-    },
-    /**
      * 是否需要背景
      */
     bg: {
@@ -61,7 +54,7 @@ onMounted(() => {
             ref="buttonBody"
             :style="{ height: buttonHeightPx }"
         >
-            {{ props.text }}
+            <slot></slot>
         </div>
     </button>
 </template>
