@@ -1,4 +1,4 @@
-import wpAppConfig from "../../wp-app.config";
+import wpAppConfig from "@wpAppConfig";
 
 const credential = window.btoa(wpAppConfig.apiUser + ":" + wpAppConfig.appPwd),
     mode = wpAppConfig.apiBaseUrl.startsWith(wpAppConfig.siteUrl) ? "same-origin" : "cors";
