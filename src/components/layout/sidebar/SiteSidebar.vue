@@ -25,13 +25,13 @@ const sidebarClass = computed(() => {
         <div class="sidebar-body">
             <slot name="body"></slot>
         </div>
-        <div class="sidebar-bottom">
+        <div class="sidebar-bottom" v-if="props.position === 'left'">
             <slot name="bottom"></slot>
         </div>
     </aside>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@sty/mixin.scss";
 @import "@sty/variable.scss";
 .site-sidebar {
@@ -109,7 +109,8 @@ const sidebarClass = computed(() => {
             > div {
                 width: inherit;
                 height: inherit;
-                background: url(@ass/32b2e170b4a43a09cff6d695df5a6d8e-Medium.png) no-repeat center;
+                background: url(@ass/32b2e170b4a43a09cff6d695df5a6d8e-Medium.png)
+                    no-repeat center;
                 background-size: $sidebar-min-width-px;
                 border-radius: inherit;
                 background-color: rgba(255, 255, 255, 0.8);

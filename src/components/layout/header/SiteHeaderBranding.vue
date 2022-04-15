@@ -1,9 +1,18 @@
+<script setup>
+import { inject } from "vue";
+
+const siteMeta = inject("site-meta");
+</script>
+
 <template>
     <div class="site-branding">
         <div class="site-logo">
+            <img v-if="siteMeta.logo" :src="siteMeta.logo" />
         </div>
         <div class="site-title">
-            <h1><a href=""></a></h1>
+            <h1>
+                <a :href="siteMeta.home">{{ siteMeta.title }}</a>
+            </h1>
         </div>
     </div>
 </template>

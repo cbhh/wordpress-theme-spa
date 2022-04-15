@@ -3,17 +3,21 @@
  */
 export default {
     /**
-     * 本站点标题
+     * 本站点标题（显示在浏览器标签上的）
      */
     siteTitle: "小流星的梦",
     /**
-     * 本站点描述，用于搜索引擎优化
+     * 本站点描述（meta标签里的，用于搜索引擎优化）
      */
     siteDescription: "主题SPA版本开发测试",
     /**
-     * 站点图标URL
+     * 站点图标URL（显示在浏览器标签上的）
      */
     siteIcon: "http://localhost:2222/wp-content/uploads/2022/03/cropped-6b6fec0efd8b0e996cb4f1ae7842571b-Mini.png",
+    /**
+     * 站点logo URL
+     */
+    siteLogo: "http://localhost:2222/wp-content/uploads/2022/04/cropped-6b6fec0efd8b0e996cb4f1ae7842571b.png",
     /**
      * 本站点URL，非API URL
      */
