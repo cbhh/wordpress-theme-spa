@@ -78,7 +78,7 @@ onMounted(() => {
     }
     &.has-bg {
         > .button-body {
-            background: url(../../assets/7933259ae51d7b49d5291e7a1759d6f2.jpeg)
+            background: url(@ass/7933259ae51d7b49d5291e7a1759d6f2.jpeg)
                 repeat;
             background-size: contain;
         }
