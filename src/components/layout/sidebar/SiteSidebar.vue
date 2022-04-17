@@ -26,7 +26,9 @@ const sidebarClass = computed(() => {
             <slot name="body"></slot>
         </div>
         <div class="sidebar-bottom" v-if="props.position === 'left'">
-            <slot name="bottom"></slot>
+            <div class="deco-image">
+                <div></div>
+            </div>
         </div>
     </aside>
 </template>
