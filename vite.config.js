@@ -28,6 +28,12 @@ function generateSiteLink() {
 			`<link rel="icon" href="${wpAppConfig.siteIcon}" sizes="192x192">`, `<link rel="apple-touch-icon" href="${wpAppConfig.siteIcon}">`
 		);
 	}
+	//加载icon样式表
+	if (process.env.NODE_ENV === "production") {
+		linkArray.push("<link rel='stylesheet' href='https://cdn.staticfile.org/font-awesome/4.7.0/css/font-awesome.min.css'>");
+	} else {
+		linkArray.push("<link rel='stylesheet' href='/fontawesome/css/font-awesome.min.css'>");
+	}
 	return linkArray.join("");
 }
 /**

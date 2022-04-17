@@ -1,3 +1,5 @@
+@import "@sty/variable.scss";
+
 html,
 body,
 div,
@@ -52,4 +54,20 @@ ol>li {
     --theme-transition: all 0.2s linear;
     --theme-shadow: 0 0 3px var(--theme-color);
     --theme-shadow-dark: 0 0 8px var(--theme-color-gray);
+}
+
+@media (max-width: $body-min-width-px) {
+    :root {
+        font-size: 0.9rem;
+    }
+}
+@media (max-width: $media-small-size) {
+    :root {
+        font-size: 0.8rem;
+    }
+}
+@media (max-width: $media-minier-size) {
+    :root {
+        font-size: 0.7rem;
+    }
 }
