@@ -12,7 +12,7 @@ const siteMeta = inject("site-meta");
         </div>
         <div class="site-title">
             <h1>
-                <RouterLink :to="{ name: home }">{{
+                <RouterLink :to="{ name: 'home' }">{{
                     siteMeta.title
                 }}</RouterLink>
             </h1>

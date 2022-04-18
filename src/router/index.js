@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import home from "../views/home.vue"
 
 const routes = [
     {
@@ -10,8 +11,13 @@ const routes = [
         name: "tag"
     },
     {
+        path: "/post/:id",
+        name: "post"
+    },
+    {
         path: "/",
-        name: "home"
+        name: "home",
+        component: home
     }
 ]
 

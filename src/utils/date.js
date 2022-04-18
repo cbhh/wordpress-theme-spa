@@ -18,5 +18,5 @@ const monthMap = {
  */
 export function convertDateFormat(dateStr) {
     const dateSplits = dateStr.split("T")[0].split("-");
-    return monthMap[dateSplits[1]] + "月 " + dateSplits[2].startsWith("0") ? dateSplits[2].charAt(1) : dateSplits[2] + "，" + dateSplits[0];
+    return monthMap[dateSplits[1]] + "月 " + (dateSplits[2].startsWith("0") ? dateSplits[2].charAt(1) : dateSplits[2]) + "，" + dateSplits[0];
 }

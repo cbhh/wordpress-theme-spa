@@ -13,7 +13,7 @@ const props = defineProps({
 <template>
     <div class="breadcrumb-area">
         <div class="breadcrumb-nav">
-            <RouterLink class="to-home" :to="{ name: home }">
+            <RouterLink class="to-home" :to="{ name: 'home' }">
                 <i class="fa fa-home"></i>首页</RouterLink
             >
             <SitePrimaryBreadcrumbItem
