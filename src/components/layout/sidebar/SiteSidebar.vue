@@ -19,7 +19,7 @@ const sidebarClass = computed(() => {
 
 <template>
     <aside class="site-sidebar" :class="sidebarClass">
-        <ThemeButton deco bg>
+        <ThemeButton deco bg class="sidebar-top">
             <slot name="top"></slot>
         </ThemeButton>
         <div class="sidebar-body">
@@ -51,10 +51,14 @@ const sidebarClass = computed(() => {
         background-size: 20px;
         box-shadow: 0px 74px 3px #000;
     }
+    $top-width-except: $sidebar-edge-gap * 2 + 2px;
     > .sidebar-top {
         margin: $sidebar-edge-gap;
         font-family: var(--theme-font);
         line-height: 25px;
+        display: block;
+        width: calc(100% - $top-width-except);
+        font-size: inherit;
     }
     @media (max-width: $media-small-size) {
         margin: 25px;

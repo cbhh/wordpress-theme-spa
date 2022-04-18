@@ -93,11 +93,6 @@ const props = defineProps({
             right: 0;
         }
     }
-    &:not(.post-tag-cloud) {
-        a:hover {
-            color: var(--theme-color-gray);
-        }
-    }
     @media (max-width: 1100px) {
         .sidebar-item-title {
             font-size: 0.9rem;
@@ -135,45 +130,11 @@ const props = defineProps({
             @include hide-more-words;
         }
     }
-    &.post-tag-cloud {
-        a {
-            background: var(--theme-color-pale);
-            border-radius: 20px;
-            color: #fff;
-            padding: 8px;
-            transition: var(--theme-transition);
-            display: inline-block;
-            margin: 3px;
-            line-height: 1;
-            > span {
-                font-size: 0.6rem;
-            }
-            &:hover {
-                background: var(--theme-color);
-            }
-        }
-    }
     &.post-catalogues {
         .sidebar-item-body {
             text-align: left;
             padding-left: 5px;
             padding-right: 5px;
-        }
-        .cat-item {
-            font-size: 14px;
-            color: var(--theme-color-gray);
-            > a {
-                font-size: initial;
-            }
-            > .children {
-                margin-left: 1rem;
-            }
-        }
-        @media (max-width: 1100px) {
-            .cat-item,
-            .cat-item a {
-                font-size: 0.9rem;
-            }
         }
     }
     &.post-calendar {

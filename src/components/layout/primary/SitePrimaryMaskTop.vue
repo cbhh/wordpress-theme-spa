@@ -7,7 +7,6 @@
 </template>
 
 <style lang="scss" scoped>
-@import "@sty/variable.scss";
 .primary-mask-top {
     position: absolute;
     z-index: 1;
@@ -23,7 +22,7 @@
         left: var(--offset-x);
         width: calc(100% - 2 * var(--offset-x));
         height: 10px;
-        background: url($primary-mask-background) repeat-x;
+        background: url(@ass/db8a37c82fe95b87a34e92b554178108-m.png) repeat-x;
         transform: rotateX(33deg);
         background-size: 18% auto;
         box-shadow: 0 -1px 3px #000;

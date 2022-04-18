@@ -1,5 +1,5 @@
 <script setup>
-import { provide, readonly, onMounted } from "vue";
+import { provide, readonly, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import { RouterView } from "vue-router";
 import getTags from "./init/getTags";
@@ -9,6 +9,9 @@ import SiteHeader from "./components/layout/header/SiteHeader.vue";
 import HomeLanding from "./components/layout/landing/HomeLanding.vue";
 import SitePrimaryMaskTop from "./components/layout/primary/SitePrimaryMaskTop.vue";
 import SiteSidebar from "./components/layout/sidebar/SiteSidebar.vue";
+import SiteSidebarItem from "./components/layout/sidebar/SiteSidebarItem.vue";
+import Catalogue from "./components/layout/sidebar/modules/Catalogue.vue";
+import Tag from "./components/layout/sidebar/modules/Tag.vue";
 
 const { tagList, getTagList } = getTags();
 const { siteMeta, getSiteSettings } = getSettings();
@@ -28,6 +31,10 @@ onMounted(() => {
         store.commit("storeCategoryList", categoryList.value);
     });
 });
+
+const hierarchicCategoryList = computed(() => {
+    return store.state.categories.hierarchicCategoryList;
+});
 </script>
 
 <template>
@@ -39,8 +46,30 @@ onMounted(() => {
             <div class="site-content">
                 <RouterView></RouterView>
             </div>
-            <SiteSidebar position="left"></SiteSidebar>
-            <SiteSidebar position="right"></SiteSidebar>
+            <SiteSidebar position="left">
+                <template v-slot:top>侧边栏1</template>
+                <template v-slot:body>
+                    <SiteSidebarItem
+                        itemTitle="分类"
+                        funcClass="post-catalogues"
+                    >
+                        <Catalogue
+                            :catalogueList="hierarchicCategoryList"
+                        ></Catalogue>
+                    </SiteSidebarItem>
+                </template>
+            </SiteSidebar>
+            <SiteSidebar position="right">
+                <template v-slot:top>侧边栏2</template>
+                <template v-slot:body>
+                    <SiteSidebarItem
+                        itemTitle="标签云"
+                        funcClass="post-tag-cloud"
+                    >
+                        <Tag :tagList="tagList"></Tag>
+                    </SiteSidebarItem>
+                </template>
+            </SiteSidebar>
         </div>
     </div>
 </template>
