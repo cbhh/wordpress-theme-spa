@@ -8,6 +8,10 @@ const routes = [
     {
         path: "/tag/:tag",
         name: "tag"
+    },
+    {
+        path: "/",
+        name: "home"
     }
 ]
 

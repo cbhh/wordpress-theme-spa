@@ -8,6 +8,7 @@ import getCategories from "./init/getCategories";
 import SiteHeader from "./components/layout/header/SiteHeader.vue";
 import HomeLanding from "./components/layout/landing/HomeLanding.vue";
 import SitePrimaryMaskTop from "./components/layout/primary/SitePrimaryMaskTop.vue";
+import SitePrimaryBreadcrumb from "./components/layout/primary/SitePrimaryBreadcrumb.vue";
 import SiteSidebar from "./components/layout/sidebar/SiteSidebar.vue";
 import SiteSidebarItem from "./components/layout/sidebar/SiteSidebarItem.vue";
 import Category from "./components/layout/sidebar/modules/Category.vue";
@@ -35,6 +36,9 @@ onMounted(() => {
 const hierarchicCategoryList = computed(() => {
     return store.state.categories.hierarchicCategoryList;
 });
+const breadcrumbNavList = computed(() => {
+    return store.state.breadcrumb.categoryNavList;
+});
 </script>
 
 <template>
@@ -44,7 +48,12 @@ const hierarchicCategoryList = computed(() => {
         <SitePrimaryMaskTop></SitePrimaryMaskTop>
         <div class="primary-content">
             <div class="site-content">
-                <RouterView></RouterView>
+                <SitePrimaryBreadcrumb
+                    :categoryList="breadcrumbNavList"
+                ></SitePrimaryBreadcrumb>
+                <main>
+                    <RouterView></RouterView>
+                </main>
             </div>
             <SiteSidebar position="left">
                 <template v-slot:top>侧边栏1</template>
@@ -150,6 +159,42 @@ const hierarchicCategoryList = computed(() => {
     > .site-sidebar-right {
         grid-column: 3 / 4;
         grid-row-start: 1;
+    }
+}
+.site-content {
+    margin: 0 $site-content-horizontal-margin 125px
+        $site-content-horizontal-margin;
+    display: flex;
+    flex-direction: column;
+    @media (max-width: $media-small-size) {
+        margin: 0;
+        > main {
+            border-left: 2px solid var(--theme-color);
+            border-bottom: 2px solid var(--theme-color);
+            border-right: 2px solid var(--theme-color);
+            box-shadow: var(--theme-shadow);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+    }
+
+    > main {
+        flex: 1;
+        padding: 25px 25px 35px 25px;
+        margin: 0 25px;
+        background: url(@ass/47ff0c21443ce5f94a6bee19199d0fbe-crop.jpeg) repeat;
+        background-size: 20%;
+        @media (max-width: $media-smallest-size) {
+            padding: 15px;
+            background-size: 25%;
+        }
+        @media (max-width: $media-mini-size) {
+            padding: 10px;
+            margin: 0 10px;
+        }
+        @media (max-width: $media-minier-size) {
+            background-size: 30%;
+        }
     }
 }
 </style>

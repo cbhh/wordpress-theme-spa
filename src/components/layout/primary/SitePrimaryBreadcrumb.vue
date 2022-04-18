@@ -1,18 +1,34 @@
 <script setup>
-import { inject } from "vue";
+import { RouterLink } from "vue-router";
+import SitePrimaryBreadcrumbItem from "./SitePrimaryBreadcrumbItem.vue";
 
-const siteMeta = inject("site-meta");
+const props = defineProps({
+    categoryList: {
+        type: Array,
+        required: false,
+    },
+});
 </script>
 
 <template>
     <div class="breadcrumb-area">
         <div class="breadcrumb-nav">
-            <a :href="siteMeta.home"><i class="fa fa-home"></i>首页</a>
+            <RouterLink class="to-home" :to="{ name: home }">
+                <i class="fa fa-home"></i>首页</RouterLink
+            >
+            <SitePrimaryBreadcrumbItem
+                v-for="item in props.categoryList"
+                :key="item.id"
+                :slug="item.slug"
+                :id="item.id"
+                :name="item.name"
+            ></SitePrimaryBreadcrumbItem>
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
+@import "@sty/variable.scss";
 .breadcrumb-area {
     position: relative;
     background: url(@ass/db8a37c82fe95b87a34e92b554178108-m.png) repeat;
@@ -31,24 +47,17 @@ const siteMeta = inject("site-meta");
         box-shadow: 0 0 5px #333;
         background: #fff;
         font-family: var(--theme-font-compatible);
-        > span {
-            color: var(--theme-color-gray);
-            margin: 0 5px;
-            &:last-child {
-                display: none;
-            }
-        }
-        > a:first-child {
+        > .to-home {
             > i {
                 margin-right: 3px;
                 color: var(--theme-color);
                 transition: var(--theme-transition);
             }
-        }
-        a:hover {
-            color: var(--theme-color-gray);
-            > i {
+            &:hover {
                 color: var(--theme-color-gray);
+                > i {
+                    color: var(--theme-color-gray);
+                }
             }
         }
     }

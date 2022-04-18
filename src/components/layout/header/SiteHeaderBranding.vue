@@ -1,5 +1,6 @@
 <script setup>
 import { inject } from "vue";
+import { RouterLink } from "vue-router";
 
 const siteMeta = inject("site-meta");
 </script>
@@ -11,7 +12,9 @@ const siteMeta = inject("site-meta");
         </div>
         <div class="site-title">
             <h1>
-                <a :href="siteMeta.home">{{ siteMeta.title }}</a>
+                <RouterLink :to="{ name: home }">{{
+                    siteMeta.title
+                }}</RouterLink>
             </h1>
         </div>
     </div>
