@@ -51,5 +51,28 @@ export default {
     /**
      * 隐藏无内容的分类，默认true，即隐藏
      */
-    hideEmptyCategory: true
+    hideEmptyCategory: true,
+    /**
+     * 隐藏无内容的标签，默认true，即隐藏
+     */
+    hideEmptyTag: true,
+    /**
+     * 标签文字尺寸（单位rem，网页文字默认1rem），不填写即所有标签文字都一样大小
+     * 
+     * 最小值不应小于0.4，最大值不应大于2
+     */
+    tagFontSize: {
+        /**
+         * 拥有项目最少的标签，填写0即不设置尺寸
+         * 
+         * 该值不应小于0.4
+         */
+        min: 0.6,
+        /**
+         * 拥有项目最多的标签，填写0即不设置尺寸
+         * 
+         * 该值不应大于2
+         */
+        max: 1.2
+    }
 }

@@ -1,6 +1,7 @@
 import appFetch from "../utils/fetch";
+import wpAppConfig from "@wpAppConfig";
 
-const tagEndpoint = "tags?_fields=id,count,name,slug";
+const tagEndpoint = `tags?_fields=id,count,name,slug&hide_empty=${wpAppConfig.hideEmptyTag}`;
 
 /**
  * 获取tag列表
