@@ -36,6 +36,7 @@ const sidebarClass = computed(() => {
 <style lang="scss" scoped>
 @import "@sty/mixin.scss";
 @import "@sty/variable.scss";
+@import "@sty/keyframe.scss";
 .site-sidebar {
     min-width: $sidebar-min-width-px;
     background-image: url(@ass/47ff0c21443ce5f94a6bee19199d0fbe-crop.jpeg);

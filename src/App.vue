@@ -7,6 +7,7 @@ import getSettings from "./init/getSettings";
 import getCategories from "./init/getCategories";
 import SiteHeader from "./components/layout/header/SiteHeader.vue";
 import HomeLanding from "./components/layout/landing/HomeLanding.vue";
+import SiteFooter from "./components/layout/footer/SiteFooter.vue";
 import SitePrimaryMaskTop from "./components/layout/primary/SitePrimaryMaskTop.vue";
 import SitePrimaryBreadcrumb from "./components/layout/primary/SitePrimaryBreadcrumb.vue";
 import SiteSidebar from "./components/layout/sidebar/SiteSidebar.vue";
@@ -81,6 +82,7 @@ const breadcrumbNavList = computed(() => {
             </SiteSidebar>
         </div>
     </div>
+    <SiteFooter></SiteFooter>
 </template>
 
 <style lang="scss">
