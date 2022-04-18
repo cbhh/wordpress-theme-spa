@@ -1,6 +1,6 @@
 import appFetch from "../utils/fetch";
 
-const categoryEndpoint = "categories?_fields=id,count,name,slug,parent";
+const categoryEndpoint = "categories?_fields=id,count,name,slug,parent&per_page=100";
 
 /**
  * 获取category列表，

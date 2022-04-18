@@ -26,12 +26,12 @@ const props = defineProps({
 
 <template>
     <li class="cat-item">
-        <RouterLink :to="{ name: 'catalogue', params: { cat: props.slug } }">
+        <RouterLink :to="{ name: 'category', params: { cat: props.slug } }">
             {{ props.name }}</RouterLink
         >
         ({{ props.count }})
         <ul class="children" v-if="props.children">
-            <CatalogueItem
+            <CategoryItem
                 v-for="subItem in props.children"
                 :key="subItem.id"
                 :slug="subItem.slug"
@@ -39,7 +39,7 @@ const props = defineProps({
                 :id="subItem.id"
                 :name="subItem.name"
                 :children="subItem.children"
-            ></CatalogueItem>
+            ></CategoryItem>
         </ul>
     </li>
 </template>

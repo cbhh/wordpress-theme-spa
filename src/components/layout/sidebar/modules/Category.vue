@@ -1,7 +1,7 @@
 <script setup>
-import CatalogueItem from "./CatalogueItem.vue";
+import CategoryItem from './CategoryItem.vue';
 const props = defineProps({
-    catalogueList: {
+    categoryList: {
         type: Array,
         required: true,
     },
@@ -9,8 +9,8 @@ const props = defineProps({
 </script>
 
 <template>
-    <CatalogueItem
-        v-for="item in props.catalogueList"
+    <CategoryItem
+        v-for="item in props.categoryList"
         :key="item.id"
         :slug="item.slug"
         :count="item.count"
@@ -18,5 +18,5 @@ const props = defineProps({
         :name="item.name"
         :children="item.children"
     >
-    </CatalogueItem>
+    </CategoryItem>
 </template>

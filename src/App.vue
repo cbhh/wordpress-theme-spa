@@ -10,7 +10,7 @@ import HomeLanding from "./components/layout/landing/HomeLanding.vue";
 import SitePrimaryMaskTop from "./components/layout/primary/SitePrimaryMaskTop.vue";
 import SiteSidebar from "./components/layout/sidebar/SiteSidebar.vue";
 import SiteSidebarItem from "./components/layout/sidebar/SiteSidebarItem.vue";
-import Catalogue from "./components/layout/sidebar/modules/Catalogue.vue";
+import Category from "./components/layout/sidebar/modules/Category.vue";
 import Tag from "./components/layout/sidebar/modules/Tag.vue";
 
 const { tagList, getTagList } = getTags();
@@ -51,11 +51,11 @@ const hierarchicCategoryList = computed(() => {
                 <template v-slot:body>
                     <SiteSidebarItem
                         itemTitle="分类"
-                        funcClass="post-catalogues"
+                        funcClass="post-categories"
                     >
-                        <Catalogue
-                            :catalogueList="hierarchicCategoryList"
-                        ></Catalogue>
+                        <Category
+                            :categoryList="hierarchicCategoryList"
+                        ></Category>
                     </SiteSidebarItem>
                 </template>
             </SiteSidebar>

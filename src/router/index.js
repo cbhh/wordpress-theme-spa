@@ -2,8 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
     {
-        path: "/catalogue/:cat",
-        name: "catalogue"
+        path: "/category/:cat",
+        name: "category"
     },
     {
         path: "/tag/:tag",

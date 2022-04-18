@@ -11,7 +11,7 @@ const props = defineProps({
             return [
                 "recent-posts",
                 "post-tag-cloud",
-                "post-catalogues",
+                "post-categories",
                 "post-calendar",
                 "monthly-archives",
             ].includes(cl);
@@ -130,7 +130,7 @@ const props = defineProps({
             @include hide-more-words;
         }
     }
-    &.post-catalogues {
+    &.post-categories {
         .sidebar-item-body {
             text-align: left;
             padding-left: 5px;
