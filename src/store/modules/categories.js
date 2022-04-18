@@ -80,6 +80,18 @@ const mutations = {
                 Array.prototype.push.apply(specificChild.children, st.children);
             }
         });
+        //TODO:需要统计各节点的后代节点数量，wordpress api返回的count仅仅包含自身的数量，不包含子孙节点的数量
+        const gather = function (node) {
+            var total = node.count;
+            node.children.forEach(function (child) {
+                gather(child);
+                total += child.count;
+            });
+            node.count = total;
+        }
+        for (var item of hierarchic) {
+            gather(item);
+        }
         state.hierarchicCategoryList = hierarchic;
     }
 }

@@ -47,5 +47,9 @@ export default {
      * postname:文章名称，
      * postid:文章ID
      */
-    urlPattern: "y-m-postname"
+    urlPattern: "y-m-postname",
+    /**
+     * 隐藏无内容的分类，默认true，即隐藏
+     */
+    hideEmptyCategory: true
 }
