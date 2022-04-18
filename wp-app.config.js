@@ -74,5 +74,39 @@ export default {
          * 该值不应大于2
          */
         max: 1.2
+    },
+    /**
+     * 背景图片设置
+     */
+    background: {
+        /**
+         * 图片URL
+         */
+        image: "http://localhost:2222/wp-content/uploads/2022/04/e7fe136e453e68f2e25993593199be10.jpg",
+        /**
+         * 图片位置
+         */
+        position: {
+            /**
+             * 水平方向，可选值：left，center，right
+             */
+            horizontal: "center",
+            /**
+             * 垂直方向，可选值：top，center，bottom，
+             */
+            vertical: "center"
+        },
+        /**
+         * 图片尺寸，可选值：unset（原始）、contain（适合屏幕）、cover（填满屏幕）
+         */
+        size: "cover",
+        /**
+         * 重复背景图片，默认false，即不重复
+         */
+        repeat: false,
+        /**
+         * 图片随页面滚动，默认false，即不滚动
+         */
+        scroll: false
     }
 }
