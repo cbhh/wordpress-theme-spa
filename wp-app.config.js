@@ -36,18 +36,11 @@ export default {
      */
     appPwd: "gxYX wxyy aSQJ tAEI 5NyB AarZ",
     /**
-     * 链接结构，参考wordpress设置中“固定链接”
+     * 是否启用对wordpress古腾堡编辑器（区块编辑器）样式支持，默认true，即启用
      * 
-     * 默认为y-m-postname
-     * 
-     * 供选择的用来组合URL的子项：
-     * y:年，
-     * m:月，
-     * d:日，
-     * postname:文章名称，
-     * postid:文章ID
+     * 若在wordpress后台写文章时采用的是旧版富文本编辑器，则将该项置为false
      */
-    urlPattern: "y-m-postname",
+    enableGutenbergEditorStyle: true,
     /**
      * 隐藏无内容的分类，默认true，即隐藏
      */
