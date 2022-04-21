@@ -27,8 +27,14 @@ onMounted(() => {
          * @param {PostDetail} data
          */
         function (data) {
-        contentHtml.value = data.content.rendered;
-    });
+            contentHtml.value = data.content.rendered;
+            store.commit("setPostMeta", {
+                title: data.title.rendered,
+                time: data.date,
+                bg: data.featured_image_url || "",
+            });
+        }
+    );
 });
 </script>
 

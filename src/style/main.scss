@@ -16,10 +16,7 @@ h1 {
 body {
     color: #333;
     text-align: center;
-    font-family: Avenir,
-        Helvetica,
-        Arial,
-        sans-serif;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -39,8 +36,12 @@ li {
     list-style-type: none;
 }
 
-ol>li {
+ol > li {
     list-style-type: inherit;
+}
+
+h1 {
+    font-weight: 400;
 }
 
 :root {

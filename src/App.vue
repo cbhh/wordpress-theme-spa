@@ -1,12 +1,13 @@
 <script setup>
-import { provide, readonly, onMounted, computed } from "vue";
+import { provide, readonly, onMounted, computed, ref, watch } from "vue";
 import { useStore } from "vuex";
-import { RouterView } from "vue-router";
+import { RouterView, useRoute } from "vue-router";
 import getTags from "./init/getTags";
 import getSettings from "./init/getSettings";
 import getCategories from "./init/getCategories";
 import SiteHeader from "./components/layout/header/SiteHeader.vue";
 import HomeLanding from "./components/layout/landing/HomeLanding.vue";
+import PostArchiveLanding from "./components/layout/landing/PostArchiveLanding.vue";
 import SiteFooter from "./components/layout/footer/SiteFooter.vue";
 import SitePrimaryMaskTop from "./components/layout/primary/SitePrimaryMaskTop.vue";
 import SitePrimaryBreadcrumb from "./components/layout/primary/SitePrimaryBreadcrumb.vue";
@@ -19,8 +20,35 @@ const { tagList, getTagList } = getTags();
 const { siteMeta, getSiteSettings } = getSettings();
 const { categoryList, getCategoryList } = getCategories();
 const store = useStore();
+const route = useRoute();
+
+const landingMap = {
+    home: HomeLanding,
+    post: PostArchiveLanding,
+    archive: PostArchiveLanding,
+};
+
+const routeName = ref("");
+
+const currentLandingComponent = computed(() => landingMap[routeName.value]);
+
+const hierarchicCategoryList = computed(
+    () => store.state.categories.hierarchicCategoryList
+);
+const breadcrumbNavList = computed(
+    () => store.state.breadcrumb.categoryNavList
+);
 
 provide("site-meta", readonly(siteMeta));
+
+//侦听一个getter
+//https://v3.cn.vuejs.org/guide/reactivity-computed-watchers.html#watch
+watch(
+    () => route.name,
+    (n, o) => {
+        routeName.value = n;
+    }
+);
 
 onMounted(() => {
     getTagList().then(() => {
@@ -33,18 +61,16 @@ onMounted(() => {
         store.commit("storeCategoryList", categoryList.value);
     });
 });
-
-const hierarchicCategoryList = computed(() => {
-    return store.state.categories.hierarchicCategoryList;
-});
-const breadcrumbNavList = computed(() => {
-    return store.state.breadcrumb.categoryNavList;
-});
 </script>
 
 <template>
     <SiteHeader></SiteHeader>
-    <HomeLanding></HomeLanding>
+    <KeepAlive>
+        <component
+            :is="currentLandingComponent"
+            :landingType="routeName"
+        ></component
+    ></KeepAlive>
     <div id="primary">
         <SitePrimaryMaskTop></SitePrimaryMaskTop>
         <div class="primary-content">
