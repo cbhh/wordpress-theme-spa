@@ -1,8 +1,9 @@
 <script setup>
 import { ref, getCurrentInstance, onMounted, computed } from "vue";
 import { useStore } from "vuex";
-import { RouterLink, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 import { PostDetail } from "../apis/dataType";
+import PostTagList from "../components/layout/content/PostTagList.vue";
 
 const $apis = getCurrentInstance().appContext.config.globalProperties.$apis;
 const store = useStore();
@@ -33,6 +34,14 @@ onMounted(() => {
                 time: data.date,
                 bg: data.featured_image_url || "",
             });
+            tagList.value = data.tags.map(function (t) {
+                var tagMeta = allTags.value.find((v) => v.id === t);
+                return {
+                    id: t,
+                    slug: tagMeta.slug,
+                    name: tagMeta.name,
+                };
+            });
         }
     );
 });
@@ -43,20 +52,7 @@ onMounted(() => {
         <div class="entry-content" v-html="contentHtml"></div>
         <footer class="entry-footer">
             <div class="extra-meta">
-                <div class="post-tag">
-                    <i class="fa fa-tags"></i>
-                </div>
-                <div class="post-author">
-                    <div class="author-avatar" title="作者：">
-                        <a href=""></a>
-                    </div>
-                    <div class="author-profile">
-                        <div aria-label="文章作者">
-                            <span>作者：</span><a href=""></a>
-                        </div>
-                        <div></div>
-                    </div>
-                </div>
+                <PostTagList :tagList="tagList"></PostTagList>
             </div>
             <div class="block-corner-deco">
                 <span class="tl">❊</span>
@@ -122,53 +118,6 @@ onMounted(() => {
             margin: 10px 12px;
             position: relative;
             z-index: 1;
-            ul,
-            .post-tag,
-            .post-author {
-                display: flex;
-                align-items: center;
-            }
-            a:hover {
-                color: var(--theme-color-gray);
-            }
-            .post-tag {
-                margin-bottom: 10px;
-                > i {
-                    color: var(--theme-color);
-                    margin-right: 10px;
-                }
-                span {
-                    color: var(--theme-color-gray);
-                    margin: 0 5px;
-                }
-            }
-            .author-avatar {
-                margin-right: 10px;
-                border-radius: 50%;
-                transition: var(--theme-transition);
-                a,
-                img {
-                    border-radius: inherit;
-                }
-                &:hover {
-                    box-shadow: 0 0 3px #aaa;
-                }
-            }
-            .author-profile > div:last-child {
-                font-family: var(--theme-font-compatible);
-            }
-        }
-        @media (max-width: $media-smallest-size) {
-            .author-avatar img {
-                width: 72px;
-                height: 72px;
-            }
-        }
-        @media (max-width: $media-minier-size) {
-            .author-avatar img {
-                width: 48px;
-                height: 48px;
-            }
         }
     }
     @media (max-width: $media-small-size) {
