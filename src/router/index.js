@@ -11,6 +11,10 @@ const routes = [
         name: "tag"
     },
     {
+        path: "/author/:id",
+        name: "author"
+    },
+    {
         path: "/post/:id",
         name: "post",
         component: () => import("../views/post.vue")
