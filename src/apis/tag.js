@@ -5,6 +5,5 @@ const tagEndpoint = `tags?_fields=id,count,name,slug&hide_empty=${wpAppConfig.hi
 
 /**
  * 获取tag列表
- * 返回数据格式：[{"id":18,"count":1,"name":"php","slug":"php"}]
  */
 export default appFetch(tagEndpoint);

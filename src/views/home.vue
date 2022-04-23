@@ -2,6 +2,7 @@
 import { ref, getCurrentInstance, onMounted, computed } from "vue";
 import { useStore } from "vuex";
 import PostList from "../components/layout/content/PostList.vue";
+import { ApiList } from "../apis/dataType";
 
 const $apis = getCurrentInstance().appContext.config.globalProperties.$apis;
 const store = useStore();
@@ -15,13 +16,13 @@ const allTags = computed(() => {
 });
 
 onMounted(() => {
-    $apis.post().then(function (data) {
-        /**
-         * @type Array<{"id":Number,"date":String,"modified":String,"slug":String,"title":{"rendered":String},"excerpt":{"rendered":String,"protected":Boolean},"author":Number,"featured_media":Number,"categories":Array<Number>,"tags":Array<Number>,"featured_image_url":String|Boolean}>
-         */
-        const posts = data,
-            generateList = [];
-        posts.forEach(function (item) {
+    /**
+     * @type ApiList
+     */
+    var $api = $apis;
+    $api.post().then(function (data) {
+        var generateList = [];
+        data.forEach(function (item) {
             var meta = {
                     id: item.id,
                     thumbnail: item.featured_image_url || "",

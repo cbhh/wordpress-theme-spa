@@ -4,6 +4,7 @@ import setting from "./setting";
 import post from "./post";
 import postDetail from "./postDetail";
 import userDetail from "./userDetail";
+import postCategory from "./postCategory";
 
 export default {
     tag,
@@ -11,6 +12,7 @@ export default {
     setting,
     post,
     postDetail,
-    userDetail
+    userDetail,
+    postCategory
 }
 

@@ -9,7 +9,7 @@ import {
 } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
-import { PostDetail, UserDetail, ApiList } from "../apis/dataType";
+import { ApiList } from "../apis/dataType";
 import PostTagList from "../components/layout/content/PostTagList.vue";
 import PostAuthor from "../components/layout/content/PostAuthor.vue";
 
@@ -42,59 +42,45 @@ onMounted(() => {
      */
     var $api = $apis;
     $api.postDetail(postId)
-        .then(
-            /**
-             * @param {PostDetail} data
-             */
-            function (data) {
-                contentHtml.value = data.content.rendered;
-                store.commit("setPostMeta", {
-                    title: data.title.rendered,
-                    time: data.date,
-                    bg: data.featured_image_url || "",
-                });
-                tagList.value = data.tags.map(function (t) {
-                    var tagMeta = allTags.value.find((v) => v.id === t);
-                    return {
-                        id: t,
-                        slug: tagMeta.slug,
-                        name: tagMeta.name,
-                    };
-                });
-                //如果有多个分类，则面包屑导航中只显示最后一个分类的祖先列表
-                var lastCatId = data.categories[data.categories.length - 1],
-                    lastCat = allCategories.value.find(
-                        (c) => c.id === lastCatId
-                    );
-                breadcrumbCategoryList.value.unshift(lastCat);
-                //递归查找父级分类，直到父级分类为0，即达到顶层分类
-                const getParent = function (cat) {
-                    var pid = cat["parent"];
-                    if (pid > 0) {
-                        var pnode = allCategories.value.find(
-                            (c) => c.id === pid
-                        );
-                        breadcrumbCategoryList.value.unshift(pnode);
-                        getParent(pnode);
-                    }
+        .then(function (data) {
+            contentHtml.value = data.content.rendered;
+            store.commit("setPostMeta", {
+                title: data.title.rendered,
+                time: data.date,
+                bg: data.featured_image_url || "",
+            });
+            tagList.value = data.tags.map(function (t) {
+                var tagMeta = allTags.value.find((v) => v.id === t);
+                return {
+                    id: t,
+                    slug: tagMeta.slug,
+                    name: tagMeta.name,
                 };
-                getParent(lastCat);
-                store.commit("setBreadcrumbNav", breadcrumbCategoryList.value);
-                return data.author;
-            }
-        )
-        .then(function (author) {
-            $api.userDetail(author).then(
-                /**
-                 * @param {UserDetail} data
-                 */
-                function (data) {
-                    authorMeta.avatar = data.avatar_urls["96"];
-                    authorMeta.description = data.description;
-                    authorMeta.id = data.id;
-                    authorMeta.name = data.name;
+            });
+            //如果有多个分类，则面包屑导航中只显示最后一个分类的祖先列表
+            var lastCatId = data.categories[data.categories.length - 1],
+                lastCat = allCategories.value.find((c) => c.id === lastCatId);
+            breadcrumbCategoryList.value.unshift(lastCat);
+            //递归查找父级分类，直到父级分类为0，即达到顶层分类
+            const getParent = function (cat) {
+                var pid = cat["parent"];
+                if (pid > 0) {
+                    var pnode = allCategories.value.find((c) => c.id === pid);
+                    breadcrumbCategoryList.value.unshift(pnode);
+                    getParent(pnode);
                 }
-            );
+            };
+            getParent(lastCat);
+            store.commit("setBreadcrumbNav", breadcrumbCategoryList.value);
+            return data.author;
+        })
+        .then(function (author) {
+            $api.userDetail(author).then(function (data) {
+                authorMeta.avatar = data.avatar_urls["96"];
+                authorMeta.description = data.description;
+                authorMeta.id = data.id;
+                authorMeta.name = data.name;
+            });
         });
 });
 onUnmounted(() => {
