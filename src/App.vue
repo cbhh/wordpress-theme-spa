@@ -46,7 +46,11 @@ provide("site-meta", readonly(siteMeta));
 watch(
     () => route.name,
     (n, o) => {
-        routeName.value = n;
+        if (["author", "category", "tag"].includes(n)) {
+            routeName.value = "archive";
+        } else {
+            routeName.value = n;
+        }
     }
 );
 

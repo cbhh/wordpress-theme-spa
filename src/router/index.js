@@ -4,7 +4,8 @@ import home from "../views/home.vue"
 const routes = [
     {
         path: "/category/:cat",
-        name: "category"
+        name: "category",
+        component: () => import("../views/category.vue")
     },
     {
         path: "/tag/:tag",
