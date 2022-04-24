@@ -23,9 +23,15 @@ export default {
      */
     siteUrl: "http://localhost:3000",
     /**
-     * API基准URL
+     * API基准URL（协议+主机名）
      */
-    apiBaseUrl: "http://localhost:2222/wp-json/wp/v2/",
+    apiBaseUrl: "http://localhost:2222",
+    /**
+     * API端是否启用易于识别的URL
+     * 
+     * wordpress设置-固定链接中，如果启用了朴素型URL，则将该项置为false
+     */
+    apiBackendPrettyUrlEnabled: false,
     /**
      * 访问wordpress rest api的用户名，
      * 与应用程序密码同在wordpress个人资料里设置

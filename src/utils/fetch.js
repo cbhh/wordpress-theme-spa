@@ -3,6 +3,7 @@ import wpAppConfig from "@wpAppConfig";
 const credential = window.btoa(wpAppConfig.apiUser + ":" + wpAppConfig.appPwd),
     mode = wpAppConfig.apiBaseUrl.startsWith(wpAppConfig.siteUrl) ? "same-origin" : "cors";
 const paramSearchReg = /{\w+}/g;
+const restApiUrl = wpAppConfig.apiBaseUrl + (wpAppConfig.apiBackendPrettyUrlEnabled ? "/wp-json" : "/?rest_route=") + "/wp/v2/";
 /**
  * 获取远程资源
  * @param {String} endpoint
@@ -32,7 +33,7 @@ export default function (endpoint) {
             }
         }
         //TODO:启用loading动画
-        const response = await fetch(wpAppConfig.apiBaseUrl + (reGenerateEndPoint ? ep : endpoint), {
+        const response = await fetch(restApiUrl + (reGenerateEndPoint ? ep : endpoint), {
             method: "GET",
             mode: mode,
             headers: {
