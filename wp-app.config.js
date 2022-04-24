@@ -31,7 +31,7 @@ export default {
      * 
      * wordpress设置-固定链接中，如果启用了朴素型URL，则将该项置为false
      */
-    apiBackendPrettyUrlEnabled: false,
+    apiBackendPrettyUrlEnabled: true,
     /**
      * 访问wordpress rest api的用户名，
      * 与应用程序密码同在wordpress个人资料里设置
