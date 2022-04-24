@@ -18,15 +18,15 @@ function UserDetail() { }
 /**
  * PostListItem数据结构
  */
-function PostListItem() { }
+export function PostListItem() { }
 /**
  * TagListItem数据结构
  */
-function TagListItem() { }
+export function TagListItem() { }
 /**
  * CategoryListItem数据结构
  */
-function CategoryListItem() { }
+export function CategoryListItem() { }
 
 ApiList.prototype = {
     /**
