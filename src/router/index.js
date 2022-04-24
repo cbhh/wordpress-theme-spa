@@ -9,7 +9,8 @@ const routes = [
     },
     {
         path: "/tag/:tag",
-        name: "tag"
+        name: "tag",
+        component: () => import("../views/tag.vue")
     },
     {
         path: "/author/:id",

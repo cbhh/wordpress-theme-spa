@@ -50,6 +50,13 @@ ApiList.prototype = {
      */
     postCategory: function (cats) { },
     /**
+     * 获取指定标签的文章列表
+     * @param  {Number} tag 传递给endpoint的参数：tag ID
+     * @returns {Promise<Array<PostListItem>>} 
+     * 发送GET请求的promise对象，该请求返回PostListItem对象数组
+     */
+    postTag: function (tag) { },
+    /**
      * 获取tag列表
      * @returns {Promise<Array<TagListItem>>} 
      * 发送GET请求的promise对象，该请求返回TagListItem对象数组

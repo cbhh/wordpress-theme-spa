@@ -63,7 +63,7 @@ const renderView = function (currentCatSlug) {
 watch(
     () => route.params["cat"],
     (n, o) => {
-        if (renderTimes.value) {
+        if (renderTimes.value && n) {
             renderView(n);
         }
     }
