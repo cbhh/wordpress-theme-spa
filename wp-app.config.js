@@ -1,5 +1,5 @@
 /**
- * 站点及rest api配置信息
+ * 站点及rest api配置信息，以下为示例配置，可自行修改
  */
 export default {
     /**
@@ -23,7 +23,7 @@ export default {
      */
     siteUrl: "http://localhost:3000",
     /**
-     * API基准URL（协议+主机名）
+     * API基准URL（协议+主机名+端口号）
      */
     apiBaseUrl: "http://localhost:2222",
     /**

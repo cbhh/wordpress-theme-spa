@@ -31,9 +31,13 @@ export function generateSiteLink() {
     }
     //加载icon样式表
     if (process.env.NODE_ENV === "production") {
-        linkArray.push(`<link rel='stylesheet' href='${cdnPrefix}font-awesome/4.7.0/css/font-awesome.min.css'>`);
+        linkArray.push(`<link rel='stylesheet' id='fontawesome-css' href='${cdnPrefix}font-awesome/4.7.0/css/font-awesome.min.css' type='text/css' media='all'>`);
     } else {
-        linkArray.push("<link rel='stylesheet' href='/fontawesome/css/font-awesome.min.css'>");
+        linkArray.push("<link rel='stylesheet' id='fontawesome-css' href='/fontawesome/css/font-awesome.min.css' type='text/css' media='all'>");
+    }
+    //加载区块编辑器样式表
+    if (wpAppConfig.enableGutenbergEditorStyle) {
+        linkArray.push(`<link rel="stylesheet" id="wp-block-library-css" href="${wpAppConfig.apiBaseUrl}/wp-includes/css/dist/block-library/style.min.css" type="text/css" media="all">`);
     }
     return linkArray.join("");
 }

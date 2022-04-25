@@ -12,7 +12,6 @@ dist
 dist-ssr
 *.local
 src/test
-fontawesome
 
 # Editor directories and files
 .vscode/
