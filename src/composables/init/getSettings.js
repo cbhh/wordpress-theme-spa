@@ -1,5 +1,5 @@
 import { reactive } from "vue";
-import setting from "../apis/setting";
+import setting from "../../apis/setting";
 import wpAppConfig from "@wpAppConfig";
 
 export default function () {

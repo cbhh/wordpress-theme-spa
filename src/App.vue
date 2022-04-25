@@ -2,9 +2,10 @@
 import { provide, readonly, onMounted, computed, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { RouterView, useRoute } from "vue-router";
-import getTags from "./init/getTags";
-import getSettings from "./init/getSettings";
-import getCategories from "./init/getCategories";
+import getTags from "./composables/init/getTags";
+import getSettings from "./composables/init/getSettings";
+import getCategories from "./composables/init/getCategories";
+import getUsers from "./composables/init/getUsers";
 import SiteHeader from "./components/layout/header/SiteHeader.vue";
 import HomeLanding from "./components/layout/landing/HomeLanding.vue";
 import PostArchiveLanding from "./components/layout/landing/PostArchiveLanding.vue";
@@ -19,6 +20,7 @@ import Tag from "./components/layout/sidebar/modules/Tag.vue";
 const { tagList, getTagList } = getTags();
 const { siteMeta, getSiteSettings } = getSettings();
 const { categoryList, getCategoryList } = getCategories();
+const { userList, getUserList } = getUsers();
 const store = useStore();
 const route = useRoute();
 
@@ -55,15 +57,14 @@ watch(
 );
 
 onMounted(() => {
-    getTagList().then(() => {
-        store.commit("storeTagList", tagList.value);
-    });
-    getSiteSettings().then(() => {
-        console.log(siteMeta.description + " " + siteMeta.title);
-    });
-    getCategoryList().then(() => {
-        store.commit("storeCategoryList", categoryList.value);
-    });
+    getTagList().then(() => store.commit("storeTagList", tagList.value));
+    getSiteSettings().then(() =>
+        console.log(siteMeta.description + " " + siteMeta.title)
+    );
+    getCategoryList().then(() =>
+        store.commit("storeCategoryList", categoryList.value)
+    );
+    getUserList().then(() => store.commit("storeUserList", userList.value));
 });
 </script>
 

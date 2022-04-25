@@ -6,29 +6,29 @@ import {
     computed,
     reactive,
     onUnmounted,
+    watch,
 } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { ApiList } from "../apis/dataType";
 import PostTagList from "../components/layout/content/PostTagList.vue";
 import PostAuthor from "../components/layout/content/PostAuthor.vue";
+import getAncestorCategories from "../composables/getAncestorCategories";
 
 const $apis = getCurrentInstance().appContext.config.globalProperties.$apis;
 const store = useStore();
 const route = useRoute();
 
-const postId = route.params["id"];
+const allCategories = computed(() => store.state.categories.categoryList);
+const allTags = computed(() => store.state.tags.tagList);
+const allUsers = computed(() => store.state.users.userList);
 
-const allCategories = computed(() => {
-    return store.state.categories.categoryList;
-});
-const allTags = computed(() => {
-    return store.state.tags.tagList;
-});
+const { ancestors, getParent } = getAncestorCategories(allCategories.value);
+
+const renderTimes = ref(0);
 
 const contentHtml = ref(""),
     tagList = ref([]),
-    breadcrumbCategoryList = ref([]),
     authorMeta = reactive({
         name: "",
         avatar: "",
@@ -36,56 +36,58 @@ const contentHtml = ref(""),
         description: "",
     });
 
-onMounted(() => {
+const renderView = function (curentPostId) {
     /**
      * @type ApiList
      */
     var $api = $apis;
-    $api.postDetail(postId)
-        .then(function (data) {
-            contentHtml.value = data.content.rendered;
-            store.commit("setPostMeta", {
-                title: data.title.rendered,
-                time: data.date,
-                bg: data.featured_image_url || "",
-            });
-            tagList.value = data.tags.map(function (t) {
-                var tagMeta = allTags.value.find((v) => v.id === t);
-                return {
-                    id: t,
-                    slug: tagMeta.slug,
-                    name: tagMeta.name,
-                };
-            });
-            //如果有多个分类，则面包屑导航中只显示最后一个分类的祖先列表
-            var lastCatId = data.categories[data.categories.length - 1],
-                lastCat = allCategories.value.find((c) => c.id === lastCatId);
-            breadcrumbCategoryList.value.unshift(lastCat);
-            //递归查找父级分类，直到父级分类为0，即达到顶层分类
-            const getParent = function (cat) {
-                var pid = cat["parent"];
-                if (pid > 0) {
-                    var pnode = allCategories.value.find((c) => c.id === pid);
-                    breadcrumbCategoryList.value.unshift(pnode);
-                    getParent(pnode);
-                }
-            };
-            getParent(lastCat);
-            store.commit("setBreadcrumbNav", breadcrumbCategoryList.value);
-            return data.author;
-        })
-        .then(function (author) {
-            $api.userDetail(author).then(function (data) {
-                authorMeta.avatar = data.avatar_urls["96"];
-                authorMeta.description = data.description;
-                authorMeta.id = data.id;
-                authorMeta.name = data.name;
-            });
+    $api.postDetail(curentPostId).then(function (data) {
+        contentHtml.value = data.content.rendered;
+        //landing组件
+        store.commit("setPostMeta", {
+            title: data.title.rendered,
+            time: data.date,
+            bg: data.featured_image_url || "",
         });
-});
-onUnmounted(() => {
-    store.commit("setBreadcrumbNav", []);
-});
+        //PostTagList组件
+        tagList.value = data.tags.map(function (t) {
+            var tagMeta = allTags.value.find((v) => v.id === t);
+            return {
+                id: t,
+                slug: tagMeta.slug,
+                name: tagMeta.name,
+            };
+        });
+        //面包屑导航：递归查找父级分类，直到父级分类为0，即达到顶层分类
+        //如果有多个分类，则只显示最后一个分类
+        var currentCatId = data.categories[data.categories.length - 1],
+            currentCat = allCategories.value.find((c) => c.id === currentCatId);
+        ancestors.value = [];
+        ancestors.value.push(currentCat);
+        getParent(currentCat);
+        store.commit("setBreadcrumbNav", ancestors.value);
+        //PostAuthor组件
+        var currentAuthor = allUsers.value.find((a) => a.id === data.author);
+        authorMeta.avatar = currentAuthor.avatar_urls["96"];
+        authorMeta.description = currentAuthor.description;
+        authorMeta.id = currentAuthor.id;
+        authorMeta.name = currentAuthor.name;
+
+        renderTimes.value += 1;
+    });
+};
+
+watch(
+    () => route.params["id"],
+    (n) => {
+        if (renderTimes.value && n) {
+            renderView(n);
+        }
+    }
+);
+
+onMounted(() => renderView(route.params["id"]));
+onUnmounted(() => store.commit("setBreadcrumbNav", []));
 </script>
 
 <template>

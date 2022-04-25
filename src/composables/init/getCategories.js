@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import category from "../apis/category";
+import category from "../../apis/category";
 /**
  * 加载category列表
  */

@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import tag from "../apis/tag";
+import tag from "../../apis/tag";
 /**
  * 加载tag列表
  */
