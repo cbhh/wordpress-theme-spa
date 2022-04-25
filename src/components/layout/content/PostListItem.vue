@@ -85,7 +85,7 @@ const props = defineProps({
             </div>
             <div class="post-title">
                 <span>❊</span
-                ><RouterLink :to="{ name: 'post', params: { id: props.id } }">{{
+                ><RouterLink :to="{ name: 'post', params: { pid: props.id } }">{{
                     props.title
                 }}</RouterLink
                 ><span>❊</span>

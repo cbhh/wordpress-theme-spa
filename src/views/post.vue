@@ -78,7 +78,7 @@ const renderView = function (curentPostId) {
 };
 
 watch(
-    () => route.params["id"],
+    () => route.params["pid"],
     (n) => {
         if (renderTimes.value && n) {
             renderView(n);
@@ -86,7 +86,7 @@ watch(
     }
 );
 
-onMounted(() => renderView(route.params["id"]));
+onMounted(() => renderView(route.params["pid"]));
 onUnmounted(() => store.commit("setBreadcrumbNav", []));
 </script>
 

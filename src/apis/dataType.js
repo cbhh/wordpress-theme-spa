@@ -57,6 +57,13 @@ ApiList.prototype = {
      */
     postTag: function (tag) { },
     /**
+     * 获取指定作者的文章列表
+     * @param  {Number} author 传递给endpoint的参数：author ID
+     * @returns {Promise<Array<PostListItem>>} 
+     * 发送GET请求的promise对象，该请求返回PostListItem对象数组
+     */
+    postAuthor: function (author) { },
+    /**
      * 获取tag列表
      * @returns {Promise<Array<TagListItem>>} 
      * 发送GET请求的promise对象，该请求返回TagListItem对象数组

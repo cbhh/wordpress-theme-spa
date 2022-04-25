@@ -13,11 +13,12 @@ const routes = [
         component: () => import("../views/tag.vue")
     },
     {
-        path: "/author/:id",
-        name: "author"
+        path: "/author/:uid",
+        name: "author",
+        component: () => import("../views/author.vue")
     },
     {
-        path: "/post/:id",
+        path: "/post/:pid",
         name: "post",
         component: () => import("../views/post.vue")
     },
