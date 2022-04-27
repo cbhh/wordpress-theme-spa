@@ -137,40 +137,6 @@ const props = defineProps({
             padding-right: 5px;
         }
     }
-    &.post-calendar {
-        #wp-calendar {
-            width: 100%;
-            thead {
-                font-family: var(--theme-font);
-            }
-            tbody {
-                font-size: 0.8rem;
-                line-height: 2;
-            }
-            #today {
-                background: var(--theme-color);
-                color: #fff;
-                border-radius: 10px;
-                > a {
-                    color: #fff;
-                }
-            }
-            a {
-                color: var(--theme-color);
-                font-weight: bold;
-            }
-            .has-post {
-                transition: var(--theme-transition);
-                border-radius: 10px;
-                &:hover {
-                    background: var(--theme-color-gray);
-                    > a {
-                        color: #fff;
-                    }
-                }
-            }
-        }
-    }
     &.monthly-archives {
         li {
             font-size: 14px;

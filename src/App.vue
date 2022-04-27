@@ -16,6 +16,7 @@ import SiteSidebar from "./components/layout/sidebar/SiteSidebar.vue";
 import SiteSidebarItem from "./components/layout/sidebar/SiteSidebarItem.vue";
 import Category from "./components/layout/sidebar/modules/Category.vue";
 import Tag from "./components/layout/sidebar/modules/Tag.vue";
+import Calendar from "./components/layout/sidebar/modules/Calendar.vue";
 
 const { tagList, getTagList } = getTags();
 const { siteMeta, getSiteSettings } = getSettings();
@@ -108,6 +109,12 @@ onMounted(() => {
                         funcClass="post-tag-cloud"
                     >
                         <Tag :tagList="tagList"></Tag>
+                    </SiteSidebarItem>
+                    <SiteSidebarItem 
+                        itemTitle="日历" 
+                        funcClass="post-calendar"
+                    >
+                        <Calendar></Calendar>
                     </SiteSidebarItem>
                 </template>
             </SiteSidebar>
