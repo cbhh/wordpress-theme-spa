@@ -6,6 +6,7 @@ import getTags from "./composables/init/getTags";
 import getSettings from "./composables/init/getSettings";
 import getCategories from "./composables/init/getCategories";
 import getUsers from "./composables/init/getUsers";
+import getMonthPostDates from "./composables/getMonthPostDates";
 import SiteHeader from "./components/layout/header/SiteHeader.vue";
 import HomeLanding from "./components/layout/landing/HomeLanding.vue";
 import PostArchiveLanding from "./components/layout/landing/PostArchiveLanding.vue";
@@ -17,35 +18,53 @@ import SiteSidebarItem from "./components/layout/sidebar/SiteSidebarItem.vue";
 import Category from "./components/layout/sidebar/modules/Category.vue";
 import Tag from "./components/layout/sidebar/modules/Tag.vue";
 import Calendar from "./components/layout/sidebar/modules/Calendar.vue";
-
+//调用各组合式函数并解构出数据和对应操作函数
 const { tagList, getTagList } = getTags();
 const { siteMeta, getSiteSettings } = getSettings();
 const { categoryList, getCategoryList } = getCategories();
 const { userList, getUserList } = getUsers();
+const { dateList, getDates } = getMonthPostDates();
+//初始化store和route
 const store = useStore();
 const route = useRoute();
-
+/**
+ * 几种可能的着陆页组件，当切换不同种类（首页/文章页/内容归档页）的页面时，会选择不同的landing组件
+ */
 const landingMap = {
     home: HomeLanding,
     post: PostArchiveLanding,
     archive: PostArchiveLanding,
 };
-
+/**
+ * 当前日期
+ */
+const currentDate = new Date();
+/**
+ * 当前路由名
+ */
 const routeName = ref("");
-
+/**
+ * 当前选用的着陆页组件
+ */
 const currentLandingComponent = computed(() => landingMap[routeName.value]);
-
+/**
+ * 层次型分类列表，由wordpress api返回的扁平型列表计算得出
+ */
 const hierarchicCategoryList = computed(
     () => store.state.categories.hierarchicCategoryList
 );
+/**
+ * 面包屑导航（除了"首页"以外的部分）列表
+ */
 const breadcrumbNavList = computed(
     () => store.state.breadcrumb.categoryNavList
 );
-
+//站点设置信息注入，方便后代组件访问
 provide("site-meta", readonly(siteMeta));
 
 //侦听一个getter
 //https://v3.cn.vuejs.org/guide/reactivity-computed-watchers.html#watch
+//侦听路由名称变化，以选择不同的着陆页组件
 watch(
     () => route.name,
     (n, o) => {
@@ -56,27 +75,38 @@ watch(
         }
     }
 );
-
+//组件挂载之后，执行数据请求操作
 onMounted(() => {
+    //加载标签列表并存储进vuex
     getTagList().then(() => store.commit("storeTagList", tagList.value));
-    getSiteSettings().then(() =>
-        console.log(siteMeta.description + " " + siteMeta.title)
-    );
+    //加载站点设置
+    getSiteSettings();
+    //加载分类列表并存储进vuex
     getCategoryList().then(() =>
         store.commit("storeCategoryList", categoryList.value)
     );
+    //加载用户（作者）列表并存储进vuex
     getUserList().then(() => store.commit("storeUserList", userList.value));
+    const month = currentDate.getMonth() + 1,
+        year = currentDate.getFullYear();
+    //查找当前月中发布了post的日期（仅供日历显示用）
+    getDates(
+        `${year}-${month > 9 ? month : "0" + month}-01`,
+        `${year}-${month > 9 ? month : "0" + month}-31`
+    );
 });
 </script>
 
 <template>
     <SiteHeader></SiteHeader>
+    <!--着陆页组件切换start-->
     <KeepAlive>
         <component
             :is="currentLandingComponent"
             :landingType="routeName"
         ></component
     ></KeepAlive>
+    <!--着陆页组件切换end-->
     <div id="primary">
         <SitePrimaryMaskTop></SitePrimaryMaskTop>
         <div class="primary-content">
@@ -110,11 +140,11 @@ onMounted(() => {
                     >
                         <Tag :tagList="tagList"></Tag>
                     </SiteSidebarItem>
-                    <SiteSidebarItem 
-                        itemTitle="日历" 
-                        funcClass="post-calendar"
-                    >
-                        <Calendar></Calendar>
+                    <SiteSidebarItem itemTitle="日历" funcClass="post-calendar">
+                        <Calendar
+                            :current="currentDate"
+                            :hasPostDates="dateList"
+                        ></Calendar>
                     </SiteSidebarItem>
                 </template>
             </SiteSidebar>

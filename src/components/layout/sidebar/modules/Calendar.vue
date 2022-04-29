@@ -1,16 +1,40 @@
 <script setup>
 import ThemeTable from "../../../common/ThemeTable.vue";
 import { generateCalendarData } from "../../../../utils/date";
+import { computed } from "vue";
+
+const props = defineProps({
+    /**
+     * 当前日期，一个Date对象
+     */
+    current: {
+        type: Date,
+        required: true,
+    },
+    /**
+     * 本月中含有post的日期数组
+     */
+    hasPostDates: {
+        type: Array,
+        required: true,
+    },
+});
 
 const head = ["日", "一", "二", "三", "四", "五", "六"];
 
-const today = new Date(),
-    todayDate = today.getDate(),
-    monthData = generateCalendarData(today);
+const todayDate = computed(() => props.current.getDate());
+const monthData = computed(() => generateCalendarData(props.current));
+
 const cellStyle = function (cellData) {
-    if (cellData.value === todayDate) {
-        return "today";
+    var c = "",
+        v = cellData.value;
+    if (v === todayDate.value) {
+        c += "today";
     }
+    if (props.hasPostDates.includes(v)) {
+        c += "has-post";
+    }
+    return c;
 };
 </script>
 
@@ -37,23 +61,10 @@ const cellStyle = function (cellData) {
         background: var(--theme-color);
         color: #fff;
         border-radius: 10px;
-        > a {
-            color: #fff;
-        }
-    }
-    a {
-        color: var(--theme-color);
-        font-weight: bold;
     }
     .has-post {
-        transition: var(--theme-transition);
-        border-radius: 10px;
-        &:hover {
-            background: var(--theme-color-gray);
-            > a {
-                color: #fff;
-            }
-        }
+        color: var(--theme-color);
+        font-weight: bold;
     }
 }
 </style>
