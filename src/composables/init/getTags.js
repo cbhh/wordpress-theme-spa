@@ -6,7 +6,8 @@ import tag from "../../apis/tag";
 export default function () {
     const tagList = ref([]);
     const getTagList = async function () {
-        tagList.value = await tag();
+        var { result } = await tag();
+        tagList.value = result;
     }
     return {
         tagList,

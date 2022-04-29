@@ -6,7 +6,8 @@ import category from "../../apis/category";
 export default function () {
     const categoryList = ref([]);
     const getCategoryList = async function () {
-        categoryList.value = await category();
+        var { result } = await category();
+        categoryList.value = result;
     }
     return {
         categoryList,

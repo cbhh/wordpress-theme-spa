@@ -55,7 +55,7 @@ const renderView = function (currentCatSlug) {
     var $api = $apis;
     $api.postCategory(descendants.value.join(",")).then(function (data) {
         postList.value = [];
-        generateList(allCategories.value, allTags.value, data);
+        generateList(allCategories.value, allTags.value, data.result);
     });
     renderTimes.value += 1;
 };

@@ -39,9 +39,21 @@ export default function (endpoint) {
             headers: {
                 "Authorization": "Basic " + credential
             }
-        }),
-            result = await response.json();
+        });
+        if (response.ok) {
+            const headers = response.headers,
+                totalItems = headers.get("X-WP-Total"),
+                totalPages = headers.get("X-WP-TotalPages"),
+                result = await response.json();
+            if (totalItems && totalPages) {
+                return {
+                    totalItems: parseInt(totalItems),
+                    totalPages: parseInt(totalPages),
+                    result
+                }
+            } else return result;
+        }
+        else console.error("fetch data failed");
         //TODO:停用loading动画
-        return result;
     }
 }

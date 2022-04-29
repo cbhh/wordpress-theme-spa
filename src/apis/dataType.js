@@ -31,8 +31,8 @@ export function CategoryListItem() { }
 ApiList.prototype = {
     /**
      * 获取post列表
-     * @returns {Promise<Array<PostListItem>>} 
-     * 发送GET请求的promise对象，该请求返回PostListItem对象数组
+     * @returns {Promise<{totalItems:Number,totalPages:Number,result:Array<PostListItem>}>} 
+    * 发送GET请求的promise对象，该请求返回PostListItem对象数组以及item总数
      */
     post: function () { },
     /**
@@ -45,36 +45,42 @@ ApiList.prototype = {
     /**
      * 获取指定分类的文章列表
      * @param  {String} cats 传递给endpoint的参数：分类ID列表，用逗号隔开
-     * @returns {Promise<Array<PostListItem>>} 
-     * 发送GET请求的promise对象，该请求返回PostListItem对象数组
+     * @returns {Promise<{totalItems:Number,totalPages:Number,result:Array<PostListItem>}>} 
+     * 发送GET请求的promise对象，该请求返回PostListItem对象数组以及item总数
      */
     postCategory: function (cats) { },
     /**
      * 获取指定标签的文章列表
      * @param  {Number} tag 传递给endpoint的参数：tag ID
-     * @returns {Promise<Array<PostListItem>>} 
-     * 发送GET请求的promise对象，该请求返回PostListItem对象数组
+     * @returns {Promise<{totalItems:Number,totalPages:Number,result:Array<PostListItem>}>} 
+     * 发送GET请求的promise对象，该请求返回PostListItem对象数组以及item总数
      */
     postTag: function (tag) { },
     /**
      * 获取指定作者的文章列表
      * @param  {Number} author 传递给endpoint的参数：author ID
-     * @returns {Promise<Array<PostListItem>>} 
-     * 发送GET请求的promise对象，该请求返回PostListItem对象数组
+     * @returns {Promise<{totalItems:Number,totalPages:Number,result:Array<PostListItem>}>} 
+     * 发送GET请求的promise对象，该请求返回PostListItem对象数组以及item总数
      */
     postAuthor: function (author) { },
     /**
      * 获取tag列表
-     * @returns {Promise<Array<TagListItem>>} 
-     * 发送GET请求的promise对象，该请求返回TagListItem对象数组
+     * @returns {Promise<{totalItems:Number,totalPages:Number,result:Array<TagListItem>}>} 
+     * 发送GET请求的promise对象，该请求返回TagListItem对象数组以及item总数
      */
     tag: function () { },
     /**
      * 获取category列表
-     * @returns {Promise<Array<CategoryListItem>>} 
-     * 发送GET请求的promise对象，该请求返回CategoryListItem对象数组
+     * @returns {Promise<{totalItems:Number,totalPages:Number,result:Array<CategoryListItem>}>} 
+     * 发送GET请求的promise对象，该请求返回CategoryListItem对象数组以及item总数
      */
     category: function () { },
+    /**
+     * 获取user列表
+     * @returns {Promise<{totalItems:Number,totalPages:Number,result:Array<UserDetail>}>} 
+     * 发送GET请求的promise对象，该请求返回UserDetail对象数组以及item总数
+     */
+    user: function () { },
     /**
      * 获取站点设置
      * @returns {Promise<SettingDetail>} 

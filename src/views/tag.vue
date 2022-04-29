@@ -33,7 +33,7 @@ const renderView = function (currentTagSlug) {
     var $api = $apis;
     $api.postTag(currentTagId).then(function (data) {
         postList.value = [];
-        generateList(allCategories.value, allTags.value, data);
+        generateList(allCategories.value, allTags.value, data.result);
     });
     renderTimes.value += 1;
 };

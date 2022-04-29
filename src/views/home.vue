@@ -19,7 +19,7 @@ onMounted(() => {
      */
     var $api = $apis;
     $api.post().then(function (data) {
-        generateList(allCategories.value, allTags.value, data);
+        generateList(allCategories.value, allTags.value, data.result);
     });
 });
 </script>

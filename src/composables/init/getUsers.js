@@ -6,7 +6,8 @@ import user from "../../apis/user";
 export default function () {
     const userList = ref([]);
     const getUserList = async function () {
-        userList.value = await user();
+        var { result } = await user();
+        userList.value = result;
     }
     return {
         userList,
