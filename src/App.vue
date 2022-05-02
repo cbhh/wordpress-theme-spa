@@ -151,6 +151,7 @@ onMounted(() => {
         </div>
     </div>
     <SiteFooter></SiteFooter>
+    <back-to-top :visible="true"></back-to-top>
 </template>
 
 <style lang="scss">
