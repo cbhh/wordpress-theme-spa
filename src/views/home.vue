@@ -18,7 +18,7 @@ onMounted(() => {
      * @type ApiList
      */
     var $api = $apis;
-    $api.post().then(function (data) {
+    $api.postList().then(function (data) {
         generateList(allCategories.value, allTags.value, data.result);
     });
 });

@@ -13,7 +13,7 @@ export default function () {
      */
     const getDates = async function (start, end) {
         //[{ id: Number, date: String }]
-        var { result } = await postDateRangeOnlyDate(start, end),
+        var { result } = await postDateRangeOnlyDate([start, end]),
             temp = [];
         result.forEach(function (item) {
             var dateStr = item.date,

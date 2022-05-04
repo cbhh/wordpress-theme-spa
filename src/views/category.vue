@@ -53,7 +53,9 @@ const renderView = function (currentCatSlug) {
      * @type ApiList
      */
     var $api = $apis;
-    $api.postCategory(descendants.value.join(",")).then(function (data) {
+    $api.postList({ categories: descendants.value.join(",") }).then(function (
+        data
+    ) {
         postList.value = [];
         generateList(allCategories.value, allTags.value, data.result);
     });

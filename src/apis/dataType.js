@@ -31,10 +31,12 @@ export function CategoryListItem() { }
 ApiList.prototype = {
     /**
      * 获取post列表
+     * @param {{}} conditions 查询条件，传递一个对象字面量来指定条件，如{tag:1,author:1}
+     * 不填写即按照wordpress默认规则查询最近文章
      * @returns {Promise<{totalItems:Number,totalPages:Number,result:Array<PostListItem>}>} 
     * 发送GET请求的promise对象，该请求返回PostListItem对象数组以及item总数
      */
-    post: function () { },
+    postList: function (conditions = undefined) { },
     /**
      * 获取单个post
      * @param  {Number} id 传递给endpoint的参数：post ID
@@ -42,27 +44,6 @@ ApiList.prototype = {
      * 发送GET请求的promise对象，该请求返回PostDetail对象
      */
     postDetail: function (id) { },
-    /**
-     * 获取指定分类的文章列表
-     * @param  {String} cats 传递给endpoint的参数：分类ID列表，用逗号隔开
-     * @returns {Promise<{totalItems:Number,totalPages:Number,result:Array<PostListItem>}>} 
-     * 发送GET请求的promise对象，该请求返回PostListItem对象数组以及item总数
-     */
-    postCategory: function (cats) { },
-    /**
-     * 获取指定标签的文章列表
-     * @param  {Number} tag 传递给endpoint的参数：tag ID
-     * @returns {Promise<{totalItems:Number,totalPages:Number,result:Array<PostListItem>}>} 
-     * 发送GET请求的promise对象，该请求返回PostListItem对象数组以及item总数
-     */
-    postTag: function (tag) { },
-    /**
-     * 获取指定作者的文章列表
-     * @param  {Number} author 传递给endpoint的参数：author ID
-     * @returns {Promise<{totalItems:Number,totalPages:Number,result:Array<PostListItem>}>} 
-     * 发送GET请求的promise对象，该请求返回PostListItem对象数组以及item总数
-     */
-    postAuthor: function (author) { },
     /**
      * 获取tag列表
      * @returns {Promise<{totalItems:Number,totalPages:Number,result:Array<TagListItem>}>} 
@@ -86,14 +67,7 @@ ApiList.prototype = {
      * @returns {Promise<SettingDetail>} 
      * 发送GET请求的promise对象，该请求返回SettingDetail对象
      */
-    setting: function () { },
-    /**
-     * 获取用户信息
-     * @param  {Number} id 传递给endpoint的参数：用户ID
-     * @returns {Promise<UserDetail>} 
-     * 发送GET请求的promise对象，该请求返回UserDetail对象
-     */
-    userDetail: function (id) { }
+    setting: function () { }
 }
 SettingDetail.prototype = {
     /**

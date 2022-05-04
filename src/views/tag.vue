@@ -31,7 +31,7 @@ const renderView = function (currentTagSlug) {
      * @type ApiList
      */
     var $api = $apis;
-    $api.postTag(currentTagId).then(function (data) {
+    $api.postList({ tags: currentTagId }).then(function (data) {
         postList.value = [];
         generateList(allCategories.value, allTags.value, data.result);
     });

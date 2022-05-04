@@ -31,7 +31,7 @@ const renderView = function (currentUserId) {
      * @type ApiList
      */
     var $api = $apis;
-    $api.postAuthor(currentUserId).then(function (data) {
+    $api.postList({ author: currentUserId }).then(function (data) {
         postList.value = [];
         generateList(allCategories.value, allTags.value, data.result);
     });
