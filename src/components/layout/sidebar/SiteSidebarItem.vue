@@ -6,7 +6,7 @@ const props = defineProps({
     },
     funcClass: {
         type: String,
-        required: true,
+        required: false,
         validator: function (cl) {
             return [
                 "recent-posts",
@@ -22,7 +22,7 @@ const props = defineProps({
 
 <template>
     <div class="sidebar-item" :class="props.funcClass">
-        <div>
+        <div class="sidebar-item-wrap">
             <div class="sidebar-item-title">{{ props.itemTitle }}</div>
             <div class="sidebar-item-body">
                 <slot></slot>
@@ -35,22 +35,26 @@ const props = defineProps({
 @import "@sty/mixin.scss";
 @import "@sty/variable.scss";
 
+$sidebar-item-title-height: 30px;
+$sidebar-item-body-margin-v: 3px;
+
 .sidebar-item {
     margin: $sidebar-edge-gap $sidebar-edge-gap 25px $sidebar-edge-gap;
     box-shadow: 0 0 3px #aaa;
     background: rgba(255, 255, 255, 0.5);
     border-radius: 5px;
     border: 1px solid #fff;
-    > div {
+    .sidebar-item-wrap {
         border-radius: inherit;
         border: 1px solid var(--theme-color);
         margin: 2px;
         background: #fff;
+        max-width: calc(100% - 6px);
     }
     .sidebar-item-title {
         background: #ece5d6;
         font-family: var(--theme-font);
-        line-height: 30px;
+        line-height: $sidebar-item-title-height;
         padding: 0 5px;
         border-top-left-radius: inherit;
         border-top-right-radius: inherit;
@@ -76,22 +80,26 @@ const props = defineProps({
         }
     }
     .sidebar-item-body {
-        @include has-dual-same-pseudo-els("❊");
+        //@include has-dual-same-pseudo-els("❊");
         line-height: 30px;
-        margin: 3px 5px;
+        margin: $sidebar-item-body-margin-v 5px;
         padding-bottom: 10px;
-        &::before,
-        &::after {
-            color: var(--theme-color);
-            font-size: 8px;
-            bottom: -10px;
-        }
-        &::before {
-            left: 0;
-        }
-        &::after {
-            right: 0;
-        }
+        height: calc(
+            100% -
+                ($sidebar-item-title-height + $sidebar-item-body-margin-v * 2)
+        );
+        // &::before,
+        // &::after {
+        //     color: var(--theme-color);
+        //     font-size: 8px;
+        //     bottom: -10px;
+        // }
+        // &::before {
+        //     left: 0;
+        // }
+        // &::after {
+        //     right: 0;
+        // }
     }
     @media (max-width: 1100px) {
         .sidebar-item-title {

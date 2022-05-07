@@ -7,13 +7,16 @@ import {
     reactive,
     onUnmounted,
     watch,
+    nextTick,
 } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import { ApiList } from "../apis/dataType";
 import PostTagList from "../components/layout/content/PostTagList.vue";
 import PostAuthor from "../components/layout/content/PostAuthor.vue";
+import SiteSidebarItem from "../components/layout/sidebar/SiteSidebarItem.vue";
 import getAncestorCategories from "../composables/getAncestorCategories";
+import generateCatalogData from "../composables/generateCatalogData";
 
 const $apis = getCurrentInstance().appContext.config.globalProperties.$apis;
 const store = useStore();
@@ -24,10 +27,16 @@ const allTags = computed(() => store.state.tags.tagList);
 const allUsers = computed(() => store.state.users.userList);
 
 const { ancestors, getParent } = getAncestorCategories(allCategories.value);
+const { catalogData, generateData } = generateCatalogData();
 
-const renderTimes = ref(0);
+const catalogVisible = computed(() => Object.keys(catalogData).length > 0);
 
-const contentHtml = ref(""),
+const renderTimes = ref(0),
+    /**
+     * content dom引用
+     */
+    content = ref(null),
+    contentHtml = ref(""),
     tagList = ref([]),
     authorMeta = reactive({
         name: "",
@@ -41,40 +50,48 @@ const renderView = function (curentPostId) {
      * @type ApiList
      */
     var $api = $apis;
-    $api.postDetail(curentPostId).then(function (data) {
-        contentHtml.value = data.content.rendered;
-        //landing组件
-        store.commit("setPostMeta", {
-            title: data.title.rendered,
-            time: data.date,
-            bg: data.featured_image_url || "",
-        });
-        //PostTagList组件
-        tagList.value = data.tags.map(function (t) {
-            var tagMeta = allTags.value.find((v) => v.id === t);
-            return {
-                id: t,
-                slug: tagMeta.slug,
-                name: tagMeta.name,
-            };
-        });
-        //面包屑导航：递归查找父级分类，直到父级分类为0，即达到顶层分类
-        //如果有多个分类，则只显示最后一个分类
-        var currentCatId = data.categories[data.categories.length - 1],
-            currentCat = allCategories.value.find((c) => c.id === currentCatId);
-        ancestors.value = [];
-        ancestors.value.push(currentCat);
-        getParent(currentCat);
-        store.commit("setBreadcrumbNav", ancestors.value);
-        //PostAuthor组件
-        var currentAuthor = allUsers.value.find((a) => a.id === data.author);
-        authorMeta.avatar = currentAuthor.avatar_urls["96"];
-        authorMeta.description = currentAuthor.description;
-        authorMeta.id = currentAuthor.id;
-        authorMeta.name = currentAuthor.name;
+    $api.postDetail(curentPostId)
+        .then(function (data) {
+            contentHtml.value = data.content.rendered;
+            //landing组件
+            store.commit("setPostMeta", {
+                title: data.title.rendered,
+                time: data.date,
+                bg: data.featured_image_url || "",
+            });
+            //PostTagList组件
+            tagList.value = data.tags.map(function (t) {
+                var tagMeta = allTags.value.find((v) => v.id === t);
+                return {
+                    id: t,
+                    slug: tagMeta.slug,
+                    name: tagMeta.name,
+                };
+            });
+            //面包屑导航：递归查找父级分类，直到父级分类为0，即达到顶层分类
+            //如果有多个分类，则只显示最后一个分类
+            var currentCatId = data.categories[data.categories.length - 1],
+                currentCat = allCategories.value.find(
+                    (c) => c.id === currentCatId
+                );
+            ancestors.value = [];
+            ancestors.value.push(currentCat);
+            getParent(currentCat);
+            store.commit("setBreadcrumbNav", ancestors.value);
+            //PostAuthor组件
+            var currentAuthor = allUsers.value.find(
+                (a) => a.id === data.author
+            );
+            authorMeta.avatar = currentAuthor.avatar_urls["96"];
+            authorMeta.description = currentAuthor.description;
+            authorMeta.id = currentAuthor.id;
+            authorMeta.name = currentAuthor.name;
 
-        renderTimes.value += 1;
-    });
+            renderTimes.value += 1;
+        })
+        .then(function () {
+            nextTick().then(generateData(content.value));
+        });
 };
 
 watch(
@@ -92,7 +109,7 @@ onUnmounted(() => store.commit("setBreadcrumbNav", []));
 
 <template>
     <article class="post">
-        <div class="entry-content" v-html="contentHtml"></div>
+        <div class="entry-content" v-html="contentHtml" ref="content"></div>
         <footer class="entry-footer">
             <div class="extra-meta">
                 <PostTagList :tagList="tagList"></PostTagList>
@@ -111,6 +128,9 @@ onUnmounted(() => store.commit("setBreadcrumbNav", []));
             </div>
         </footer>
     </article>
+    <SiteSidebarItem itemTitle="文章目录" id="post-catalog">
+        <catalog :catalogItemList="catalogData" v-if="catalogVisible"></catalog>
+    </SiteSidebarItem>
 </template>
 
 <style lang="scss" scoped>
@@ -174,6 +194,32 @@ onUnmounted(() => store.commit("setBreadcrumbNav", []));
     }
     @media (max-width: $media-mini-size) {
         padding: 10px;
+    }
+}
+#post-catalog {
+    transition: var(--theme-transition);
+    background: none;
+    border: none;
+    border-radius: 10px;
+    position: fixed;
+    z-index: 10;
+    bottom: 0;
+    left: 0;
+    margin: 5px;
+    display: flex;
+    max-height: calc(100% - $header-height - 10px);
+    max-width: calc(19% - 10px);
+    @media (max-width: $media-small-size) {
+        max-width: 25%;
+    }   
+    @media (max-width: $media-smallest-size) {
+        max-width: 35%;
+    }
+    @media (max-width: $media-mini-size) {
+        max-width: 45%;
+    }
+    @media (max-width: $media-minier-size) {
+        max-width: 55%;
     }
 }
 </style>
