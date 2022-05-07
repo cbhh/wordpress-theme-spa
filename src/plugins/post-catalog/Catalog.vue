@@ -8,11 +8,14 @@ const props = defineProps({
 });
 const emits = defineEmits(["clickedItem"]);
 /**
- * 将对应anchor值的项传递给父组件
+ * 将数据中对应anchor值的项传递给父组件
  * @param {String} anchor 点击的目录项的anchor值
  */
 const getClickedItem = function (anchor) {
-    emits("clickedItem", props.catalogItemList[anchor]);
+    emits(
+        "clickedItem",
+        props.catalogItemList.find((i) => i.anchor === anchor)
+    );
 };
 </script>
 

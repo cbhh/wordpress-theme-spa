@@ -1,4 +1,5 @@
-import { ref } from "vue";
+import { ref, computed } from "vue";
+import { CatalogItemDataType } from "../plugins/post-catalog/catalog";
 
 function randomString(length) {
     if (length <= 13 && length > 0) {
@@ -10,7 +11,18 @@ const headings = ["H2", "H3", "H4", "H5", "H6"];
  * 生成目录数据
  */
 export default function () {
-    const catalogData = ref([]);
+    /**
+     * 目录数据数组
+     */
+    const catalogData = ref([]),
+        /**
+         * 上一次选中的目录项对应的数据
+         */
+        lastClickedCatalogItem = ref({});
+    /**
+     * 目录是否可见
+     */
+    const catalogVisible = computed(() => catalogData.value.length > 0);
     /**
      * 生成目录数据
      * @param {HTMLDivElement} contentRef 内容dom的引用
@@ -41,7 +53,6 @@ export default function () {
                     }
                     node.dataset.anchor = nonce;
                     lastTag = level;
-                    console.log(node);
                     catalogData.value.push({
                         text: node.innerText,
                         level: parseInt(level),
@@ -51,12 +62,21 @@ export default function () {
                     });
                 }
             }
-            console.log(catalogData);
         }
     };
-
+    /**
+     * 设置选中目录项的样式
+     * @param {CatalogItemDataType} clickedItem
+     */
+    const setClickedCatalogItemStyle = function (clickedItem) {
+        lastClickedCatalogItem.value.current = false;
+        clickedItem.current = true;
+        lastClickedCatalogItem.value = clickedItem;
+    };
     return {
         catalogData,
-        generateData
+        catalogVisible,
+        generateData,
+        setClickedCatalogItemStyle
     }
 }

@@ -27,9 +27,12 @@ const allTags = computed(() => store.state.tags.tagList);
 const allUsers = computed(() => store.state.users.userList);
 
 const { ancestors, getParent } = getAncestorCategories(allCategories.value);
-const { catalogData, generateData } = generateCatalogData();
-
-const catalogVisible = computed(() => Object.keys(catalogData).length > 0);
+const {
+    catalogData,
+    catalogVisible,
+    generateData,
+    setClickedCatalogItemStyle,
+} = generateCatalogData();
 
 const renderTimes = ref(0),
     /**
@@ -129,7 +132,11 @@ onUnmounted(() => store.commit("setBreadcrumbNav", []));
         </footer>
     </article>
     <SiteSidebarItem itemTitle="文章目录" id="post-catalog">
-        <catalog :catalogItemList="catalogData" v-if="catalogVisible"></catalog>
+        <catalog
+            :catalogItemList="catalogData"
+            v-if="catalogVisible"
+            @clickedItem="setClickedCatalogItemStyle"
+        ></catalog>
     </SiteSidebarItem>
 </template>
 
@@ -151,12 +158,6 @@ onUnmounted(() => store.commit("setBreadcrumbNav", []));
     .entry-content {
         padding-bottom: 1px;
         margin-bottom: 1rem;
-        img {
-            box-shadow: 0 0 3px #000;
-            cursor: pointer;
-            max-width: 100%;
-            height: auto;
-        }
     }
     .entry-footer {
         border: 2px solid #b8860b;
@@ -196,6 +197,59 @@ onUnmounted(() => store.commit("setBreadcrumbNav", []));
         padding: 10px;
     }
 }
+</style>
+<style lang="scss">
+@import "@sty/mixin.scss";
+@import "@sty/variable.scss";
+.post {
+    .entry-content {
+        p code {
+            margin: 0 3px;
+            background: rgba(189, 159, 111, 0.2);
+            padding: 2px 5px;
+        }
+        blockquote {
+            position: relative;
+            background: rgba(189, 159, 111, 0.1);
+            padding: 3px 5px;
+            text-align: right;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            > i {
+                position: absolute;
+                color: var(--theme-color);
+                &.fa-quote-left {
+                    left: -1rem;
+                    top: -1rem;
+                }
+                &.fa-quote-right {
+                    right: -1rem;
+                    bottom: -1rem;
+                }
+            }
+            > p {
+                text-align: left;
+            }
+        }
+        figure.aligncenter {
+            > figcaption {
+                text-align: center;
+            }
+        }
+        img {
+            box-shadow: 0 0 3px #000;
+            cursor: pointer;
+            max-width: 100%;
+            height: auto;
+        }
+        a {
+            color: var(--theme-color);
+        }
+        a:hover {
+            color: var(--theme-color-gray);
+        }
+    }
+}
 #post-catalog {
     transition: var(--theme-transition);
     background: none;
@@ -211,7 +265,7 @@ onUnmounted(() => store.commit("setBreadcrumbNav", []));
     max-width: calc(19% - 10px);
     @media (max-width: $media-small-size) {
         max-width: 25%;
-    }   
+    }
     @media (max-width: $media-smallest-size) {
         max-width: 35%;
     }
@@ -220,43 +274,6 @@ onUnmounted(() => store.commit("setBreadcrumbNav", []));
     }
     @media (max-width: $media-minier-size) {
         max-width: 55%;
-    }
-}
-</style>
-<style lang="scss">
-.post {
-    p code {
-        margin: 0 3px;
-        background: rgba(189, 159, 111, 0.2);
-        padding: 2px 5px;
-    }
-    blockquote {
-        position: relative;
-        background: rgba(189, 159, 111, 0.1);
-        padding: 3px 5px;
-        text-align: right;
-        margin-top: 2rem;
-        margin-bottom: 2rem;
-        > i {
-            position: absolute;
-            color: var(--theme-color);
-            &.fa-quote-left {
-                left: -1rem;
-                top: -1rem;
-            }
-            &.fa-quote-right {
-                right: -1rem;
-                bottom: -1rem;
-            }
-        }
-        > p {
-            text-align: left;
-        }
-    }
-    figure.aligncenter {
-        > figcaption {
-            text-align: center;
-        }
     }
 }
 </style>
