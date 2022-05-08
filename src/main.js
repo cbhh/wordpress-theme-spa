@@ -3,6 +3,7 @@ import App from "./App.vue";
 import apis from "./apis";
 import store from "./store";
 import router from "./router";
+import "./global/windowScroll";
 import backToTop from "./plugins/back-to-top/backToTop";
 import catalog from "./plugins/post-catalog/catalog";
 

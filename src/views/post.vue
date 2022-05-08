@@ -17,6 +17,7 @@ import PostAuthor from "../components/layout/content/PostAuthor.vue";
 import SiteSidebarItem from "../components/layout/sidebar/SiteSidebarItem.vue";
 import getAncestorCategories from "../composables/getAncestorCategories";
 import generateCatalogData from "../composables/generateCatalogData";
+import windowScroll from "../global/windowScroll";
 
 const $apis = getCurrentInstance().appContext.config.globalProperties.$apis;
 const store = useStore();
@@ -31,6 +32,7 @@ const {
     catalogData,
     catalogVisible,
     generateData,
+    headingArray,
     setClickedCatalogItemStyle,
 } = generateCatalogData();
 
@@ -47,7 +49,10 @@ const renderTimes = ref(0),
         id: 0,
         description: "",
     });
-
+/**
+ * 提供数据渲染视图
+ * @param {Number} curentPostId 
+ */
 const renderView = function (curentPostId) {
     /**
      * @type ApiList
@@ -96,7 +101,26 @@ const renderView = function (curentPostId) {
             nextTick().then(generateData(content.value));
         });
 };
-
+/**
+ * 监听窗口滚动，动态更新目录列表当前项
+ */
+const switchCurrentCatalogItem = function () {
+    /**
+     * @type Array<HTMLHeadingElement>
+     */
+    var allHeadings = headingArray.value,
+        headingCount = allHeadings.length;
+    for (var i = headingCount - 1; i >= 0; i--) {
+        var h = allHeadings[i];
+        if (h.getBoundingClientRect().top <= 80) {
+            var anchor = h.dataset.anchor,
+                dataItem = catalogData.value.find((i) => i.anchor === anchor);
+            setClickedCatalogItemStyle(dataItem);
+            break;
+        }
+    }
+};
+//监听路由变化，加载不同文章
 watch(
     () => route.params["pid"],
     (n) => {
@@ -106,8 +130,16 @@ watch(
     }
 );
 
-onMounted(() => renderView(route.params["pid"]));
-onUnmounted(() => store.commit("setBreadcrumbNav", []));
+onMounted(() => {
+    renderView(route.params["pid"]);
+    //添加更新目录的窗口滚动事件处理器
+    windowScroll.addHandle("catalog-move", null, switchCurrentCatalogItem);
+});
+onUnmounted(() => {
+    store.commit("setBreadcrumbNav", []);
+    //移除更新目录的窗口滚动事件处理器
+    windowScroll.deleteHandle("catalog-move");
+});
 </script>
 
 <template>
@@ -262,7 +294,7 @@ onUnmounted(() => store.commit("setBreadcrumbNav", []));
     margin: 5px;
     display: flex;
     max-height: calc(100% - $header-height - 10px);
-    max-width: calc(19% - 10px);
+    max-width: calc($sidebar-width-percentage - 10px);
     @media (max-width: $media-small-size) {
         max-width: 25%;
     }

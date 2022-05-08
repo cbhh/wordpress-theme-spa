@@ -18,7 +18,11 @@ export default function () {
         /**
          * 上一次选中的目录项对应的数据
          */
-        lastClickedCatalogItem = ref({});
+        lastClickedCatalogItem = ref({}),
+        /**
+         * 保存所有heading元素
+         */
+        headingArray = ref([]);
     /**
      * 目录是否可见
      */
@@ -52,6 +56,7 @@ export default function () {
                         node.id = `h${level}-${tagCount[level - 1]}-${nonce}`;
                     }
                     node.dataset.anchor = nonce;
+                    headingArray.value.push(node);
                     lastTag = level;
                     catalogData.value.push({
                         text: node.innerText,
@@ -77,6 +82,7 @@ export default function () {
         catalogData,
         catalogVisible,
         generateData,
+        headingArray,
         setClickedCatalogItemStyle
     }
 }
