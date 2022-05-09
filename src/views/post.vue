@@ -14,7 +14,6 @@ import { useRoute } from "vue-router";
 import { ApiList } from "../apis/dataType";
 import PostTagList from "../components/layout/content/PostTagList.vue";
 import PostAuthor from "../components/layout/content/PostAuthor.vue";
-import SiteSidebarItem from "../components/layout/sidebar/SiteSidebarItem.vue";
 import getAncestorCategories from "../composables/getAncestorCategories";
 import generateCatalogData from "../composables/generateCatalogData";
 import windowScroll from "../global/windowScroll";
@@ -30,7 +29,7 @@ const allUsers = computed(() => store.state.users.userList);
 const { ancestors, getParent } = getAncestorCategories(allCategories.value);
 const {
     catalogData,
-    catalogVisible,
+    catalogRequired,
     generateData,
     headingArray,
     setClickedCatalogItemStyle,
@@ -48,10 +47,14 @@ const renderTimes = ref(0),
         avatar: "",
         id: 0,
         description: "",
-    });
+    }),
+    /**
+     * 目录可见性
+     */
+    catalogVisible = ref(true);
 /**
  * 提供数据渲染视图
- * @param {Number} curentPostId 
+ * @param {Number} curentPostId
  */
 const renderView = function (curentPostId) {
     /**
@@ -120,6 +123,12 @@ const switchCurrentCatalogItem = function () {
         }
     }
 };
+/**
+ * 切换目录可见性
+ */
+const switchCatalogVisible = function () {
+    catalogVisible.value = !catalogVisible.value;
+};
 //监听路由变化，加载不同文章
 watch(
     () => route.params["pid"],
@@ -163,13 +172,16 @@ onUnmounted(() => {
             </div>
         </footer>
     </article>
-    <SiteSidebarItem itemTitle="文章目录" id="post-catalog">
-        <catalog
-            :catalogItemList="catalogData"
-            v-if="catalogVisible"
-            @clickedItem="setClickedCatalogItemStyle"
-        ></catalog>
-    </SiteSidebarItem>
+    <catalog
+        v-if="catalogRequired"
+        :catalogItemList="catalogData"
+        :visible="catalogVisible"
+        @clickedItem="setClickedCatalogItemStyle"
+    ></catalog>
+    <catalog-switch-button
+        :catalogVisible="catalogVisible"
+        @switchButtonClicked="switchCatalogVisible"
+    ></catalog-switch-button>
 </template>
 
 <style lang="scss" scoped>
@@ -280,32 +292,6 @@ onUnmounted(() => {
         a:hover {
             color: var(--theme-color-gray);
         }
-    }
-}
-#post-catalog {
-    transition: var(--theme-transition);
-    background: none;
-    border: none;
-    border-radius: 10px;
-    position: fixed;
-    z-index: 10;
-    bottom: 0;
-    left: 0;
-    margin: 5px;
-    display: flex;
-    max-height: calc(100% - $header-height - 10px);
-    max-width: calc($sidebar-width-percentage - 10px);
-    @media (max-width: $media-small-size) {
-        max-width: 25%;
-    }
-    @media (max-width: $media-smallest-size) {
-        max-width: 35%;
-    }
-    @media (max-width: $media-mini-size) {
-        max-width: 45%;
-    }
-    @media (max-width: $media-minier-size) {
-        max-width: 55%;
     }
 }
 </style>

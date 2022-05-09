@@ -39,14 +39,7 @@ const props = defineProps({
         default: false,
     },
 });
-const emits = defineEmits(["itemClick"]);
 const levelClass = computed(() => "catalog-h" + props.itemLevel);
-/**
- * 点击任意一个目录项时，将其anchor值传递给父组件
- */
-const catalogItemClick = function () {
-    emits("itemClick", props.itemAnchor);
-};
 </script>
 
 <template>
@@ -55,7 +48,6 @@ const catalogItemClick = function () {
         :class="[props.isCurrent ? 'current' : '', levelClass]"
         :data-anchor="props.itemAnchor"
         :href="'#' + props.itemHref"
-        @click="catalogItemClick"
     >
         <div class="catalog-item-wrap">
             <div class="item-deco"></div>

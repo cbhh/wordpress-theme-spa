@@ -24,9 +24,9 @@ export default function () {
          */
         headingArray = ref([]);
     /**
-     * 目录是否可见
+     * 目录是否需要
      */
-    const catalogVisible = computed(() => catalogData.value.length > 0);
+    const catalogRequired = computed(() => catalogData.value.length > 0);
     /**
      * 生成目录数据
      * @param {HTMLDivElement} contentRef 内容dom的引用
@@ -80,7 +80,7 @@ export default function () {
     };
     return {
         catalogData,
-        catalogVisible,
+        catalogRequired,
         generateData,
         headingArray,
         setClickedCatalogItemStyle
