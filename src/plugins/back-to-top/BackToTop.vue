@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from "vue";
 const props = defineProps({
     visible: {
         type: Boolean,
@@ -8,6 +9,14 @@ const props = defineProps({
 });
 
 const scrollInterval = 20;
+
+const isMouseDown = ref(false);
+const mouseDown = function () {
+    isMouseDown.value = true;
+};
+const mouseUp = function () {
+    isMouseDown.value = false;
+};
 
 const move = function () {
     var view = document.documentElement,
@@ -33,14 +42,20 @@ const move = function () {
 </script>
 
 <template>
-    <div id="back-to-top" :class="{ hidden: !props.visible }" @click="move">
+    <div
+        class="back-to-top"
+        :class="{ hidden: !props.visible, mousedown: isMouseDown }"
+        @click="move"
+        @mousedown="mouseDown"
+        @mouseup="mouseUp"
+    >
         <div><i class="fa fa-arrow-up"></i></div>
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 @import "@sty/variable.scss";
-#back-to-top {
+.back-to-top {
     --side-length: 50px;
     position: fixed;
     bottom: 30px;
