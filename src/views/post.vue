@@ -32,6 +32,7 @@ const {
     catalogRequired,
     generateData,
     headingArray,
+    lastClickedCatalogItem,
     setClickedCatalogItemStyle,
 } = generateCatalogData();
 
@@ -116,9 +117,14 @@ const switchCurrentCatalogItem = function () {
     for (var i = headingCount - 1; i >= 0; i--) {
         var h = allHeadings[i];
         if (h.getBoundingClientRect().top <= 80) {
-            var anchor = h.dataset.anchor,
-                dataItem = catalogData.value.find((i) => i.anchor === anchor);
-            setClickedCatalogItemStyle(dataItem);
+            var anchor = h.dataset.anchor;
+            //小小的优化：若当前所处heading与上一个heading相同，则不执行任何操作
+            if (anchor !== lastClickedCatalogItem.value.anchor) {
+                var dataItem = catalogData.value.find(
+                    (i) => i.anchor === anchor
+                );
+                setClickedCatalogItemStyle(dataItem);
+            }
             break;
         }
     }

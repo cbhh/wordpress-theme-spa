@@ -83,6 +83,7 @@ export default function () {
         catalogRequired,
         generateData,
         headingArray,
+        lastClickedCatalogItem,
         setClickedCatalogItemStyle
     }
 }
