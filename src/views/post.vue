@@ -29,9 +29,9 @@ const allUsers = computed(() => store.state.users.userList);
 
 const { ancestors, getParent } = getAncestorCategories(allCategories.value);
 const {
-    catalogData,
+    catalogList,
     catalogRequired,
-    generateData,
+    generateCatalogList,
     headingArray,
     lastClickedCatalogItem,
     setClickedCatalogItemStyle,
@@ -106,7 +106,7 @@ const renderView = function (curentPostId) {
         .then(function () {
             nextTick().then(function () {
                 //生成文章目录
-                generateData(content.value);
+                generateCatalogList(content.value);
                 //生成文章图片画廊
                 generateGalleryImageList(content.value);
             });
@@ -127,7 +127,7 @@ const switchCurrentCatalogItem = function () {
             var anchor = h.dataset.anchor;
             //小小的优化：若当前所处heading与上一个heading相同，则不执行任何操作
             if (anchor !== lastClickedCatalogItem.value.anchor) {
-                var dataItem = catalogData.value.find(
+                var dataItem = catalogList.value.find(
                     (i) => i.anchor === anchor
                 );
                 setClickedCatalogItemStyle(dataItem);
@@ -185,12 +185,12 @@ onUnmounted(() => {
             </div>
         </footer>
     </article>
-    <catalog
+    <post-catalog
         v-if="catalogRequired"
-        :catalogItemList="catalogData"
+        :catalogItemList="catalogList"
         :visible="catalogVisible"
         @clickedItem="setClickedCatalogItemStyle"
-    ></catalog>
+    ></post-catalog>
     <catalog-switch-button
         :catalogVisible="catalogVisible"
         @switchButtonClicked="switchCatalogVisible"

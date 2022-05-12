@@ -3,7 +3,7 @@ import CatalogSwitchButton from "./CatalogSwitchButton.vue";
 
 export default {
     install: function (app, options) {
-        app.component("catalog", Catalog);
+        app.component("post-catalog", Catalog);
         app.component("catalog-switch-button", CatalogSwitchButton);
     }
 }

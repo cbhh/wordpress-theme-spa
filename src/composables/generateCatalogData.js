@@ -1,11 +1,7 @@
 import { ref, computed } from "vue";
 import { CatalogItemDataType } from "../plugins/post-catalog/catalog";
+import { randomString } from "../utils/random"
 
-function randomString(length) {
-    if (length <= 13 && length > 0) {
-        return Math.random().toString(16).substring(2, length + 2);
-    }
-}
 const headings = ["H2", "H3", "H4", "H5", "H6"];
 /**
  * 生成目录数据
@@ -14,7 +10,7 @@ export default function () {
     /**
      * 目录数据数组
      */
-    const catalogData = ref([]),
+    const catalogList = ref([]),
         /**
          * 上一次选中的目录项对应的数据
          */
@@ -26,12 +22,12 @@ export default function () {
     /**
      * 目录是否需要
      */
-    const catalogRequired = computed(() => catalogData.value.length > 0);
+    const catalogRequired = computed(() => catalogList.value.length > 0);
     /**
      * 生成目录数据
      * @param {HTMLDivElement} contentRef 内容dom的引用
      */
-    const generateData = function (contentRef) {
+    const generateCatalogList = function (contentRef) {
         if (contentRef && contentRef instanceof HTMLDivElement) {
             var children = contentRef.children,
                 count = contentRef.childElementCount,
@@ -58,7 +54,7 @@ export default function () {
                     node.dataset.anchor = nonce;
                     headingArray.value.push(node);
                     lastTag = level;
-                    catalogData.value.push({
+                    catalogList.value.push({
                         text: node.innerText,
                         level: parseInt(level),
                         href: node.id,
@@ -79,9 +75,9 @@ export default function () {
         lastClickedCatalogItem.value = clickedItem;
     };
     return {
-        catalogData,
+        catalogList,
         catalogRequired,
-        generateData,
+        generateCatalogList,
         headingArray,
         lastClickedCatalogItem,
         setClickedCatalogItemStyle
