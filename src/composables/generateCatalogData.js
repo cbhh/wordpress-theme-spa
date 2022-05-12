@@ -12,17 +12,27 @@ export default function () {
      */
     const catalogList = ref([]),
         /**
-         * 上一次选中的目录项对应的数据
-         */
-        lastClickedCatalogItem = ref({}),
-        /**
          * 保存所有heading元素
+         * @type Array<HTMLHeadingElement>
          */
-        headingArray = ref([]);
+        headingArray = [],
+        /**
+         * 目录可见性
+         */
+        catalogVisible = ref(true);
     /**
-     * 目录是否需要
+     * 上一次选中的目录项对应的数据
+     * @type CatalogItemDataType
      */
-    const catalogRequired = computed(() => catalogList.value.length > 0);
+    var lastClickedCatalogItem = {};
+    /**
+     * 目录项总数
+     */
+    const catalogItemCount = computed(() => catalogList.value.length),
+        /**
+         * 目录是否需要
+         */
+        catalogRequired = computed(() => catalogItemCount.value > 0);
     /**
      * 生成目录数据
      * @param {HTMLDivElement} contentRef 内容dom的引用
@@ -52,7 +62,7 @@ export default function () {
                         node.id = `h${level}-${tagCount[level - 1]}-${nonce}`;
                     }
                     node.dataset.anchor = nonce;
-                    headingArray.value.push(node);
+                    headingArray.push(node);
                     lastTag = level;
                     catalogList.value.push({
                         text: node.innerText,
@@ -66,20 +76,46 @@ export default function () {
         }
     };
     /**
+     * 监听窗口滚动，动态更新目录列表当前项
+     */
+    const switchCurrentCatalogItem = function () {
+        for (var i = catalogItemCount.value - 1; i >= 0; i--) {
+            var h = headingArray[i];
+            if (h.getBoundingClientRect().top <= 80) {
+                var anchor = h.dataset.anchor;
+                //小小的优化：若当前所处heading与上一个heading相同，则不执行任何操作
+                if (anchor !== lastClickedCatalogItem.anchor) {
+                    var dataItem = catalogList.value.find(
+                        (i) => i.anchor === anchor
+                    );
+                    setClickedCatalogItemStyle(dataItem);
+                }
+                break;
+            }
+        }
+    };
+    /**
      * 设置选中目录项的样式
      * @param {CatalogItemDataType} clickedItem
      */
     const setClickedCatalogItemStyle = function (clickedItem) {
-        lastClickedCatalogItem.value.current = false;
+        lastClickedCatalogItem.current = false;
         clickedItem.current = true;
-        lastClickedCatalogItem.value = clickedItem;
+        lastClickedCatalogItem = clickedItem;
+    };
+    /**
+     * 切换目录可见性
+     */
+    const switchCatalogVisible = function () {
+        catalogVisible.value = !catalogVisible.value;
     };
     return {
         catalogList,
         catalogRequired,
         generateCatalogList,
-        headingArray,
-        lastClickedCatalogItem,
-        setClickedCatalogItemStyle
+        catalogVisible,
+        setClickedCatalogItemStyle,
+        switchCatalogVisible,
+        switchCurrentCatalogItem
     }
 }

@@ -32,9 +32,10 @@ const {
     catalogList,
     catalogRequired,
     generateCatalogList,
-    headingArray,
-    lastClickedCatalogItem,
+    catalogVisible,
     setClickedCatalogItemStyle,
+    switchCatalogVisible,
+    switchCurrentCatalogItem
 } = generateCatalogData();
 const {
     galleryImageList,
@@ -59,11 +60,7 @@ const renderTimes = ref(0),
         avatar: "",
         id: 0,
         description: "",
-    }),
-    /**
-     * 目录可见性
-     */
-    catalogVisible = ref(true);
+    });
 /**
  * 提供数据渲染视图
  * @param {Number} curentPostId
@@ -120,36 +117,6 @@ const renderView = function (curentPostId) {
                 generateGalleryImageList(content.value);
             });
         });
-};
-/**
- * 监听窗口滚动，动态更新目录列表当前项
- */
-const switchCurrentCatalogItem = function () {
-    /**
-     * @type Array<HTMLHeadingElement>
-     */
-    var allHeadings = headingArray.value,
-        headingCount = allHeadings.length;
-    for (var i = headingCount - 1; i >= 0; i--) {
-        var h = allHeadings[i];
-        if (h.getBoundingClientRect().top <= 80) {
-            var anchor = h.dataset.anchor;
-            //小小的优化：若当前所处heading与上一个heading相同，则不执行任何操作
-            if (anchor !== lastClickedCatalogItem.value.anchor) {
-                var dataItem = catalogList.value.find(
-                    (i) => i.anchor === anchor
-                );
-                setClickedCatalogItemStyle(dataItem);
-            }
-            break;
-        }
-    }
-};
-/**
- * 切换目录可见性
- */
-const switchCatalogVisible = function () {
-    catalogVisible.value = !catalogVisible.value;
 };
 //监听路由变化，加载不同文章
 watch(
