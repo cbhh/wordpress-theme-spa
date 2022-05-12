@@ -16,6 +16,7 @@ import PostTagList from "../components/layout/content/PostTagList.vue";
 import PostAuthor from "../components/layout/content/PostAuthor.vue";
 import getAncestorCategories from "../composables/getAncestorCategories";
 import generateCatalogData from "../composables/generateCatalogData";
+import generateGalleryData from "../composables/generateGalleryData";
 import windowScroll from "../global/windowScroll";
 
 const $apis = getCurrentInstance().appContext.config.globalProperties.$apis;
@@ -35,6 +36,7 @@ const {
     lastClickedCatalogItem,
     setClickedCatalogItemStyle,
 } = generateCatalogData();
+const { galleryImageList, generateGalleryImageList } = generateGalleryData();
 
 const renderTimes = ref(0),
     /**
@@ -102,7 +104,12 @@ const renderView = function (curentPostId) {
             renderTimes.value += 1;
         })
         .then(function () {
-            nextTick().then(generateData(content.value));
+            nextTick().then(function () {
+                //生成文章目录
+                generateData(content.value);
+                //生成文章图片画廊
+                generateGalleryImageList(content.value);
+            });
         });
 };
 /**
@@ -188,6 +195,7 @@ onUnmounted(() => {
         :catalogVisible="catalogVisible"
         @switchButtonClicked="switchCatalogVisible"
     ></catalog-switch-button>
+    <post-gallery :imageList="galleryImageList"></post-gallery>
 </template>
 
 <style lang="scss" scoped>
