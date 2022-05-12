@@ -2,42 +2,49 @@
 import GalleryItem from "./GalleryItem.vue";
 import { computed } from "vue";
 const props = defineProps({
-    visible: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
     imageList: {
         type: Array,
         required: true,
     },
     /**
-     * 当前图片在全部图片中的位置，从1开始
+     * 当前图片在全部图片中的位置，从0开始
      */
     currentImageIndex: {
         type: Number,
         required: false,
-        default: 1,
+        default: 0,
     },
 });
+const emits = defineEmits(["closeGallery", "moveNext", "movePre"]);
 const currentImageDescription = computed(() => {
-    var data = props.imageList[props.currentImageIndex - 1];
+    var data = props.imageList[props.currentImageIndex];
     return data ? data.description : "";
 });
+const clickCloseButton = function () {
+    emits("closeGallery");
+};
+const clickPre = function () {
+    emits("movePre");
+};
+const clickNext = function () {
+    emits("moveNext");
+};
 </script>
 
 <template>
-    <div class="post-img-gallery" v-show="props.visible">
-        <div class="gallery-close" title="退出画廊">
+    <div class="post-img-gallery">
+        <div class="gallery-close" title="退出画廊" @click="clickCloseButton">
             <i class="fa fa-close"></i>
         </div>
         <div class="gallery-mover">
-            <div class="icon" title="前一张">
+            <div class="icon" title="前一张" @click="clickPre">
                 <i class="fa fa-chevron-left"></i>
             </div>
         </div>
         <div class="gallery-content">
-            <div class="current-img-index">{{ props.currentImageIndex }}</div>
+            <div class="current-img-index">
+                {{ props.currentImageIndex + 1 }}
+            </div>
             <div class="img-container">
                 <GalleryItem
                     v-for="item in props.imageList"
@@ -55,7 +62,7 @@ const currentImageDescription = computed(() => {
             </div>
         </div>
         <div class="gallery-mover">
-            <div class="icon" title="后一张">
+            <div class="icon" title="后一张" @click="clickNext">
                 <i class="fa fa-chevron-right"></i>
             </div>
         </div>

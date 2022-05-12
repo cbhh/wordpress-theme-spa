@@ -36,7 +36,16 @@ const {
     lastClickedCatalogItem,
     setClickedCatalogItemStyle,
 } = generateCatalogData();
-const { galleryImageList, generateGalleryImageList } = generateGalleryData();
+const {
+    galleryImageList,
+    galleyRequired,
+    galleryVisible,
+    currentImageIndex,
+    generateGalleryImageList,
+    switchGalleyVisible,
+    moveToNext,
+    moveToPre,
+} = generateGalleryData();
 
 const renderTimes = ref(0),
     /**
@@ -195,7 +204,15 @@ onUnmounted(() => {
         :catalogVisible="catalogVisible"
         @switchButtonClicked="switchCatalogVisible"
     ></catalog-switch-button>
-    <post-gallery :imageList="galleryImageList"></post-gallery>
+    <post-gallery
+        v-if="galleyRequired"
+        v-show="galleryVisible"
+        :imageList="galleryImageList"
+        :currentImageIndex="currentImageIndex"
+        @closeGallery="switchGalleyVisible(false)"
+        @moveNext="moveToNext"
+        @movePre="moveToPre"
+    ></post-gallery>
 </template>
 
 <style lang="scss" scoped>
