@@ -204,6 +204,7 @@ onMounted(() => {
 
 <style lang="scss">
 @import "@sty/main.scss";
+@import "@sty/fix.scss";
 @import "@sty/variable.scss";
 
 #app {

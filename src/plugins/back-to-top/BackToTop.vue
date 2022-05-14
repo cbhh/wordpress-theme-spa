@@ -70,7 +70,7 @@ const move = function () {
     transition: var(--theme-transition);
     cursor: pointer;
     box-shadow: 0 0 10px #333;
-    z-index: 1;
+    z-index: 10;
     > div {
         border-radius: inherit;
         width: calc(0.8 * var(--side-length));

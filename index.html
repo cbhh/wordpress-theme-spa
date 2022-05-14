@@ -4,10 +4,42 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title><%- title %></title>
-        <%- injectMeta %>
-        <%- injectLink %>
-        <%- injectStyle %>
-        <%- injectScript %>
+        <script>
+            const platform = (function () {
+                    var os = navigator.oscpu,
+                        pl1 = navigator.platform,
+                        pl2 =
+                            navigator.userAgentData &&
+                            navigator.userAgentData.platform;
+                    if (
+                        (os && os.includes("Windows")) ||
+                        (pl1 && pl1.includes("Win32")) ||
+                        (pl2 && pl2.includes("Windows"))
+                    ) {
+                        return "Win";
+                    }
+                    if (
+                        (os && os.includes("Mac OS")) ||
+                        (pl1 && pl1.includes("MacIntel")) ||
+                        (pl2 && pl2.includes("macOS"))
+                    ) {
+                        return "Mac";
+                    }
+                })(),
+                isSafari = navigator.vendor === "Apple Computer, Inc.",
+                isLowPixelRatio = window.devicePixelRatio < 1.5;
+            if (platform === "Win") {
+                document.documentElement.classList.add("platform-win");
+            }
+            if (isSafari) {
+                document.documentElement.classList.add("browser-safari");
+            }
+            if (isLowPixelRatio) {
+                document.documentElement.classList.add("pixel-ratio-low");
+            }
+        </script>
+        <%- injectMeta %> <%- injectLink %> <%- injectStyle %> <%- injectScript
+        %>
     </head>
     <body>
         <div id="app"></div>

@@ -36,8 +36,8 @@ export function generateSiteLink() {
         linkArray.push("<link rel='stylesheet' id='fontawesome-css' href='/fontawesome/css/font-awesome.min.css' type='text/css' media='all'>");
     }
     //加载区块编辑器样式表
-    if (wpAppConfig.enableGutenbergEditorStyle) {
-        linkArray.push(`<link rel="stylesheet" id="wp-block-library-css" href="${wpAppConfig.apiBaseUrl}/wp-includes/css/dist/block-library/style.min.css" type="text/css" media="all">`);
+    if (wpAppConfig.gutenbergEditorStylesheet) {
+        linkArray.push(`<link rel="stylesheet" id="wp-block-library-css" href="${wpAppConfig.gutenbergEditorStylesheet}" type="text/css" media="all">`);
     }
     return linkArray.join("");
 }
@@ -65,5 +65,7 @@ export function generateBackgroundCss() {
         isXPosValid = ["left", "center", "right"].includes(settings.position.horizontal),
         isYPosValid = ["top", "center", "bottom"].includes(settings.position.vertical),
         isSizeValid = ["unset", "contain", "cover"].includes(settings.size);
-    return `<style>body{background-image:url(${settings.image});background-position:${isXPosValid ? settings.position.horizontal : "unset"} ${isYPosValid ? settings.position.vertical : "unset"};background-size:${isSizeValid ? settings.size : "unset"};background-repeat:${settings.repeat ? "repeat" : "no-repeat"};background-attachment:${settings.scroll ? "scroll" : "fixed"}}</style>`;
+    if (settings.image) {
+        return `<style>body{background-image:url(${settings.image});background-position:${isXPosValid ? settings.position.horizontal : "unset"} ${isYPosValid ? settings.position.vertical : "unset"};background-size:${isSizeValid ? settings.size : "unset"};background-repeat:${settings.repeat ? "repeat" : "no-repeat"};background-attachment:${settings.scroll ? "scroll" : "fixed"}}</style>`;
+    } else return "";
 }

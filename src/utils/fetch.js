@@ -25,8 +25,8 @@ export default function (baseEndpoint) {
             });
             if (response.ok) {
                 var headers = response.headers,
-                    totalItems = headers.get("X-WP-Total"),
-                    totalPages = headers.get("X-WP-TotalPages"),
+                    totalItems = headers.get("X-WP-Total") || headers.get("x-wp-total"),
+                    totalPages = headers.get("X-WP-TotalPages") || headers.get("x-wp-totalpages"),
                     result = await response.json();
                 if (totalItems && totalPages) {
                     return {

@@ -42,11 +42,11 @@ export default {
      */
     appPwd: "gxYX wxyy aSQJ tAEI 5NyB AarZ",
     /**
-     * 是否启用对wordpress古腾堡编辑器（区块编辑器）样式支持，默认true，即启用
+     * wordpress古腾堡编辑器（区块编辑器）样式表文件
      * 
-     * 若在wordpress后台写文章时采用的是旧版富文本编辑器，则将该项置为false
+     * 若在wordpress后台写文章时采用的是旧版富文本编辑器，则将该项置为""
      */
-    enableGutenbergEditorStyle: true,
+    gutenbergEditorStylesheet: "http://localhost:2222/wp-includes/css/dist/block-library/style.min.css",
     /**
      * 隐藏无内容的分类，默认true，即隐藏
      */
