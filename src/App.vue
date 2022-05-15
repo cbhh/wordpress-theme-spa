@@ -18,6 +18,7 @@ import SiteSidebarItem from "./components/layout/sidebar/SiteSidebarItem.vue";
 import Category from "./components/layout/sidebar/modules/Category.vue";
 import Tag from "./components/layout/sidebar/modules/Tag.vue";
 import Calendar from "./components/layout/sidebar/modules/Calendar.vue";
+import ThemeLoading from "./components/common/ThemeLoading.vue";
 //调用各组合式函数并解构出数据和对应操作函数
 const { tagList, getTagList } = getTags(),
     { siteMeta, getSiteSettings } = getSettings(),
@@ -93,7 +94,7 @@ watch(
     () => dataLoadingCompletedItem.value,
     (n, o) => {
         if (n === 4 && o < 4) {
-            dataLoadingText.value = "即将跳转至首页...";
+            dataLoadingText.value = "即将跳转至首页";
             setTimeout(() => {
                 router.push({ name: "home" });
                 loadingMaskRequired.value = false;
@@ -103,7 +104,7 @@ watch(
 );
 //组件挂载之后，执行数据请求操作
 onMounted(() => {
-    dataLoadingText.value = "正在加载站点数据...";
+    dataLoadingText.value = "正在加载站点数据";
     //加载标签列表并存储进vuex
     getTagList().then(() => {
         store.commit("storeTagList", tagList.value);
@@ -139,12 +140,10 @@ onMounted(() => {
 
 <template>
     <div id="loading-mask" v-if="loadingMaskRequired">
-        <div class="theme-loading">
-            <i class="fa fa-spinner fa-pulse fa-5x loading-icon"></i>
-            <p class="loading-tip" style="margin-top: 10px">
-                {{ dataLoadingText }}
-            </p>
-        </div>
+        <ThemeLoading
+            :logoRequired="true"
+            :loadingText="dataLoadingText"
+        ></ThemeLoading>
     </div>
     <SiteHeader></SiteHeader>
     <!--着陆页组件切换start-->
@@ -214,7 +213,7 @@ onMounted(() => {
     position: fixed;
     width: 100%;
     height: 100%;
-    background: var(--theme-color-palest);
+    background: #fff;
     display: flex;
     align-items: center;
     justify-content: center;

@@ -1,5 +1,6 @@
 <script setup>
 import PostList from "../components/layout/content/PostList.vue";
+import ThemeLoading from "../components/common/ThemeLoading.vue";
 import {
     getCurrentInstance,
     onMounted,
@@ -28,11 +29,14 @@ const { descendants, getNextLvCats } = getDescendantCategories(
 );
 const { postList, generateList } = generatePostList();
 
-const renderTimes = ref(0);
+const renderTimes = ref(0),
+    loadingMaskRequired = ref(true),
+    dataLoadingText = ref("");
 
 const renderView = function (currentCatSlug) {
     var currentCat = allCategories.value.find((c) => c.slug === currentCatSlug),
         currentCatId = currentCat.id;
+    dataLoadingText.value = `正在加载分类【${currentCat.name}】`;
     //landing组件
     store.commit("setPostMeta", {
         title: "分类：" + currentCat.name,
@@ -58,6 +62,8 @@ const renderView = function (currentCatSlug) {
     ) {
         postList.value = [];
         generateList(allCategories.value, allTags.value, data.result);
+        dataLoadingText.value = `分类【${currentCat.name}】加载成功`;
+        setTimeout(() => (loadingMaskRequired.value = false), 500);
     });
     renderTimes.value += 1;
 };
@@ -76,5 +82,22 @@ onUnmounted(() => store.commit("setBreadcrumbNav", []));
 </script>
 
 <template>
-    <PostList :postList="postList"></PostList>
+    <div class="catLoadingMask" v-show="loadingMaskRequired">
+        <ThemeLoading
+            :logoRequired="false"
+            :loadingText="dataLoadingText"
+        ></ThemeLoading>
+    </div>
+    <PostList :postList="postList" v-show="!loadingMaskRequired"></PostList>
 </template>
+
+<style lang="scss" scoped>
+@import "@sty/mixin.scss";
+.catLoadingMask {
+    @include flex-center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid var(--theme-color-pale);
+    box-shadow: var(--theme-shadow);
+}
+</style>

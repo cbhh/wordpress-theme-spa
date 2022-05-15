@@ -14,6 +14,7 @@ import { useRoute } from "vue-router";
 import { ApiList } from "../apis/dataType";
 import PostTagList from "../components/layout/content/PostTagList.vue";
 import PostAuthor from "../components/layout/content/PostAuthor.vue";
+import ThemeLoading from "../components/common/ThemeLoading.vue";
 import getAncestorCategories from "../composables/getAncestorCategories";
 import generateCatalogData from "../composables/generateCatalogData";
 import generateGalleryData from "../composables/generateGalleryData";
@@ -35,7 +36,7 @@ const {
     catalogVisible,
     setClickedCatalogItemStyle,
     switchCatalogVisible,
-    switchCurrentCatalogItem
+    switchCurrentCatalogItem,
 } = generateCatalogData();
 const {
     galleryImageList,
@@ -60,12 +61,15 @@ const renderTimes = ref(0),
         avatar: "",
         id: 0,
         description: "",
-    });
+    }),
+    loadingMaskRequired = ref(true),
+    dataLoadingText = ref("");
 /**
  * 提供数据渲染视图
  * @param {Number} curentPostId
  */
 const renderView = function (curentPostId) {
+    dataLoadingText.value = "正在加载文章数据";
     /**
      * @type ApiList
      */
@@ -115,6 +119,8 @@ const renderView = function (curentPostId) {
                 generateCatalogList(content.value);
                 //生成文章图片画廊
                 generateGalleryImageList(content.value);
+                dataLoadingText.value = "文章数据加载成功";
+                setTimeout(() => (loadingMaskRequired.value = false), 500);
             });
         });
 };
@@ -142,8 +148,19 @@ onUnmounted(() => {
 
 <template>
     <article class="post">
-        <div class="entry-content" v-html="contentHtml" ref="content"></div>
-        <footer class="entry-footer">
+        <div class="postLoadingMask" v-show="loadingMaskRequired">
+            <ThemeLoading
+                :logoRequired="false"
+                :loadingText="dataLoadingText"
+            ></ThemeLoading>
+        </div>
+        <div
+            class="entry-content"
+            v-show="!loadingMaskRequired"
+            v-html="contentHtml"
+            ref="content"
+        ></div>
+        <footer class="entry-footer" v-show="!loadingMaskRequired">
             <div class="extra-meta">
                 <PostTagList :tagList="tagList"></PostTagList>
                 <PostAuthor
@@ -197,6 +214,10 @@ onUnmounted(() => {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    .postLoadingMask {
+        @include flex-center;
+        text-align: center;
+    }
     .entry-content {
         padding-bottom: 1px;
         margin-bottom: 1rem;
