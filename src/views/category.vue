@@ -36,6 +36,7 @@ const renderTimes = ref(0),
 const renderView = function (currentCatSlug) {
     var currentCat = allCategories.value.find((c) => c.slug === currentCatSlug),
         currentCatId = currentCat.id;
+    loadingMaskRequired.value = true;
     dataLoadingText.value = `正在加载分类【${currentCat.name}】`;
     //landing组件
     store.commit("setPostMeta", {
@@ -82,7 +83,7 @@ onUnmounted(() => store.commit("setBreadcrumbNav", []));
 </script>
 
 <template>
-    <div class="catLoadingMask" v-show="loadingMaskRequired">
+    <div class="postListLoadingMask" v-show="loadingMaskRequired">
         <ThemeLoading
             :logoRequired="false"
             :loadingText="dataLoadingText"
@@ -90,14 +91,3 @@ onUnmounted(() => store.commit("setBreadcrumbNav", []));
     </div>
     <PostList :postList="postList" v-show="!loadingMaskRequired"></PostList>
 </template>
-
-<style lang="scss" scoped>
-@import "@sty/mixin.scss";
-.catLoadingMask {
-    @include flex-center;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.8);
-    border: 2px solid var(--theme-color-pale);
-    box-shadow: var(--theme-shadow);
-}
-</style>

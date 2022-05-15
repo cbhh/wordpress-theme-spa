@@ -23,6 +23,7 @@ const renderTimes = ref(0),
 
 const renderView = function (currentUserId) {
     var currentUser = allUsers.value.find((u) => u.id === currentUserId);
+    loadingMaskRequired.value = true;
     dataLoadingText.value = `正在加载作者【${currentUser.name}】`;
     //landing组件
     store.commit("setPostMeta", {
@@ -60,7 +61,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="authorLoadingMask" v-show="loadingMaskRequired">
+    <div class="postListLoadingMask" v-show="loadingMaskRequired">
         <ThemeLoading
             :logoRequired="false"
             :loadingText="dataLoadingText"
@@ -68,14 +69,3 @@ onMounted(() => {
     </div>
     <PostList :postList="postList" v-show="!loadingMaskRequired"></PostList>
 </template>
-
-<style lang="scss" scoped>
-@import "@sty/mixin.scss";
-.authorLoadingMask {
-    @include flex-center;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.8);
-    border: 2px solid var(--theme-color-pale);
-    box-shadow: var(--theme-shadow);
-}
-</style>

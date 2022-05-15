@@ -18,6 +18,7 @@ const loadingMaskRequired = ref(true),
     dataLoadingText = ref("");
 
 onMounted(() => {
+    loadingMaskRequired.value = true;
     dataLoadingText.value = "正在加载最近文章";
     /**
      * @type ApiList
@@ -32,7 +33,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="homeLoadingMask" v-show="loadingMaskRequired">
+    <div class="postListLoadingMask" v-show="loadingMaskRequired">
         <ThemeLoading
             :logoRequired="false"
             :loadingText="dataLoadingText"
@@ -40,14 +41,3 @@ onMounted(() => {
     </div>
     <PostList :postList="postList" v-show="!loadingMaskRequired"></PostList>
 </template>
-
-<style lang="scss" scoped>
-@import "@sty/mixin.scss";
-.homeLoadingMask {
-    @include flex-center;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.8);
-    border: 2px solid var(--theme-color-pale);
-    box-shadow: var(--theme-shadow);
-}
-</style>

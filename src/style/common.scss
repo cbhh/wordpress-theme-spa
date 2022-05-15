@@ -1,0 +1,8 @@
+@import "@sty/mixin.scss";
+.postListLoadingMask {
+    @include flex-center;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid var(--theme-color-pale);
+    box-shadow: var(--theme-shadow);
+}

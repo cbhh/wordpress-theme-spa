@@ -7,6 +7,7 @@
 </template>
 
 <style lang="scss" scoped>
+@import "@sty/variable.scss";
 .primary-mask-top {
     position: absolute;
     z-index: 1;
@@ -26,6 +27,34 @@
         transform: rotateX(33deg);
         background-size: 18% auto;
         box-shadow: 0 -1px 3px #000;
+    }
+    @media (max-width: $media-small-size) {
+        --offset-x: 4px;
+        > div {
+            background-size: 25% auto;
+        }
+    }
+    @media (max-width: $media-smaller-size) {
+        > div {
+            background-size: 30%;
+            transform: rotateX(45deg);
+        }
+    }
+    @media (max-width: $media-smallest-size) {
+        --offset-x: 3px;
+        > div {
+            background-size: 40%;
+            height: 9px;
+            top: -8px;
+        }
+    }
+    @media (max-width: $media-mini-size) {
+        --offset-x: 2px;
+    }
+    @media (max-width: $media-minier-size) {
+        > div {
+            background-size: 50%;
+        }
     }
 }
 </style>

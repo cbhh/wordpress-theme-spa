@@ -69,6 +69,7 @@ const renderTimes = ref(0),
  * @param {Number} curentPostId
  */
 const renderView = function (curentPostId) {
+    loadingMaskRequired.value = true;
     dataLoadingText.value = "正在加载文章数据";
     /**
      * @type ApiList

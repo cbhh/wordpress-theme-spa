@@ -47,10 +47,7 @@ const logoUrl = computed(() => wpAppConfig.siteLogo);
         > .site-logo {
             max-width: 80px;
             max-height: 80px;
-            margin: 0 auto;
-        }
-        > .loading-tip {
-            margin-top: 10px;
+            margin: 0 auto 10px auto;
         }
     }
 }
