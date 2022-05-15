@@ -19,6 +19,7 @@ import Category from "./components/layout/sidebar/modules/Category.vue";
 import Tag from "./components/layout/sidebar/modules/Tag.vue";
 import Calendar from "./components/layout/sidebar/modules/Calendar.vue";
 import ThemeLoading from "./components/common/ThemeLoading.vue";
+import windowScroll from "./global/windowScroll";
 //调用各组合式函数并解构出数据和对应操作函数
 const { tagList, getTagList } = getTags(),
     { siteMeta, getSiteSettings } = getSettings(),
@@ -56,7 +57,11 @@ const landingMap = {
     /**
      * 当前路由名
      */
-    routeName = ref("home");
+    routeName = ref("home"),
+    /**
+     * 回到顶部按钮可见性
+     */
+    backToTopVisible = ref(false);
 /**
  * 当前选用的着陆页组件
  */
@@ -73,7 +78,14 @@ const currentLandingComponent = computed(() => landingMap[routeName.value]),
     breadcrumbNavList = computed(() => store.state.breadcrumb.categoryNavList);
 //站点设置信息注入，方便后代组件访问
 provide("site-meta", readonly(siteMeta));
-
+/**
+ * 根据窗口滚动切换回到顶部按钮可见性
+ * @param {Number} wsy window scroll y
+ * @param {Number} wh window inner height
+ */
+const switchBackToTopVisible = function (wsy, wh) {
+    backToTopVisible.value = wsy > wh ? true : false;
+};
 //侦听一个getter
 //https://v3.cn.vuejs.org/guide/reactivity-computed-watchers.html#watch
 //侦听路由名称变化，以选择不同的着陆页组件
@@ -135,6 +147,8 @@ onMounted(() => {
         `${year}-${month > 9 ? month : "0" + month}-01`,
         `${year}-${month > 9 ? month : "0" + month}-31`
     );
+    //添加切换回到顶部按钮可见性的窗口滚动事件处理器
+    windowScroll.addHandle("back-to-top-visible", null, switchBackToTopVisible);
 });
 </script>
 
@@ -198,7 +212,7 @@ onMounted(() => {
         </div>
     </div>
     <SiteFooter></SiteFooter>
-    <back-to-top :visible="true"></back-to-top>
+    <back-to-top :visible="backToTopVisible"></back-to-top>
 </template>
 
 <style lang="scss">

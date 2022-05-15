@@ -6,9 +6,9 @@ function windowScroller() {
     window.addEventListener("scroll", function () {
         if (!timer) {
             timer = setTimeout(function () {
-                var wsy = window.scrollY;
+                var wsy = window.scrollY, wh = window.innerHeight;
                 handles.forEach(function (item) {
-                    item.callback.call(item.thisArg, wsy);
+                    item.callback.call(item.thisArg, wsy, wh);
                 });
                 timer = 0;
             }, 100)
@@ -16,9 +16,9 @@ function windowScroller() {
     });
     /**
      * add scroll handle
-     * @param {String} name 
-     * @param {Object} thisArg 
-     * @param {Function} callback 
+     * @param {String} name 事件处理器名称，用于唯一标识该处理器
+     * @param {any} thisArg 用于传入回调函数的this对象
+     * @param {(wsy:Number,wh:Number)=>void} callback 事件处理器函数，wsy为当前窗口垂直方向滚动距离，wh为当前窗口高度，全局scroll事件处理会向每个回调函数自动注入这两个参数
      */
     var addHandle = function (name, thisArg, callback) {
         var isNameNoRepeated = handles.every(function (item) {

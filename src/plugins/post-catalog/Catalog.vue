@@ -78,6 +78,7 @@ const getClickedItem = function (item) {
     }
     @media (max-width: $media-minier-size) {
         max-width: 55%;
+        min-width: initial;
     }
 }
 </style>
