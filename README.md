@@ -1,10 +1,12 @@
 # “梦回长安” WordPress 主题 SPA（单页应用）版本
 
-与[PHP 版本](https://gitee.com/vbzxc/wordpress-theme)保持 UI 一致。SPA 版本使用 WordPress 自身提供的[Rest API](https://developer.wordpress.org/rest-api/)来获取数据，并使用应用程序密码来执行身份验证，需要 WordPress 版本在 **5.6** 以上。
+与[PHP 版本](https://gitee.com/vbzxc/wordpress-theme)保持基本 UI 一致。SPA 版本使用 WordPress 自身提供的[Rest API](https://developer.wordpress.org/rest-api/)来获取数据，并使用应用程序密码来执行身份验证，需要 WordPress 版本在 **5.6** 以上。
+
+🍪 效果演示：[https://spa.littlemeteor.xyz/](https://spa.littlemeteor.xyz/)
 
 **本项目还处于初步开发中，不可用于真实服务器环境部署。**
 
-## 使用方法
+## 🍜 使用方法
 
 使用前需要克隆仓库至本地，安装必要依赖后，填写配置文件，自行编译构建生产版本。
 
@@ -16,7 +18,7 @@
 
 4. 运行 `npm run build` 来构建生产版本，生成的文件会存放在 dist 目录下，直接将生成的文件用于静态网站根目录即可。
 
-### 一些必要操作
+### 🥚 一些必要操作
 
 1. 为减少加载文章列表时的 HTTP 请求次数，请求文章列表数据时，会将文章特色图片 URL 一同返回。为实现这一功能，需要在 WordPress 当前所使用的主题中找到 `functions.php` 文件，将以下代码加入：
 
@@ -32,7 +34,7 @@ add_action("rest_api_init", function () {
 });
 ```
 
-## 更新日志
+## 🍭 更新日志
 
 ### dev-0.1(2022-04-25)
 
@@ -41,3 +43,7 @@ add_action("rest_api_init", function () {
 ### dev-0.12(2022-05-09)
 
 添加了当月日历、文章目录、回到顶部按钮三大功能组件。
+
+### dev-0.14(2022-05-16)
+
+添加了文章图片画廊功能组件，为所有视图的数据加载添加了等待动画。
