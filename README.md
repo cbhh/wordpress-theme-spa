@@ -1,6 +1,6 @@
 # “梦回长安” WordPress 主题 SPA（单页应用）版本
 
-与[PHP 版本](https://gitee.com/vbzxc/wordpress-theme)保持基本 UI 一致。SPA 版本使用 WordPress 自身提供的[Rest API](https://developer.wordpress.org/rest-api/)来获取数据，并使用应用程序密码来执行身份验证，需要 WordPress 版本在 **5.6** 以上。
+与[PHP 版本](https://github.com/cbhh/wordpress-theme)保持基本 UI 一致。SPA 版本使用 WordPress 自身提供的[Rest API](https://developer.wordpress.org/rest-api/)来获取数据，并使用应用程序密码来执行身份验证，需要 WordPress 版本在 **5.6** 以上。
 
 🍪 效果演示：[https://spa.littlemeteor.xyz/](https://spa.littlemeteor.xyz/)
 
@@ -10,7 +10,7 @@
 
 使用前需要克隆仓库至本地，安装必要依赖后，填写配置文件，自行编译构建生产版本。
 
-1. 在[仓库首页](https://gitee.com/vbzxc/wordpress-theme-spa)克隆仓库，或直接下载 zip 压缩包至本地。
+1. 在[仓库首页](https://github.com/cbhh/wordpress-theme-spa)克隆仓库，或直接下载 zip 压缩包至本地。
 
 2. 在项目根目录运行 `npm install` 来安装 NPM 依赖包。请注意：本项目采用[vite](https://cn.vitejs.dev)打包构建，需要 Node.js 在 12.0.0 版本以上。
 
