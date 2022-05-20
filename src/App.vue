@@ -5,7 +5,7 @@ import { RouterView, useRoute, useRouter } from "vue-router";
 import getTags from "./composables/init/getTags";
 import getSettings from "./composables/init/getSettings";
 import getCategories from "./composables/init/getCategories";
-//import getUsers from "./composables/init/getUsers";
+import getUsers from "./composables/init/getUsers";
 import getMonthPostDates from "./composables/getMonthPostDates";
 import SiteHeader from "./components/layout/header/SiteHeader.vue";
 import HomeLanding from "./components/layout/landing/HomeLanding.vue";
@@ -24,7 +24,7 @@ import windowScroll from "./global/windowScroll";
 const { tagList, getTagList } = getTags(),
     { siteMeta, getSiteSettings } = getSettings(),
     { categoryList, getCategoryList } = getCategories(),
-    //{ userList, getUserList } = getUsers(),
+    { userList, getUserList } = getUsers(),
     { dateList, getDates } = getMonthPostDates();
 //初始化store和router
 const store = appUseStore(),
@@ -142,11 +142,11 @@ onMounted(() => {
         dataLoadingCompletedItem.value += 1;
     });
     //加载用户（作者）列表并存储进vuex
-    // getUserList().then(() => {
-    //     store.commit("storeUserList", userList.value);
-    //     dataLoadingText.value = "作者列表准备完成";
-    //     dataLoadingCompletedItem.value += 1;
-    // });
+    getUserList().then(() => {
+        store.commit("userModule/storeUserList", userList.value);
+        dataLoadingText.value = "作者列表准备完成";
+        dataLoadingCompletedItem.value += 1;
+    });
     const month = currentDate.getMonth() + 1,
         year = currentDate.getFullYear();
     //查找当前月中发布了post的日期（仅供日历显示用）

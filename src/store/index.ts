@@ -5,6 +5,10 @@ import CategoryModuleTypes from "./modules/category/i";
 import categoryModule from "./modules/category";
 import TagModuleTypes from "./modules/tag/i";
 import tagModule from "./modules/tag";
+import UserModuleTypes from "./modules/user/i";
+import userModule from "./modules/user";
+import PageMetaModuleTypes from "./modules/page-meta/i";
+import pageMetaModule from "./modules/page-meta";
 
 export default createStore<RootStateTypes>({
     state: {
@@ -13,6 +17,8 @@ export default createStore<RootStateTypes>({
     modules: {
         categoryModule,
         tagModule,
+        userModule,
+        pageMetaModule,
     },
 });
 export interface AllStateTypes extends RootStateTypes {
@@ -24,6 +30,14 @@ export interface AllStateTypes extends RootStateTypes {
      * tag(标签)存储
      */
     tagModule: TagModuleTypes;
+    /**
+     * user(用户)存储
+     */
+    userModule: UserModuleTypes;
+    /**
+     * 页面元信息，显示在landing组件上
+     */
+    pageMetaModule: PageMetaModuleTypes;
 }
 export const key: InjectionKey<Store<RootStateTypes>> = Symbol("app");
 /**
