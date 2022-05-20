@@ -1,18 +1,18 @@
-<script setup>
+<script setup lang="ts">
 import { provide, readonly, onMounted, computed, ref, watch } from "vue";
-import { useStore } from "vuex";
+import { appUseStore } from "./store";
 import { RouterView, useRoute, useRouter } from "vue-router";
 import getTags from "./composables/init/getTags";
 import getSettings from "./composables/init/getSettings";
 import getCategories from "./composables/init/getCategories";
-import getUsers from "./composables/init/getUsers";
+//import getUsers from "./composables/init/getUsers";
 import getMonthPostDates from "./composables/getMonthPostDates";
 import SiteHeader from "./components/layout/header/SiteHeader.vue";
 import HomeLanding from "./components/layout/landing/HomeLanding.vue";
 import PostArchiveLanding from "./components/layout/landing/PostArchiveLanding.vue";
 import SiteFooter from "./components/layout/footer/SiteFooter.vue";
 import SitePrimaryMaskTop from "./components/layout/primary/SitePrimaryMaskTop.vue";
-import SitePrimaryBreadcrumb from "./components/layout/primary/SitePrimaryBreadcrumb.vue";
+//import SitePrimaryBreadcrumb from "./components/layout/primary/SitePrimaryBreadcrumb.vue";
 import SiteSidebar from "./components/layout/sidebar/SiteSidebar.vue";
 import SiteSidebarItem from "./components/layout/sidebar/SiteSidebarItem.vue";
 import Category from "./components/layout/sidebar/modules/Category.vue";
@@ -20,14 +20,14 @@ import Tag from "./components/layout/sidebar/modules/Tag.vue";
 import Calendar from "./components/layout/sidebar/modules/Calendar.vue";
 import ThemeLoading from "./components/common/ThemeLoading.vue";
 import windowScroll from "./global/windowScroll";
-//调用各组合式函数并解构出数据和对应操作函数
+
 const { tagList, getTagList } = getTags(),
     { siteMeta, getSiteSettings } = getSettings(),
     { categoryList, getCategoryList } = getCategories(),
-    { userList, getUserList } = getUsers(),
+    //{ userList, getUserList } = getUsers(),
     { dateList, getDates } = getMonthPostDates();
-//初始化store和route
-const store = useStore(),
+//初始化store和router
+const store = appUseStore(),
     route = useRoute(),
     router = useRouter();
 /**
@@ -37,6 +37,8 @@ const landingMap = {
         home: HomeLanding,
         post: PostArchiveLanding,
         archive: PostArchiveLanding,
+    } as {
+        [key: string]: any;
     },
     /**
      * 数据加载状态，显示在loading组件中
@@ -70,20 +72,20 @@ const currentLandingComponent = computed(() => landingMap[routeName.value]),
      * 层次型分类列表，由wordpress api返回的扁平型列表计算得出
      */
     hierarchicCategoryList = computed(
-        () => store.state.categories.hierarchicCategoryList
-    ),
-    /**
-     * 面包屑导航（除了"首页"以外的部分）列表
-     */
-    breadcrumbNavList = computed(() => store.state.breadcrumb.categoryNavList);
+        () => store.state.categoryModule.hierarchicCategoryList
+    );
+/**
+ * 面包屑导航（除了"首页"以外的部分）列表
+ */
+//breadcrumbNavList = computed(() => store.state.breadcrumb.categoryNavList);
 //站点设置信息注入，方便后代组件访问
 provide("site-meta", readonly(siteMeta));
 /**
  * 根据窗口滚动切换回到顶部按钮可见性
- * @param {Number} wsy window scroll y
- * @param {Number} wh window inner height
+ * @param wsy window scroll y
+ * @param wh window inner height
  */
-const switchBackToTopVisible = function (wsy, wh) {
+const switchBackToTopVisible = function (wsy: number, wh: number) {
     backToTopVisible.value = wsy > wh ? true : false;
 };
 //侦听一个getter
@@ -92,12 +94,14 @@ const switchBackToTopVisible = function (wsy, wh) {
 watch(
     () => route.name,
     (n, o) => {
-        if (["author", "category", "tag"].includes(n)) {
-            routeName.value = "archive";
-        } else if (n === "post") {
-            routeName.value = "post";
-        } else {
-            routeName.value = "home";
+        if (n && typeof n === "string") {
+            if (["author", "category", "tag"].includes(n)) {
+                routeName.value = "archive";
+            } else if (n === "post") {
+                routeName.value = "post";
+            } else {
+                routeName.value = "home";
+            }
         }
     }
 );
@@ -119,7 +123,7 @@ onMounted(() => {
     dataLoadingText.value = "正在加载站点数据";
     //加载标签列表并存储进vuex
     getTagList().then(() => {
-        store.commit("storeTagList", tagList.value);
+        store.commit("tagModule/storeTagList", tagList.value);
         dataLoadingText.value = "标签列表准备完成";
         dataLoadingCompletedItem.value += 1;
     });
@@ -130,16 +134,19 @@ onMounted(() => {
     });
     //加载分类列表并存储进vuex
     getCategoryList().then(() => {
-        store.commit("storeCategoryList", categoryList.value);
+        store.commit(
+            "categoryModule/storeCategoryList",
+            categoryList.value
+        );
         dataLoadingText.value = "分类列表准备完成";
         dataLoadingCompletedItem.value += 1;
     });
     //加载用户（作者）列表并存储进vuex
-    getUserList().then(() => {
-        store.commit("storeUserList", userList.value);
-        dataLoadingText.value = "作者列表准备完成";
-        dataLoadingCompletedItem.value += 1;
-    });
+    // getUserList().then(() => {
+    //     store.commit("storeUserList", userList.value);
+    //     dataLoadingText.value = "作者列表准备完成";
+    //     dataLoadingCompletedItem.value += 1;
+    // });
     const month = currentDate.getMonth() + 1,
         year = currentDate.getFullYear();
     //查找当前月中发布了post的日期（仅供日历显示用）
@@ -171,14 +178,14 @@ onMounted(() => {
     <div id="primary">
         <SitePrimaryMaskTop></SitePrimaryMaskTop>
         <div class="primary-content">
-            <div class="site-content">
+            <!-- <div class="site-content">
                 <SitePrimaryBreadcrumb
                     :categoryList="breadcrumbNavList"
-                ></SitePrimaryBreadcrumb>
+                ></SitePrimaryBreadcrumb> 
                 <main>
                     <RouterView></RouterView>
                 </main>
-            </div>
+            </div> -->
             <SiteSidebar position="left">
                 <template v-slot:top>侧边栏1</template>
                 <template v-slot:body>
