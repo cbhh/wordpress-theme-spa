@@ -1,17 +1,20 @@
-<script setup>
+<script setup lang="ts">
 import PostListItem from "./PostListItem.vue";
-const props = defineProps({
-    postList: {
-        type: Array,
-        required: false,
-    },
+import { PostListItemType } from "@/components/props";
+
+interface PostListType {
+    list: PostListItemType[];
+}
+
+const props = withDefaults(defineProps<PostListType>(), {
+    list: () => [],
 });
 </script>
 
 <template>
     <div class="post-list">
         <PostListItem
-            v-for="post in props.postList"
+            v-for="post in props.list"
             :key="post.id"
             :id="post.id"
             :thumbnail="post.thumbnail"

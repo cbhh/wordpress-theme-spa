@@ -1,19 +1,16 @@
-<script setup>
+<script setup lang="ts">
 import { RouterLink } from "vue-router";
-const props = defineProps({
-    slug: {
-        type: String,
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-    divider: {
-        type: Boolean,
-        required: false,
-        default: true,
-    },
+import { PostDetailTagItemType } from "@/components/props";
+
+interface T extends PostDetailTagItemType {
+    nonce?: number;
+}
+
+const props = withDefaults(defineProps<T>(), {
+    name: "",
+    slug: "",
+    divider: true,
+    nonce: 0,
 });
 </script>
 

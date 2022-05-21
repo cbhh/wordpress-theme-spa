@@ -1,23 +1,17 @@
-<script setup>
+<script setup lang="ts">
 import { RouterLink } from "vue-router";
 import { computed } from "vue";
-const props = defineProps({
-    name: {
-        type: String,
-        required: true,
-    },
-    avatar: {
-        type: String,
-        required: true,
-    },
-    id: {
-        type: Number,
-        required: true,
-    },
-    description: {
-        type: String,
-        required: false,
-    },
+import { PostAuthorType } from "@/components/props";
+
+interface T extends PostAuthorType {
+    nonce?: number;
+}
+const props = withDefaults(defineProps<T>(), {
+    id: 0,
+    name: "",
+    avatar: "",
+    description: "",
+    nonce: 0,
 });
 const title = computed(() => "作者：" + props.name);
 </script>
