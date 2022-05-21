@@ -1,12 +1,41 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
 import { convertDateFormat } from "@/utils/date";
-import { PostListItemType } from "@/components/props";
+import {
+    PostListItemCategoryItemType,
+    PostListItemTagItemType,
+} from "@/components/props";
 //接口或对象字面类型可以包含从其他文件导入的类型引用，但是，传递给defineProps的泛型参数本身不能是一个导入的类型
 //https://staging-cn.vuejs.org/guide/typescript/composition-api.html#typing-component-props
-//TODO:不添加一个自定义属性，会报错，所以随便加了一个属性上去
-interface T extends PostListItemType {
-    nonce?: number;
+interface T {
+    /**
+     * post id
+     */
+    id: number;
+    /**
+     * 特色图片URL
+     */
+    thumbnail: string;
+    /**
+     * 所属分类 数组
+     */
+    category: PostListItemCategoryItemType[];
+    /**
+     * 所属标签 数组
+     */
+    tag: PostListItemTagItemType[];
+    /**
+     * 日期
+     */
+    date: string;
+    /**
+     * 标题
+     */
+    title: string;
+    /**
+     * 摘要
+     */
+    excerpt: string;
 }
 //props类型+默认值声明
 //https://v3.cn.vuejs.org/api/sfc-script-setup.html#仅限-typescript-的功能
@@ -18,7 +47,6 @@ const props = withDefaults(defineProps<T>(), {
     date: "",
     title: "",
     excerpt: "",
-    nonce: 0,
 });
 </script>
 

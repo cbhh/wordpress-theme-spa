@@ -1,17 +1,21 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
 import { computed } from "vue";
-import { PostAuthorType } from "@/components/props";
 
-interface T extends PostAuthorType {
-    nonce?: number;
+interface T {
+    name: string;
+    /**
+     * 头像图片URL
+     */
+    avatar: string;
+    id: number;
+    description: string;
 }
 const props = withDefaults(defineProps<T>(), {
     id: 0,
     name: "",
     avatar: "",
     description: "",
-    nonce: 0,
 });
 const title = computed(() => "作者：" + props.name);
 </script>

@@ -2,15 +2,19 @@
 import { RouterLink } from "vue-router";
 import { PostDetailTagItemType } from "@/components/props";
 
-interface T extends PostDetailTagItemType {
-    nonce?: number;
+interface T {
+    slug: string;
+    name: string;
+    /**
+     * 是否启用分隔符
+     */
+    divider?: boolean;
 }
 
 const props = withDefaults(defineProps<T>(), {
     name: "",
     slug: "",
     divider: true,
-    nonce: 0,
 });
 </script>
 

@@ -1,4 +1,4 @@
-const monthMap = {
+const monthMap: { [key: string]: string } = {
     "01": "一",
     "02": "二",
     "03": "三",
@@ -11,21 +11,32 @@ const monthMap = {
     "10": "十",
     "11": "十一",
     "12": "十二",
-}
+};
 /**
  * 转换日期格式，e.g. 2022-03-07=>三月 7，2022
- * @param {String} dateStr wordpress api返回的日期字符串，e.g.2022-03-07T13:35:30
+ * @param dateStr wordpress api返回的日期字符串，e.g.2022-03-07T13:35:30
  */
-export function convertDateFormat(dateStr) {
-    const dateSplits = dateStr.split("T")[0].split("-");
-    return monthMap[dateSplits[1]] + "月 " + (dateSplits[2].startsWith("0") ? dateSplits[2].charAt(1) : dateSplits[2]) + "，" + dateSplits[0];
+export function convertDateFormat(dateStr: string) {
+    var date = dateStr && dateStr.split("T")[0],
+        dateSplits = date && date.split("-");
+    if (dateSplits) {
+        return (
+            monthMap[dateSplits[1]] +
+            "月 " +
+            (dateSplits[2].startsWith("0")
+                ? dateSplits[2].charAt(1)
+                : dateSplits[2]) +
+            "，" +
+            dateSplits[0]
+        );
+    }
 }
 /**
  * 生成日历数据
- * @param {Date} current 当前日期
+ * @param current 当前日期
  * @returns 本月月历二维数组，按照星期划分，没有日期的补空格
  */
-export function generateCalendarData(current) {
+export function generateCalendarData(current: Date) {
     var currentMonth = current.getMonth(),
         currentDate = current.getDate(),
         currentWeekDay = current.getDay(),
@@ -35,7 +46,9 @@ export function generateCalendarData(current) {
         //计算本月多少天
         totalDays = getMonthTotalDays(currentMonth, currentYear),
         //计算本月多少个星期
-        totalWeeks = getMonthTotalWeeks(totalDays, firstDayOfMonth),
+        totalWeeks = totalDays
+            ? getMonthTotalWeeks(totalDays, firstDayOfMonth)
+            : 0,
         data = [],
         start = 1;
     for (var w = 1; w <= totalWeeks; w++) {
@@ -63,15 +76,17 @@ export function generateCalendarData(current) {
         }
         //最后一周
         else {
-            var lastDaysOfMonth = totalDays - start + 1,
+            var lastDaysOfMonth = totalDays ? totalDays - start + 1 : -1,
                 blanks = 7 - lastDaysOfMonth;
-            for (var l = 0; l < lastDaysOfMonth; l++) {
-                weekData.push(start);
-                start += 1;
-            }
-            //补空格
-            for (var b = 0; b < blanks; b++) {
-                weekData.push("");
+            if (lastDaysOfMonth >= 0) {
+                for (var l = 0; l < lastDaysOfMonth; l++) {
+                    weekData.push(start);
+                    start += 1;
+                }
+                //补空格
+                for (var b = 0; b < blanks; b++) {
+                    weekData.push("");
+                }
             }
         }
         data.push(weekData);
@@ -80,27 +95,26 @@ export function generateCalendarData(current) {
 }
 /**
  * 根据当前日期计算本月第一天是星期几
- * @param {Number} currentDate
- * @param {Number} currentWeekDay
+ * @param currentDate
+ * @param currentWeekDay
  * @returns 本月1号是星期几，0-6，0表示星期天
  */
-function getFirstDay(currentDate, currentWeekDay) {
+function getFirstDay(currentDate: number, currentWeekDay: number) {
     var elapse = currentDate - 1;
-    return (7 + (currentWeekDay - elapse % 7)) % 7;
+    return (7 + (currentWeekDay - (elapse % 7))) % 7;
 }
 /**
  * 根据指定月份数和年份计算该月总天数
- * @param {Number} month 0-11
- * @param {Number} year 
+ * @param month 0-11
+ * @param year
  * @returns 31/30/29/28
  */
-function getMonthTotalDays(month, year) {
+function getMonthTotalDays(month: number, year: number) {
     var m = month + 1;
     if ([1, 3, 5, 7, 8, 10, 12].includes(m)) {
         return 31;
-    }
-    else if (m === 2) {
-        if (year % 4 === 0 && year % 100 !== 0 || year % 400 === 0) {
+    } else if (m === 2) {
+        if ((year % 4 === 0 && year % 100 !== 0) || year % 400 === 0) {
             return 29;
         } else {
             return 28;
@@ -111,14 +125,14 @@ function getMonthTotalDays(month, year) {
 }
 /**
  * 根据月份总天数和1号星期数计算该月总共有多少个星期
- * @param {Number} totalDays 本月总共多少天 
- * @param {Number} weekOfFirstDay 本月1号是星期几，0-6，0表示星期天
+ * @param totalDays 本月总共多少天
+ * @param weekOfFirstDay 本月1号是星期几，0-6，0表示星期天
  * @returns 该月总星期数
  */
-function getMonthTotalWeeks(totalDays, weekOfFirstDay) {
+function getMonthTotalWeeks(totalDays: number, weekOfFirstDay: number) {
     var firstWeekDays = 7 - weekOfFirstDay,
         restDays = totalDays - firstWeekDays,
-        restWholeWeeks = parseInt(restDays / 7);
+        restWholeWeeks = parseInt((restDays / 7).toString());
     if (restWholeWeeks * 7 === restDays) {
         return restWholeWeeks + 1;
     } else {

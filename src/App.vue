@@ -180,7 +180,7 @@ onMounted(() => {
         <div class="primary-content">
             <div class="site-content">
                 <SitePrimaryBreadcrumb
-                    :categoryList="breadcrumbNavList"
+                    :list="breadcrumbNavList"
                 ></SitePrimaryBreadcrumb> 
                 <main>
                     <RouterView></RouterView>
