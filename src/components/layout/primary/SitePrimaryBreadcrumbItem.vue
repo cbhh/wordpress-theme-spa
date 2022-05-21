@@ -1,18 +1,16 @@
-<script setup>
+<script setup lang="ts">
 import { RouterLink } from "vue-router";
-const props = defineProps({
-    slug: {
-        type: String,
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-    id: {
-        type: Number,
-        required: true,
-    },
+import { BreadcrumbItemType } from "@/components/props";
+
+interface T extends BreadcrumbItemType {
+    nonce?: number;
+}
+
+const props = withDefaults(defineProps<T>(), {
+    name: "",
+    slug: "",
+    id: 0,
+    nonce: 0,
 });
 </script>
 

@@ -9,6 +9,8 @@ import UserModuleTypes from "./modules/user/i";
 import userModule from "./modules/user";
 import PageMetaModuleTypes from "./modules/page-meta/i";
 import pageMetaModule from "./modules/page-meta";
+import BreadcrumbModuleTypes from "./modules/breadcrumb/i";
+import breadcrumbModule from "./modules/breadcrumb";
 
 export default createStore<RootStateTypes>({
     state: {
@@ -19,6 +21,7 @@ export default createStore<RootStateTypes>({
         tagModule,
         userModule,
         pageMetaModule,
+        breadcrumbModule,
     },
 });
 export interface AllStateTypes extends RootStateTypes {
@@ -38,6 +41,10 @@ export interface AllStateTypes extends RootStateTypes {
      * 页面元信息，显示在landing组件上
      */
     pageMetaModule: PageMetaModuleTypes;
+    /**
+     * 面包屑导航列表数据
+     */
+    breadcrumbModule: BreadcrumbModuleTypes;
 }
 export const key: InjectionKey<Store<RootStateTypes>> = Symbol("app");
 /**

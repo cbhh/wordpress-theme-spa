@@ -88,3 +88,20 @@ export interface PostDetailTagItemType {
      */
     divider?: boolean;
 }
+/**
+ * 面包屑（分类）导航项
+ */
+export interface BreadcrumbItemType {
+    /**
+     * category id
+     */
+    id: number;
+    /**
+     * 别名
+     */
+    slug: string;
+    /**
+     * 名称
+     */
+    name: string;
+}

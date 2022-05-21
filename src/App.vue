@@ -12,7 +12,7 @@ import HomeLanding from "./components/layout/landing/HomeLanding.vue";
 import PostArchiveLanding from "./components/layout/landing/PostArchiveLanding.vue";
 import SiteFooter from "./components/layout/footer/SiteFooter.vue";
 import SitePrimaryMaskTop from "./components/layout/primary/SitePrimaryMaskTop.vue";
-//import SitePrimaryBreadcrumb from "./components/layout/primary/SitePrimaryBreadcrumb.vue";
+import SitePrimaryBreadcrumb from "./components/layout/primary/SitePrimaryBreadcrumb.vue";
 import SiteSidebar from "./components/layout/sidebar/SiteSidebar.vue";
 import SiteSidebarItem from "./components/layout/sidebar/SiteSidebarItem.vue";
 import Category from "./components/layout/sidebar/modules/Category.vue";
@@ -73,11 +73,11 @@ const currentLandingComponent = computed(() => landingMap[routeName.value]),
      */
     hierarchicCategoryList = computed(
         () => store.state.categoryModule.hierarchicCategoryList
-    );
+    ),
 /**
  * 面包屑导航（除了"首页"以外的部分）列表
  */
-//breadcrumbNavList = computed(() => store.state.breadcrumb.categoryNavList);
+breadcrumbNavList = computed(() => store.state.breadcrumbModule.list);
 //站点设置信息注入，方便后代组件访问
 provide("site-meta", readonly(siteMeta));
 /**
@@ -178,14 +178,14 @@ onMounted(() => {
     <div id="primary">
         <SitePrimaryMaskTop></SitePrimaryMaskTop>
         <div class="primary-content">
-            <!-- <div class="site-content">
+            <div class="site-content">
                 <SitePrimaryBreadcrumb
                     :categoryList="breadcrumbNavList"
                 ></SitePrimaryBreadcrumb> 
                 <main>
                     <RouterView></RouterView>
                 </main>
-            </div> -->
+            </div>
             <SiteSidebar position="left">
                 <template v-slot:top>侧边栏1</template>
                 <template v-slot:body>

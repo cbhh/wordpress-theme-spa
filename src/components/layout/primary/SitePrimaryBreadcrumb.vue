@@ -1,12 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import { RouterLink } from "vue-router";
 import SitePrimaryBreadcrumbItem from "./SitePrimaryBreadcrumbItem.vue";
+import { BreadcrumbItemType } from "@/components/props";
 
-const props = defineProps({
-    categoryList: {
-        type: Array,
-        required: false,
-    },
+interface BreadcrumbListType {
+    list: BreadcrumbItemType[];
+}
+
+const props = withDefaults(defineProps<BreadcrumbListType>(), {
+    list: () => [],
 });
 </script>
 
@@ -17,7 +19,7 @@ const props = defineProps({
                 <i class="fa fa-home"></i>首页</RouterLink
             >
             <SitePrimaryBreadcrumbItem
-                v-for="item in props.categoryList"
+                v-for="item in props.list"
                 :key="item.id"
                 :slug="item.slug"
                 :id="item.id"
