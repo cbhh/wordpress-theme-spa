@@ -32,7 +32,7 @@ const renderView = function (currentUserId: number) {
         loadingMaskRequired.value = true;
         dataLoadingText.value = `正在加载作者【${currentUser.name}】`;
         //landing组件
-        store.commit("pageMetaModule/storeUserList", {
+        store.commit("pageMetaModule/setPageMeta", {
             title: "作者：" + currentUser.name,
             time: "",
             background: "",

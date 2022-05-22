@@ -3,15 +3,11 @@ import { computed } from "vue";
 import PostTagListItem from "./PostTagListItem.vue";
 import { PostDetailTagItemType } from "@/components/props";
 
-interface ItemType extends PostDetailTagItemType {
-    id: number;
+interface T {
+    list: PostDetailTagItemType[];
 }
 
-interface PostDetailTagListType {
-    list: ItemType[];
-}
-
-const props = withDefaults(defineProps<PostDetailTagListType>(), {
+const props = withDefaults(defineProps<T>(), {
     list: () => [],
 });
 const tagListLength = computed(() => (props.list ? props.list.length : 0));

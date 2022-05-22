@@ -32,7 +32,7 @@ const renderView = function (currentTagSlug: string) {
         loadingMaskRequired.value = true;
         dataLoadingText.value = `正在加载标签【${currentTag.name}】`;
         //landing组件
-        store.commit("pageMetaModule/storeUserList", {
+        store.commit("pageMetaModule/setPageMeta", {
             title: "标签：" + currentTag.name,
             time: "",
             background: "",

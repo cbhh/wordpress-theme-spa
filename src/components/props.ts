@@ -81,6 +81,7 @@ export interface PostListItemType {
  * （文章详情中的）文章标签项
  */
 export interface PostDetailTagItemType {
+    id: number;
     slug: string;
     name: string;
     /**

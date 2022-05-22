@@ -45,7 +45,7 @@ const renderView = function (currentCatSlug: string) {
         loadingMaskRequired.value = true;
         dataLoadingText.value = `正在加载分类【${currentCat.name}】`;
         //landing组件
-        store.commit("pageMetaModule/storeUserList", {
+        store.commit("pageMetaModule/setPageMeta", {
             title: "分类：" + currentCat.name,
             time: "",
             background: "",

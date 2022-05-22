@@ -15,7 +15,7 @@ const pageMetaModule: Module<PageMetaModuleTypes, RootStateTypes> = {
          * @param state
          * @param data
          */
-        storeUserList(state, data) {
+        setPageMeta(state, data) {
             state.title = data.title;
             state.time = data.time;
             state.background = data.background;
