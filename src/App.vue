@@ -19,6 +19,8 @@ import Category from "./components/layout/sidebar/modules/Category.vue";
 import Tag from "./components/layout/sidebar/modules/Tag.vue";
 import Calendar from "./components/layout/sidebar/modules/Calendar.vue";
 import ThemeLoading from "./components/common/ThemeLoading.vue";
+import BackToTop from "./widgets/back-to-top/BackToTop.vue";
+import backToTopComposable from "./widgets/back-to-top/composable";
 import windowScroll from "./global/windowScroll";
 import {
     NoHomeLandingType,
@@ -30,7 +32,8 @@ const { tagList, getTagList } = getTags(),
     { siteMeta, getSiteSettings } = getSettings(),
     { categoryList, getCategoryList } = getCategories(),
     { userList, getUserList } = getUsers(),
-    { dateList, getDates } = getMonthPostDates();
+    { dateList, getDates } = getMonthPostDates(),
+    { backToTopVisible, switchBackToTopVisible } = backToTopComposable();
 //初始化store和router
 const store = appUseStore(),
     route = useRoute(),
@@ -54,11 +57,7 @@ const dataLoadingText = ref(""),
     /**
      * 当前landing组件类型
      */
-    landingType = ref<NoHomeLandingType | "home">("home"),
-    /**
-     * 回到顶部按钮可见性
-     */
-    backToTopVisible = ref(false);
+    landingType = ref<NoHomeLandingType | "home">("home");
 /**
  * 当前选用的着陆页组件
  */
@@ -85,14 +84,6 @@ const currentLandingComponent = computed(() => {
     breadcrumbNavList = computed(() => store.state.breadcrumbModule.list);
 //站点设置信息注入，方便后代组件访问
 provide("site-meta", readonly(siteMeta));
-/**
- * 根据窗口滚动切换回到顶部按钮可见性
- * @param wsy window scroll y
- * @param wh window inner height
- */
-const switchBackToTopVisible = function (wsy: number, wh: number) {
-    backToTopVisible.value = wsy > wh ? true : false;
-};
 //侦听一个getter
 //https://v3.cn.vuejs.org/guide/reactivity-computed-watchers.html#watch
 //侦听路由名称变化，以选择不同的着陆页组件

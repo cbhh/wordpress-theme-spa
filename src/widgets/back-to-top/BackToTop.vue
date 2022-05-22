@@ -1,11 +1,11 @@
-<script setup>
+<script setup lang="ts">
 import { ref } from "vue";
-const props = defineProps({
-    visible: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
+
+interface T {
+    visible: boolean;
+}
+const props = withDefaults(defineProps<T>(), {
+    visible: false,
 });
 
 const scrollInterval = 20;
