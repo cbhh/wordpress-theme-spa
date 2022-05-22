@@ -1,23 +1,20 @@
-<script setup>
-import { useStore } from "vuex";
+<script setup lang="ts">
+import { appUseStore } from "@/store";
 import { computed } from "vue";
-import { convertDateFormat } from "../../../utils/date";
+import { convertDateFormat } from "@/utils/date";
 
-const props = defineProps({
-    landingType: {
-        type: String,
-        required: true,
-        validator: function (value) {
-            return ["post", "archive"].includes(value);
-        },
-    },
-});
+const props = withDefaults(
+    defineProps<{ landingType: "post" | "archive" | "" }>(),
+    {
+        landingType: "",
+    }
+);
 
-const store = useStore();
+const store = appUseStore();
 
-const bg = computed(() => store.state.post.bg);
-const title = computed(() => store.state.post.title);
-const time = computed(() => store.state.post.time);
+const bg = computed(() => store.state.pageMetaModule.background),
+    title = computed(() => store.state.pageMetaModule.title),
+    time = computed(() => store.state.pageMetaModule.time);
 const className = computed(() => {
     if (props.landingType === "post") return "post-landing";
     if (props.landingType === "archive") return "archive-landing";

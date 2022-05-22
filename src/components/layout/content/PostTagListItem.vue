@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import { PostDetailTagItemType } from "@/components/props";
 
 interface T {
     slug: string;

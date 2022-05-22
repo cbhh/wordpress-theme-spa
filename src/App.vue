@@ -33,12 +33,10 @@ const store = appUseStore(),
 /**
  * 几种可能的着陆页组件，当切换不同种类（首页/文章页/内容归档页）的页面时，会选择不同的landing组件
  */
-const landingMap = {
+const landingMap: { [key: string]: any } = {
         home: HomeLanding,
         post: PostArchiveLanding,
         archive: PostArchiveLanding,
-    } as {
-        [key: string]: any;
     },
     /**
      * 数据加载状态，显示在loading组件中
@@ -74,10 +72,10 @@ const currentLandingComponent = computed(() => landingMap[routeName.value]),
     hierarchicCategoryList = computed(
         () => store.state.categoryModule.hierarchicCategoryList
     ),
-/**
- * 面包屑导航（除了"首页"以外的部分）列表
- */
-breadcrumbNavList = computed(() => store.state.breadcrumbModule.list);
+    /**
+     * 面包屑导航（除了"首页"以外的部分）列表
+     */
+    breadcrumbNavList = computed(() => store.state.breadcrumbModule.list);
 //站点设置信息注入，方便后代组件访问
 provide("site-meta", readonly(siteMeta));
 /**
@@ -134,10 +132,7 @@ onMounted(() => {
     });
     //加载分类列表并存储进vuex
     getCategoryList().then(() => {
-        store.commit(
-            "categoryModule/storeCategoryList",
-            categoryList.value
-        );
+        store.commit("categoryModule/storeCategoryList", categoryList.value);
         dataLoadingText.value = "分类列表准备完成";
         dataLoadingCompletedItem.value += 1;
     });
@@ -168,20 +163,20 @@ onMounted(() => {
     </div>
     <SiteHeader></SiteHeader>
     <!--着陆页组件切换start-->
-    <!-- <KeepAlive>
+    <KeepAlive>
         <component
             :is="currentLandingComponent"
             :landingType="routeName"
         ></component
-    ></KeepAlive> -->
+    ></KeepAlive>
     <!--着陆页组件切换end-->
     <div id="primary">
         <SitePrimaryMaskTop></SitePrimaryMaskTop>
         <div class="primary-content">
             <div class="site-content">
-                <!-- <SitePrimaryBreadcrumb
+                <SitePrimaryBreadcrumb
                     :list="breadcrumbNavList"
-                ></SitePrimaryBreadcrumb>  -->
+                ></SitePrimaryBreadcrumb>
                 <main>
                     <RouterView></RouterView>
                 </main>

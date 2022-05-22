@@ -1,16 +1,25 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
-import { BreadcrumbItemType } from "@/components/props";
 
-interface T extends BreadcrumbItemType {
-    nonce?: number;
+interface T {
+    /**
+     * category id
+     */
+    id: number;
+    /**
+     * 别名
+     */
+    slug: string;
+    /**
+     * 名称
+     */
+    name: string;
 }
 
 const props = withDefaults(defineProps<T>(), {
     name: "",
     slug: "",
     id: 0,
-    nonce: 0,
 });
 </script>
 
