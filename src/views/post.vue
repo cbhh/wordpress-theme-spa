@@ -12,14 +12,15 @@ import {
 import { appUseStore } from "@/store";
 import { useRoute } from "vue-router";
 import { ApiList } from "@/apis/apis";
-import PostTagList from "../components/layout/content/PostTagList.vue";
-import PostAuthor from "../components/layout/content/PostAuthor.vue";
-import ThemeLoading from "../components/common/ThemeLoading.vue";
-import getAncestorCategories from "../composables/getAncestorCategories";
+import PostTagList from "@/components/layout/content/PostTagList.vue";
+import PostAuthor from "@/components/layout/content/PostAuthor.vue";
+import ThemeLoading from "@/components/common/ThemeLoading.vue";
+import Catalog from "@/widgets/post-catalog/Catalog.vue";
+import CatalogSwitchButton from "@/widgets/post-catalog/CatalogSwitchButton.vue";
+import catalogComposable from "@/widgets/post-catalog/composable";
+import getAncestorCategories from "@/composables/getAncestorCategories";
 import { PostDetailTagItemType } from "@/components/props";
-// import generateCatalogData from "../composables/generateCatalogData";
-// import generateGalleryData from "../composables/generateGalleryData";
-// import windowScroll from "../global/windowScroll";
+import windowScroll from "@/global/windowScroll";
 
 const $apis: ApiList = (function () {
         var ins = getCurrentInstance();
@@ -35,15 +36,15 @@ const allCategories = computed(() => store.state.categoryModule.categoryList),
     allUsers = computed(() => store.state.userModule.userList);
 
 const { ancestors, getParent } = getAncestorCategories(allCategories.value);
-// const {
-//     catalogList,
-//     catalogRequired,
-//     generateCatalogList,
-//     catalogVisible,
-//     setClickedCatalogItemStyle,
-//     switchCatalogVisible,
-//     switchCurrentCatalogItem,
-// } = generateCatalogData();
+const {
+    catalogList,
+    catalogRequired,
+    generateCatalogList,
+    catalogVisible,
+    setClickedCatalogItemStyle,
+    switchCatalogVisible,
+    switchCurrentCatalogItem,
+} = catalogComposable();
 // const {
 //     galleryImageList,
 //     galleyRequired,
@@ -59,7 +60,7 @@ const renderTimes = ref(0),
     /**
      * content dom引用
      */
-    content = ref(null),
+    content = ref<HTMLDivElement>(),
     contentHtml = ref(""),
     tagList = ref<PostDetailTagItemType[]>([]),
     authorMeta = reactive({
@@ -127,7 +128,9 @@ const renderView = function (currentPostId: number) {
             .then(function () {
                 nextTick().then(function () {
                     //生成文章目录
-                    //generateCatalogList(content.value);
+                    if (content.value) {
+                        generateCatalogList(content.value);
+                    }
                     //生成文章图片画廊
                     //generateGalleryImageList(content.value);
                     dataLoadingText.value = "文章数据加载成功";
@@ -148,12 +151,12 @@ watch(
 onMounted(() => {
     renderView(parseInt(route.params["pid"].toString()));
     //添加更新目录的窗口滚动事件处理器
-    //windowScroll.addHandle("catalog-move", null, switchCurrentCatalogItem);
+    windowScroll.addHandle("catalog-move", null, switchCurrentCatalogItem);
 });
 onUnmounted(() => {
     store.commit("breadcrumbModule/setBreadcrumbNav", []);
     //移除更新目录的窗口滚动事件处理器
-    //windowScroll.deleteHandle("catalog-move");
+    windowScroll.deleteHandle("catalog-move");
 });
 </script>
 
@@ -173,7 +176,7 @@ onUnmounted(() => {
         ></div>
         <footer class="entry-footer" v-show="!loadingMaskRequired">
             <div class="extra-meta">
-                <PostTagList :list="tagList"></PostTagList>
+                <PostTagList v-if="tagList[0]" :list="tagList"></PostTagList>
                 <PostAuthor
                     :name="authorMeta.name"
                     :id="authorMeta.id"
@@ -189,16 +192,18 @@ onUnmounted(() => {
             </div>
         </footer>
     </article>
-    <!-- <post-catalog
+    <catalog
         v-if="catalogRequired"
-        :catalogItemList="catalogList"
+        :list="catalogList"
         :visible="catalogVisible"
         @clickedItem="setClickedCatalogItemStyle"
-    ></post-catalog>
+    ></catalog>
     <catalog-switch-button
+        v-if="catalogRequired"
         :catalogVisible="catalogVisible"
         @switchButtonClicked="switchCatalogVisible"
     ></catalog-switch-button>
+    <!--
     <post-gallery
         v-if="galleyRequired"
         v-show="galleryVisible"

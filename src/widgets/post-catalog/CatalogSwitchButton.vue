@@ -1,13 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from "vue";
-const props = defineProps({
-    catalogVisible: {
-        type: Boolean,
-        required: false,
-        default: true,
-    },
+
+interface T {
+    catalogVisible: boolean;
+}
+
+const props = withDefaults(defineProps<T>(), {
+    catalogVisible: true,
 });
-const emits = defineEmits(["switchButtonClicked"]);
+const emits = defineEmits<{ (e: "switchButtonClicked"): void }>();
 const buttonTip = computed(() =>
     props.catalogVisible ? "隐藏目录" : "显示目录"
 );

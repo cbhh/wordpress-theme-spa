@@ -1,42 +1,43 @@
-<script setup>
-import SiteSidebarItem from "../../components/layout/sidebar/SiteSidebarItem.vue";
+<script setup lang="ts">
+import SiteSidebarItem from "@/components/layout/sidebar/SiteSidebarItem.vue";
 import CatalogItem from "./CatalogItem.vue";
-const props = defineProps({
-    catalogItemList: {
-        type: Array,
-        required: true,
-    },
-    visible: {
-        type: Boolean,
-        required: false,
-        default: true,
-    },
+import { CatalogItemType } from "@/widgets/props";
+
+interface T {
+    list: CatalogItemType[];
+    visible: boolean;
+}
+
+const props = withDefaults(defineProps<T>(), {
+    list: () => [],
+    visible: true,
 });
-const emits = defineEmits(["clickedItem"]);
+const emits = defineEmits<{
+    (e: "clickedItem", clickedItem: CatalogItemType): void;
+}>();
 /**
- * 将数据中对应anchor值的项传递给父组件
- * @param {String} item 点击的目录项数据
+ * 将点击项的数据传递给父组件
  */
-const getClickedItem = function (item) {
-    emits("clickedItem", item);
+const getClickedItem = function (clickedItem: CatalogItemType) {
+    emits("clickedItem", clickedItem);
 };
 </script>
 
 <template>
     <SiteSidebarItem
-        itemTitle="文章目录"
+        title="文章目录"
         class="post-catalog"
         :class="{ hidden: !props.visible }"
     >
         <div class="catalog-body">
             <CatalogItem
-                v-for="item in props.catalogItemList"
-                :key="item.anchor"
-                :itemText="item.text"
-                :itemLevel="item.level"
-                :itemAnchor="item.anchor"
-                :itemHref="item.href"
-                :isCurrent="item.current"
+                v-for="item in props.list"
+                :key="item.headingAnchor"
+                :text="item.text"
+                :headingLevel="item.headingLevel"
+                :headingAnchor="item.headingAnchor"
+                :href="item.href"
+                :isCurrent="item.isCurrent"
                 @click="getClickedItem(item)"
             ></CatalogItem>
         </div>

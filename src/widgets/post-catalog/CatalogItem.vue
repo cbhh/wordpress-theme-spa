@@ -1,57 +1,33 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
-
-const props = defineProps({
-    /**
-     * 目录项标题
-     */
-    itemText: {
-        type: String,
-        required: true,
-    },
-    /**
-     * 对应的标题等级：2-6
-     */
-    itemLevel: {
-        type: Number,
-        required: true,
-        validator: function (lv) {
-            return [2, 3, 4, 5, 6].includes(lv);
-        },
-    },
-    /**
-     * 锚点字符串，用来与heading标签建立一对一的联系
-     */
-    itemAnchor: {
-        type: String,
-        required: true,
-    },
-    itemHref: {
-        type: String,
-        required: true,
-    },
-    /**
-     * 是否当前选中章节
-     */
-    isCurrent: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
+import { HeadingLevel } from "@/widgets/props";
+interface T {
+    headingAnchor: string;
+    text: string;
+    headingLevel: HeadingLevel;
+    href: string;
+    isCurrent: boolean;
+}
+const props = withDefaults(defineProps<T>(), {
+    headingAnchor: "",
+    text: "",
+    headingLevel: HeadingLevel.H2,
+    href: "",
+    isCurrent: false,
 });
-const levelClass = computed(() => "catalog-h" + props.itemLevel);
+const levelClass = computed(() => "catalog-h" + props.headingLevel);
 </script>
 
 <template>
     <a
         class="catalog-item"
         :class="[props.isCurrent ? 'current' : '', levelClass]"
-        :data-anchor="props.itemAnchor"
-        :href="'#' + props.itemHref"
+        :data-anchor="props.headingAnchor"
+        :href="'#' + props.href"
     >
         <div class="catalog-item-wrap">
             <div class="item-deco"></div>
-            <span class="item-text">{{ props.itemText }}</span>
+            <span class="item-text">{{ props.text }}</span>
         </div>
     </a>
 </template>
