@@ -1,30 +1,28 @@
-<script setup>
+<script setup lang="ts">
 import { computed, nextTick, onMounted, ref } from "vue";
-const props = defineProps({
+
+interface T {
     /**
      * 是否需要背景
      */
-    bg: {
-        type: Boolean,
-        required: false,
-    },
+    background?: boolean;
     /**
      * 是否为装饰按钮（无法点击交互）
      */
-    deco: {
-        type: Boolean,
-        required: false,
-    },
+    decoration?: boolean;
     /**
      * 是否为圆形按钮
      */
-    circle: {
-        type: Boolean,
-        required: false,
-    },
+    circle?: boolean;
+}
+
+const props = withDefaults(defineProps<T>(), {
+    background: false,
+    decoration: false,
+    circle: false,
 });
 //此处模板引用参考：https://v3.cn.vuejs.org/guide/composition-api-template-refs.html#模板引用
-const buttonBody = ref(null),
+const buttonBody = ref<HTMLDivElement>(),
     buttonHeight = ref(0),
     buttonHeightPx = computed(() => {
         return buttonHeight.value ? buttonHeight.value - 4 + "px" : "auto";
@@ -33,11 +31,8 @@ onMounted(() => {
     //若设为圆形按钮，则在dom渲染完毕后根据按钮宽度计算按钮高度
     if (props.circle) {
         nextTick().then(() => {
-            /**
-             * @type HTMLDivElement
-             */
             var el = buttonBody.value;
-            buttonHeight.value = el.getBoundingClientRect().width;
+            buttonHeight.value = el ? el.getBoundingClientRect().width : 0;
         });
     }
 });
@@ -46,8 +41,8 @@ onMounted(() => {
 <template>
     <button
         class="theme-button"
-        :class="{ 'has-bg': props.bg, circle: props.circle }"
-        :disabled="props.deco"
+        :class="{ 'has-bg': props.background, circle: props.circle }"
+        :disabled="props.decoration"
     >
         <div
             class="button-body"
@@ -78,8 +73,7 @@ onMounted(() => {
     }
     &.has-bg {
         > .button-body {
-            background: url(@ass/7933259ae51d7b49d5291e7a1759d6f2.jpeg)
-                repeat;
+            background: url(@ass/7933259ae51d7b49d5291e7a1759d6f2.jpeg) repeat;
             background-size: contain;
         }
     }

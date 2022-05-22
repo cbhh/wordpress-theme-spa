@@ -1,29 +1,21 @@
-<script setup>
-const props = defineProps({
-    itemTitle: {
-        type: String,
-        required: true,
-    },
-    funcClass: {
-        type: String,
-        required: false,
-        validator: function (cl) {
-            return [
-                "recent-posts",
-                "post-tag-cloud",
-                "post-categories",
-                "post-calendar",
-                "monthly-archives",
-            ].includes(cl);
-        },
-    },
+<script setup lang="ts">
+import { SidebarItemFeature } from "@/components/props";
+
+interface T {
+    title: string;
+    feature?: SidebarItemFeature;
+}
+
+const props = withDefaults(defineProps<T>(), {
+    title: "最近文章",
+    feature: SidebarItemFeature["recent-posts"],
 });
 </script>
 
 <template>
-    <div class="sidebar-item" :class="props.funcClass">
+    <div class="sidebar-item" :class="props.feature">
         <div class="sidebar-item-wrap">
-            <div class="sidebar-item-title">{{ props.itemTitle }}</div>
+            <div class="sidebar-item-title">{{ props.title }}</div>
             <div class="sidebar-item-body">
                 <slot></slot>
             </div>

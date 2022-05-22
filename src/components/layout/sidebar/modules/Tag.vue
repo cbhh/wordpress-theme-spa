@@ -1,16 +1,19 @@
-<script setup>
+<script setup lang="ts">
 import TagItem from "./TagItem.vue";
-const props = defineProps({
-    tagList: {
-        type: Array,
-        required: true,
-    },
+import { TagListItemWithSize } from "@/store/modules/tag/i";
+
+interface T {
+    list: TagListItemWithSize[];
+}
+
+const props = withDefaults(defineProps<T>(), {
+    list: () => [],
 });
 </script>
 
 <template>
     <TagItem
-        v-for="item in props.tagList"
+        v-for="item in props.list"
         :key="item.id"
         :slug="item.slug"
         :count="item.count"

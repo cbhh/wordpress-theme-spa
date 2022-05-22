@@ -20,6 +20,11 @@ import Tag from "./components/layout/sidebar/modules/Tag.vue";
 import Calendar from "./components/layout/sidebar/modules/Calendar.vue";
 import ThemeLoading from "./components/common/ThemeLoading.vue";
 import windowScroll from "./global/windowScroll";
+import {
+    NoHomeLandingType,
+    SidebarPosition,
+    SidebarItemFeature,
+} from "./components/props";
 
 const { tagList, getTagList } = getTags(),
     { siteMeta, getSiteSettings } = getSettings(),
@@ -31,17 +36,9 @@ const store = appUseStore(),
     route = useRoute(),
     router = useRouter();
 /**
- * 几种可能的着陆页组件，当切换不同种类（首页/文章页/内容归档页）的页面时，会选择不同的landing组件
+ * 数据加载状态，显示在loading组件中
  */
-const landingMap: { [key: string]: any } = {
-        home: HomeLanding,
-        post: PostArchiveLanding,
-        archive: PostArchiveLanding,
-    },
-    /**
-     * 数据加载状态，显示在loading组件中
-     */
-    dataLoadingText = ref(""),
+const dataLoadingText = ref(""),
     /**
      * 加载完成的数据项
      */
@@ -55,9 +52,9 @@ const landingMap: { [key: string]: any } = {
      */
     currentDate = new Date(),
     /**
-     * 当前路由名
+     * 当前landing组件类型
      */
-    routeName = ref("home"),
+    landingType = ref<NoHomeLandingType | "home">("home"),
     /**
      * 回到顶部按钮可见性
      */
@@ -65,7 +62,17 @@ const landingMap: { [key: string]: any } = {
 /**
  * 当前选用的着陆页组件
  */
-const currentLandingComponent = computed(() => landingMap[routeName.value]),
+const currentLandingComponent = computed(() => {
+        switch (landingType.value) {
+            case "home":
+                return HomeLanding;
+            case NoHomeLandingType.archive:
+            case NoHomeLandingType.post:
+                return PostArchiveLanding;
+            default:
+                return null;
+        }
+    }),
     /**
      * 层次型分类列表，由wordpress api返回的扁平型列表计算得出
      */
@@ -94,11 +101,11 @@ watch(
     (n, o) => {
         if (n && typeof n === "string") {
             if (["author", "category", "tag"].includes(n)) {
-                routeName.value = "archive";
+                landingType.value = NoHomeLandingType.archive;
             } else if (n === "post") {
-                routeName.value = "post";
+                landingType.value = NoHomeLandingType.post;
             } else {
-                routeName.value = "home";
+                landingType.value = "home";
             }
         }
     }
@@ -166,7 +173,7 @@ onMounted(() => {
     <KeepAlive>
         <component
             :is="currentLandingComponent"
-            :landingType="routeName"
+            :landingType="landingType"
         ></component
     ></KeepAlive>
     <!--着陆页组件切换end-->
@@ -181,29 +188,30 @@ onMounted(() => {
                     <RouterView></RouterView>
                 </main>
             </div>
-            <SiteSidebar position="left">
+            <SiteSidebar :position="SidebarPosition.left">
                 <template v-slot:top>侧边栏1</template>
                 <template v-slot:body>
                     <SiteSidebarItem
-                        itemTitle="分类"
-                        funcClass="post-categories"
+                        title="分类"
+                        :feature="SidebarItemFeature['post-categories']"
                     >
-                        <Category
-                            :categoryList="hierarchicCategoryList"
-                        ></Category>
+                        <Category :list="hierarchicCategoryList"></Category>
                     </SiteSidebarItem>
                 </template>
             </SiteSidebar>
-            <SiteSidebar position="right">
+            <SiteSidebar :position="SidebarPosition.right">
                 <template v-slot:top>侧边栏2</template>
                 <template v-slot:body>
                     <SiteSidebarItem
-                        itemTitle="标签云"
-                        funcClass="post-tag-cloud"
+                        title="标签云"
+                        :feature="SidebarItemFeature['post-tag-cloud']"
                     >
-                        <Tag :tagList="tagList"></Tag>
+                        <Tag :list="tagList"></Tag>
                     </SiteSidebarItem>
-                    <SiteSidebarItem itemTitle="日历" funcClass="post-calendar">
+                    <SiteSidebarItem
+                        title="日历"
+                        :feature="SidebarItemFeature['post-calendar']"
+                    >
                         <Calendar
                             :current="currentDate"
                             :hasPostDates="dateList"

@@ -1,24 +1,16 @@
-<script setup>
-const props = defineProps({
-    head: {
-        type: Array,
-        required: false,
-    },
-    body: {
-        type: Array,
-        required: true,
-    },
-    foot: {
-        type: Array,
-        required: false,
-    },
+<script setup lang="ts">
+interface T {
+    head?: (string | number)[];
+    body: (string | number)[][];
+    foot?: (string | number)[];
     /**
      * 自定义cell样式，函数要返回一个字符串作为所要应用的class名
      */
-    customizeCellClass: {
-        type: Function,
-        required: false,
-    },
+    customizeCellClass?: (v: { value: number | string }) => string;
+}
+
+const props = withDefaults(defineProps<T>(), {
+    body: () => [[""]],
 });
 </script>
 
@@ -36,7 +28,10 @@ const props = defineProps({
                 <td
                     v-for="item in row"
                     :key="item"
-                    :class="customizeCellClass({ value: item })"
+                    :class="
+                        customizeCellClass &&
+                        customizeCellClass({ value: item })
+                    "
                 >
                     {{ item }}
                 </td>
@@ -51,5 +46,3 @@ const props = defineProps({
         </tfoot>
     </table>
 </template>
-
-<style lang="scss" scoped></style>

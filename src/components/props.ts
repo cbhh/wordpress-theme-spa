@@ -106,3 +106,42 @@ export interface BreadcrumbItemType {
      */
     name: string;
 }
+/**
+ * 非home的landing组件类型
+ */
+export enum NoHomeLandingType {
+    post,
+    archive,
+}
+/**
+ * sidebar组件位置
+ */
+export enum SidebarPosition {
+    left,
+    right,
+}
+/**
+ * sidebaritem组件功能，不同功能需要添加不同class及style
+ */
+export enum SidebarItemFeature {
+    /**
+     * 最近文章
+     */
+    "recent-posts" = "recent-posts",
+    /**
+     * 标签云
+     */
+    "post-tag-cloud" = "post-tag-cloud",
+    /**
+     * 分类
+     */
+    "post-categories" = "post-categories",
+    /**
+     * 日历
+     */
+    "post-calendar" = "post-calendar",
+    /**
+     * 月度归档
+     */
+    "monthly-archives" = "monthly-archives",
+}
