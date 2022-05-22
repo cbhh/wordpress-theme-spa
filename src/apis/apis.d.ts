@@ -210,7 +210,7 @@ export declare interface ApiList {
      * @example 获取用户id为1且标签id为1的最近10篇文章
      * getPostList({tag:1, author:1}).then((data)=>{...})
      */
-    getPostList(conditions?: { [key: string]: string }): Promise<{
+    getPostList(conditions?: { [key: string]: string | number }): Promise<{
         totalItems: number;
         totalPages: number;
         result: PostListItem[];

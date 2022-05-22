@@ -168,20 +168,20 @@ onMounted(() => {
     </div>
     <SiteHeader></SiteHeader>
     <!--着陆页组件切换start-->
-    <KeepAlive>
+    <!-- <KeepAlive>
         <component
             :is="currentLandingComponent"
             :landingType="routeName"
         ></component
-    ></KeepAlive>
+    ></KeepAlive> -->
     <!--着陆页组件切换end-->
     <div id="primary">
         <SitePrimaryMaskTop></SitePrimaryMaskTop>
         <div class="primary-content">
             <div class="site-content">
-                <SitePrimaryBreadcrumb
+                <!-- <SitePrimaryBreadcrumb
                     :list="breadcrumbNavList"
-                ></SitePrimaryBreadcrumb> 
+                ></SitePrimaryBreadcrumb>  -->
                 <main>
                     <RouterView></RouterView>
                 </main>
