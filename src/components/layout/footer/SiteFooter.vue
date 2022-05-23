@@ -32,7 +32,7 @@ const siteMeta = inject("site-meta");
                 <div class="ack-separate">❊</div>
                 <div class="ack-theme">
                     <a
-                        href="https://gitee.com/vbzxc/wordpress-theme-spa"
+                        href="https://github.com/cbhh/wordpress-theme-spa"
                         target="_blank"
                         title="复古中国风WordPress主题SPA版本"
                         >梦回长安</a
