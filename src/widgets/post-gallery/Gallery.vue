@@ -1,23 +1,28 @@
-<script setup>
+<script setup lang="ts">
 import GalleryItem from "./GalleryItem.vue";
 import { computed } from "vue";
-const props = defineProps({
-    imageList: {
-        type: Array,
-        required: true,
-    },
+import { GalleryItemType } from "../props";
+
+interface T {
+    list: GalleryItemType[];
     /**
      * 当前图片在全部图片中的位置，从0开始
      */
-    currentImageIndex: {
-        type: Number,
-        required: false,
-        default: 0,
-    },
+    currentImageIndex: number;
+}
+
+const props = withDefaults(defineProps<T>(), {
+    list: () => [],
+    currentImageIndex: 0,
 });
-const emits = defineEmits(["closeGallery", "moveNext", "movePre"]);
+
+const emits = defineEmits<{
+    (e: "closeGallery"): void;
+    (e: "movePre"): void;
+    (e: "moveNext"): void;
+}>();
 const currentImageDescription = computed(() => {
-    var data = props.imageList[props.currentImageIndex];
+    var data = props.list[props.currentImageIndex];
     return data ? data.description : "";
 });
 const clickCloseButton = function () {
@@ -47,13 +52,13 @@ const clickNext = function () {
             </div>
             <div class="img-container">
                 <GalleryItem
-                    v-for="item in props.imageList"
+                    v-for="item in props.list"
                     :key="item.imgLink"
-                    :statusCurrent="item.current"
-                    :statusPre="item.pre"
-                    :statusNext="item.next"
-                    :src="item.src"
-                    :srcset="item.srcset"
+                    :isCurrent="item.isCurrent"
+                    :isCurrentPre="item.isCurrentPre"
+                    :isCurrentNext="item.isCurrentNext"
+                    :imgSrc="item.imgSrc"
+                    :imgSrcset="item.imgSrcset"
                     :imgLink="item.imgLink"
                 ></GalleryItem>
             </div>

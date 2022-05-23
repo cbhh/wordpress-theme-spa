@@ -18,6 +18,8 @@ import ThemeLoading from "@/components/common/ThemeLoading.vue";
 import Catalog from "@/widgets/post-catalog/Catalog.vue";
 import CatalogSwitchButton from "@/widgets/post-catalog/CatalogSwitchButton.vue";
 import catalogComposable from "@/widgets/post-catalog/composable";
+import Gallery from "@/widgets/post-gallery/Gallery.vue";
+import galleryComposable from "@/widgets/post-gallery/composable";
 import getAncestorCategories from "@/composables/getAncestorCategories";
 import { PostDetailTagItemType } from "@/components/props";
 import windowScroll from "@/global/windowScroll";
@@ -45,16 +47,16 @@ const {
     switchCatalogVisible,
     switchCurrentCatalogItem,
 } = catalogComposable();
-// const {
-//     galleryImageList,
-//     galleyRequired,
-//     galleryVisible,
-//     currentImageIndex,
-//     generateGalleryImageList,
-//     switchGalleyVisible,
-//     moveToNext,
-//     moveToPre,
-// } = generateGalleryData();
+const {
+    galleryImageList,
+    galleyRequired,
+    galleryVisible,
+    currentImageIndex,
+    generateGalleryImageList,
+    switchGalleyVisible,
+    moveToNext,
+    moveToPre,
+} = galleryComposable();
 
 const renderTimes = ref(0),
     /**
@@ -127,12 +129,12 @@ const renderView = function (currentPostId: number) {
             })
             .then(function () {
                 nextTick().then(function () {
-                    //生成文章目录
                     if (content.value) {
+                        //生成文章目录
                         generateCatalogList(content.value);
+                        //生成文章图片画廊
+                        generateGalleryImageList(content.value);
                     }
-                    //生成文章图片画廊
-                    //generateGalleryImageList(content.value);
                     dataLoadingText.value = "文章数据加载成功";
                     setTimeout(() => (loadingMaskRequired.value = false), 500);
                 });
@@ -203,16 +205,15 @@ onUnmounted(() => {
         :catalogVisible="catalogVisible"
         @switchButtonClicked="switchCatalogVisible"
     ></catalog-switch-button>
-    <!--
-    <post-gallery
+    <gallery
         v-if="galleyRequired"
         v-show="galleryVisible"
-        :imageList="galleryImageList"
+        :list="galleryImageList"
         :currentImageIndex="currentImageIndex"
         @closeGallery="switchGalleyVisible(false)"
         @moveNext="moveToNext"
         @movePre="moveToPre"
-    ></post-gallery> -->
+    ></gallery>
 </template>
 
 <style lang="scss" scoped>

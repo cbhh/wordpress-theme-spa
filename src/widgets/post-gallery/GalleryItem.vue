@@ -1,35 +1,20 @@
-<script setup>
-const props = defineProps({
-    statusCurrent: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
-    statusPre: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
-    statusNext: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
-    srcset: {
-        type: String,
-        required: false,
-    },
-    src: {
-        type: String,
-        required: true,
-    },
-    /**
-     * 用来与文章中的对应image元素建立一对一的联系
-     */
-    imgLink: {
-        type: String,
-        required: true,
-    },
+<script setup lang="ts">
+interface T {
+    imgLink: string;
+    isCurrent: boolean;
+    isCurrentPre: boolean;
+    isCurrentNext: boolean;
+    imgSrc: string;
+    imgSrcset: string;
+}
+
+const props = withDefaults(defineProps<T>(), {
+    imgLink: "",
+    isCurrent: false,
+    isCurrentPre: false,
+    isCurrentNext: false,
+    imgSrc: "",
+    imgSrcset: "",
 });
 </script>
 
@@ -37,13 +22,17 @@ const props = defineProps({
     <div
         class="gallery-image-wrap"
         :class="{
-            current: props.statusCurrent,
-            pre: props.statusPre,
-            next: props.statusNext,
+            current: props.isCurrent,
+            pre: props.isCurrentPre,
+            next: props.isCurrentNext,
         }"
         :data-img-link="props.imgLink"
     >
-        <img class="gallery-image" :src="props.src" :srcset="props.srcset" />
+        <img
+            class="gallery-image"
+            :src="props.imgSrc"
+            :srcset="props.imgSrcset"
+        />
     </div>
 </template>
 

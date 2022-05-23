@@ -31,3 +31,36 @@ export interface CatalogItemType {
      */
     isCurrent: boolean;
 }
+/**
+ * 画廊项
+ */
+export interface GalleryItemType {
+    /**
+     * link值，用于标识article中所对应的img元素
+     */
+    imgLink: string;
+    /**
+     * 是否当前选中
+     */
+    isCurrent: boolean;
+    /**
+     * 是否当前选中项的前一项
+     */
+    isCurrentPre: boolean;
+    /**
+     * 是否当前选中项的后一项
+     */
+    isCurrentNext: boolean;
+    /**
+     * 图片src
+     */
+    imgSrc: string;
+    /**
+     * 图片srcset
+     */
+    imgSrcset: string;
+    /**
+     * 图片描述，来自alt属性或最近的figcaption元素
+     */
+    description?: string;
+}
