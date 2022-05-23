@@ -6,7 +6,7 @@ interface T {
     /**
      * 自定义cell样式，函数要返回一个字符串作为所要应用的class名
      */
-    customizeCellClass?: (v: { value: number | string }) => string;
+    customizeCellClass?: (v: { value: any }) => string;
 }
 
 const props = withDefaults(defineProps<T>(), {

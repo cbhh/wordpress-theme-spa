@@ -4,7 +4,6 @@
     "version": "0.0.0",
     "scripts": {
         "dev": "vite",
-        "js-build": "vite build",
         "build": "vue-tsc --noEmit && vite build",
         "preview": "vite preview"
     },

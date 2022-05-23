@@ -45,7 +45,6 @@ const setCellStyle = (function () {
 </script>
 
 <template>
-    <!--TODO:不会这个 number赋值给number|string，实际运行无影响-->
     <ThemeTable
         :head="head"
         :body="monthData"
