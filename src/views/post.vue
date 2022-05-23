@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import {
     ref,
     getCurrentInstance,
@@ -9,24 +9,33 @@ import {
     watch,
     nextTick,
 } from "vue";
-import { useStore } from "vuex";
+import { appUseStore } from "@/store";
 import { useRoute } from "vue-router";
-import { ApiList } from "../apis/dataType";
-import PostTagList from "../components/layout/content/PostTagList.vue";
-import PostAuthor from "../components/layout/content/PostAuthor.vue";
-import ThemeLoading from "../components/common/ThemeLoading.vue";
-import getAncestorCategories from "../composables/getAncestorCategories";
-import generateCatalogData from "../composables/generateCatalogData";
-import generateGalleryData from "../composables/generateGalleryData";
-import windowScroll from "../global/windowScroll";
+import { ApiList } from "@/apis/apis";
+import PostTagList from "@/components/layout/content/PostTagList.vue";
+import PostAuthor from "@/components/layout/content/PostAuthor.vue";
+import ThemeLoading from "@/components/common/ThemeLoading.vue";
+import Catalog from "@/widgets/post-catalog/Catalog.vue";
+import CatalogSwitchButton from "@/widgets/post-catalog/CatalogSwitchButton.vue";
+import catalogComposable from "@/widgets/post-catalog/composable";
+import Gallery from "@/widgets/post-gallery/Gallery.vue";
+import galleryComposable from "@/widgets/post-gallery/composable";
+import getAncestorCategories from "@/composables/getAncestorCategories";
+import { PostDetailTagItemType } from "@/components/props";
+import windowScroll from "@/global/windowScroll";
 
-const $apis = getCurrentInstance().appContext.config.globalProperties.$apis;
-const store = useStore();
-const route = useRoute();
+const $apis: ApiList = (function () {
+        var ins = getCurrentInstance();
+        if (ins) {
+            return ins.appContext.config.globalProperties.$apis;
+        }
+    })(),
+    route = useRoute(),
+    store = appUseStore();
 
-const allCategories = computed(() => store.state.categories.categoryList);
-const allTags = computed(() => store.state.tags.tagList);
-const allUsers = computed(() => store.state.users.userList);
+const allCategories = computed(() => store.state.categoryModule.categoryList),
+    allTags = computed(() => store.state.tagModule.tagList),
+    allUsers = computed(() => store.state.userModule.userList);
 
 const { ancestors, getParent } = getAncestorCategories(allCategories.value);
 const {
@@ -37,7 +46,7 @@ const {
     setClickedCatalogItemStyle,
     switchCatalogVisible,
     switchCurrentCatalogItem,
-} = generateCatalogData();
+} = catalogComposable();
 const {
     galleryImageList,
     galleyRequired,
@@ -47,15 +56,15 @@ const {
     switchGalleyVisible,
     moveToNext,
     moveToPre,
-} = generateGalleryData();
+} = galleryComposable();
 
 const renderTimes = ref(0),
     /**
      * content dom引用
      */
-    content = ref(null),
+    content = ref<HTMLDivElement>(),
     contentHtml = ref(""),
-    tagList = ref([]),
+    tagList = ref<PostDetailTagItemType[]>([]),
     authorMeta = reactive({
         name: "",
         avatar: "",
@@ -66,82 +75,88 @@ const renderTimes = ref(0),
     dataLoadingText = ref("");
 /**
  * 提供数据渲染视图
- * @param {Number} curentPostId
+ * @param currentPostId
  */
-const renderView = function (curentPostId) {
+const renderView = function (currentPostId: number) {
     loadingMaskRequired.value = true;
     dataLoadingText.value = "正在加载文章数据";
-    /**
-     * @type ApiList
-     */
-    var $api = $apis;
-    $api.postDetail(curentPostId)
-        .then(function (data) {
-            contentHtml.value = data.content.rendered;
-            //landing组件
-            store.commit("setPostMeta", {
-                title: data.title.rendered,
-                time: data.date,
-                bg: data.featured_image_url || "",
-            });
-            //PostTagList组件
-            tagList.value = data.tags.map(function (t) {
-                var tagMeta = allTags.value.find((v) => v.id === t);
-                return {
-                    id: t,
-                    slug: tagMeta.slug,
-                    name: tagMeta.name,
-                };
-            });
-            //面包屑导航：递归查找父级分类，直到父级分类为0，即达到顶层分类
-            //如果有多个分类，则只显示最后一个分类
-            var currentCatId = data.categories[data.categories.length - 1],
-                currentCat = allCategories.value.find(
-                    (c) => c.id === currentCatId
+    $apis &&
+        $apis
+            .getPostDetail(currentPostId)
+            .then(function (data) {
+                contentHtml.value = data.content.rendered;
+                //landing组件
+                store.commit("pageMetaModule/setPageMeta", {
+                    title: data.title.rendered,
+                    time: data.date,
+                    background: data.featured_image_url || "",
+                });
+                //PostTagList组件
+                tagList.value = data.tags.map(function (t) {
+                    var tagMeta = allTags.value.find((v) => v.id === t);
+                    return {
+                        id: t,
+                        slug: (tagMeta && tagMeta.slug) || "",
+                        name: (tagMeta && tagMeta.name) || "",
+                    };
+                });
+                //面包屑导航：递归查找父级分类，直到父级分类为0，即达到顶层分类
+                //如果有多个分类，则只显示最后一个分类
+                var currentCatId = data.categories[data.categories.length - 1],
+                    currentCat = allCategories.value.find(
+                        (c) => c.id === currentCatId
+                    );
+                if (currentCat) {
+                    ancestors.value = [];
+                    ancestors.value.push(currentCat);
+                    getParent(currentCat);
+                    store.commit(
+                        "breadcrumbModule/setBreadcrumbNav",
+                        ancestors.value
+                    );
+                }
+                //PostAuthor组件
+                var currentAuthor = allUsers.value.find(
+                    (a) => a.id === data.author
                 );
-            ancestors.value = [];
-            ancestors.value.push(currentCat);
-            getParent(currentCat);
-            store.commit("setBreadcrumbNav", ancestors.value);
-            //PostAuthor组件
-            var currentAuthor = allUsers.value.find(
-                (a) => a.id === data.author
-            );
-            authorMeta.avatar = currentAuthor.avatar_urls["96"];
-            authorMeta.description = currentAuthor.description;
-            authorMeta.id = currentAuthor.id;
-            authorMeta.name = currentAuthor.name;
-
-            renderTimes.value += 1;
-        })
-        .then(function () {
-            nextTick().then(function () {
-                //生成文章目录
-                generateCatalogList(content.value);
-                //生成文章图片画廊
-                generateGalleryImageList(content.value);
-                dataLoadingText.value = "文章数据加载成功";
-                setTimeout(() => (loadingMaskRequired.value = false), 500);
+                if (currentAuthor) {
+                    authorMeta.avatar = currentAuthor.avatar_urls["96"];
+                    authorMeta.description = currentAuthor.description;
+                    authorMeta.id = currentAuthor.id;
+                    authorMeta.name = currentAuthor.name;
+                }
+                renderTimes.value += 1;
+            })
+            .then(function () {
+                nextTick().then(function () {
+                    if (content.value) {
+                        //生成文章目录
+                        generateCatalogList(content.value);
+                        //生成文章图片画廊
+                        generateGalleryImageList(content.value);
+                    }
+                    dataLoadingText.value = "文章数据加载成功";
+                    setTimeout(() => (loadingMaskRequired.value = false), 500);
+                });
             });
-        });
 };
 //监听路由变化，加载不同文章
 watch(
     () => route.params["pid"],
     (n) => {
         if (renderTimes.value && n) {
-            renderView(n);
+            renderView(parseInt(n.toString()));
         }
     }
 );
 
 onMounted(() => {
-    renderView(route.params["pid"]);
+    renderView(parseInt(route.params["pid"].toString()));
     //添加更新目录的窗口滚动事件处理器
     windowScroll.addHandle("catalog-move", null, switchCurrentCatalogItem);
 });
 onUnmounted(() => {
-    store.commit("setBreadcrumbNav", []);
+    store.commit("breadcrumbModule/setBreadcrumbNav", []);
     //移除更新目录的窗口滚动事件处理器
     windowScroll.deleteHandle("catalog-move");
 });
@@ -163,7 +178,7 @@ onUnmounted(() => {
         ></div>
         <footer class="entry-footer" v-show="!loadingMaskRequired">
             <div class="extra-meta">
-                <PostTagList :tagList="tagList"></PostTagList>
+                <PostTagList v-if="tagList[0]" :list="tagList"></PostTagList>
                 <PostAuthor
                     :name="authorMeta.name"
                     :id="authorMeta.id"
@@ -179,25 +194,26 @@ onUnmounted(() => {
             </div>
         </footer>
     </article>
-    <post-catalog
+    <catalog
         v-if="catalogRequired"
-        :catalogItemList="catalogList"
+        :list="catalogList"
         :visible="catalogVisible"
         @clickedItem="setClickedCatalogItemStyle"
-    ></post-catalog>
+    ></catalog>
     <catalog-switch-button
+        v-if="catalogRequired"
         :catalogVisible="catalogVisible"
         @switchButtonClicked="switchCatalogVisible"
     ></catalog-switch-button>
-    <post-gallery
+    <gallery
         v-if="galleyRequired"
         v-show="galleryVisible"
-        :imageList="galleryImageList"
+        :list="galleryImageList"
         :currentImageIndex="currentImageIndex"
         @closeGallery="switchGalleyVisible(false)"
         @moveNext="moveToNext"
         @movePre="moveToPre"
-    ></post-gallery>
+    ></gallery>
 </template>
 
 <style lang="scss" scoped>

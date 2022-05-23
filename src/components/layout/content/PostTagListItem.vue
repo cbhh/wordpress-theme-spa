@@ -1,19 +1,19 @@
-<script setup>
+<script setup lang="ts">
 import { RouterLink } from "vue-router";
-const props = defineProps({
-    slug: {
-        type: String,
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-    divider: {
-        type: Boolean,
-        required: false,
-        default: true,
-    },
+
+interface T {
+    slug: string;
+    name: string;
+    /**
+     * 是否启用分隔符
+     */
+    divider?: boolean;
+}
+
+const props = withDefaults(defineProps<T>(), {
+    name: "",
+    slug: "",
+    divider: true,
 });
 </script>
 

@@ -1,18 +1,25 @@
-<script setup>
+<script setup lang="ts">
 import { RouterLink } from "vue-router";
-const props = defineProps({
-    slug: {
-        type: String,
-        required: true,
-    },
-    name: {
-        type: String,
-        required: true,
-    },
-    id: {
-        type: Number,
-        required: true,
-    },
+
+interface T {
+    /**
+     * category id
+     */
+    id: number;
+    /**
+     * 别名
+     */
+    slug: string;
+    /**
+     * 名称
+     */
+    name: string;
+}
+
+const props = withDefaults(defineProps<T>(), {
+    name: "",
+    slug: "",
+    id: 0,
 });
 </script>
 

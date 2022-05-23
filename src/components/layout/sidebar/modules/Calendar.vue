@@ -1,48 +1,55 @@
-<script setup>
-import ThemeTable from "../../../common/ThemeTable.vue";
-import { generateCalendarData } from "../../../../utils/date";
+<script setup lang="ts">
+import ThemeTable from "@/components/common/ThemeTable.vue";
+import { generateCalendarData } from "@/utils/date";
 import { computed } from "vue";
 
-const props = defineProps({
+interface T {
     /**
      * 当前日期，一个Date对象
      */
-    current: {
-        type: Date,
-        required: true,
-    },
+    current: Date;
     /**
      * 本月中含有post的日期数组
      */
-    hasPostDates: {
-        type: Array,
-        required: true,
-    },
+    hasPostDates?: number[];
+}
+
+const props = withDefaults(defineProps<T>(), {
+    current: () => new Date(),
 });
 
 const head = ["日", "一", "二", "三", "四", "五", "六"];
 
-const todayDate = computed(() => props.current.getDate());
-const monthData = computed(() => generateCalendarData(props.current));
+const todayDate = computed(() => props.current.getDate()),
+    monthData = computed(() => generateCalendarData(props.current));
 
-const cellStyle = function (cellData) {
-    var c = "",
-        v = cellData.value;
-    if (v === todayDate.value) {
-        c += "today";
+const setCellStyle = (function () {
+    if (props.hasPostDates) {
+        return function (cellData: { value: number }) {
+            var c = "",
+                v = cellData.value;
+            if (v === todayDate.value) {
+                c += "today";
+            }
+            if (props.hasPostDates && props.hasPostDates.includes(v)) {
+                c += "has-post";
+            }
+            return c;
+        };
+    } else {
+        return function (cellData: { value: number }) {
+            return cellData.value === todayDate.value ? "today" : "";
+        };
     }
-    if (props.hasPostDates.includes(v)) {
-        c += "has-post";
-    }
-    return c;
-};
+})();
 </script>
 
 <template>
+    <!--TODO:不会这个 number赋值给number|string，实际运行无影响-->
     <ThemeTable
         :head="head"
         :body="monthData"
-        :customizeCellClass="cellStyle"
+        :customizeCellClass="setCellStyle"
         class="month-calendar"
     ></ThemeTable>
 </template>

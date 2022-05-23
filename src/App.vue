@@ -1,6 +1,6 @@
-<script setup>
+<script setup lang="ts">
 import { provide, readonly, onMounted, computed, ref, watch } from "vue";
-import { useStore } from "vuex";
+import { appUseStore } from "./store";
 import { RouterView, useRoute, useRouter } from "vue-router";
 import getTags from "./composables/init/getTags";
 import getSettings from "./composables/init/getSettings";
@@ -19,29 +19,29 @@ import Category from "./components/layout/sidebar/modules/Category.vue";
 import Tag from "./components/layout/sidebar/modules/Tag.vue";
 import Calendar from "./components/layout/sidebar/modules/Calendar.vue";
 import ThemeLoading from "./components/common/ThemeLoading.vue";
+import BackToTop from "./widgets/back-to-top/BackToTop.vue";
+import backToTopComposable from "./widgets/back-to-top/composable";
 import windowScroll from "./global/windowScroll";
-//调用各组合式函数并解构出数据和对应操作函数
+import {
+    NoHomeLandingType,
+    SidebarPosition,
+    SidebarItemFeature,
+} from "./components/props";
+
 const { tagList, getTagList } = getTags(),
     { siteMeta, getSiteSettings } = getSettings(),
     { categoryList, getCategoryList } = getCategories(),
     { userList, getUserList } = getUsers(),
-    { dateList, getDates } = getMonthPostDates();
-//初始化store和route
-const store = useStore(),
+    { dateList, getDates } = getMonthPostDates(),
+    { backToTopVisible, switchBackToTopVisible } = backToTopComposable();
+//初始化store和router
+const store = appUseStore(),
     route = useRoute(),
     router = useRouter();
 /**
- * 几种可能的着陆页组件，当切换不同种类（首页/文章页/内容归档页）的页面时，会选择不同的landing组件
+ * 数据加载状态，显示在loading组件中
  */
-const landingMap = {
-        home: HomeLanding,
-        post: PostArchiveLanding,
-        archive: PostArchiveLanding,
-    },
-    /**
-     * 数据加载状态，显示在loading组件中
-     */
-    dataLoadingText = ref(""),
+const dataLoadingText = ref(""),
     /**
      * 加载完成的数据项
      */
@@ -55,49 +55,49 @@ const landingMap = {
      */
     currentDate = new Date(),
     /**
-     * 当前路由名
+     * 当前landing组件类型
      */
-    routeName = ref("home"),
-    /**
-     * 回到顶部按钮可见性
-     */
-    backToTopVisible = ref(false);
+    landingType = ref<NoHomeLandingType | "home">("home");
 /**
  * 当前选用的着陆页组件
  */
-const currentLandingComponent = computed(() => landingMap[routeName.value]),
+const currentLandingComponent = computed(() => {
+        switch (landingType.value) {
+            case "home":
+                return HomeLanding;
+            case NoHomeLandingType.archive:
+            case NoHomeLandingType.post:
+                return PostArchiveLanding;
+            default:
+                return null;
+        }
+    }),
     /**
      * 层次型分类列表，由wordpress api返回的扁平型列表计算得出
      */
     hierarchicCategoryList = computed(
-        () => store.state.categories.hierarchicCategoryList
+        () => store.state.categoryModule.hierarchicCategoryList
     ),
     /**
      * 面包屑导航（除了"首页"以外的部分）列表
      */
-    breadcrumbNavList = computed(() => store.state.breadcrumb.categoryNavList);
+    breadcrumbNavList = computed(() => store.state.breadcrumbModule.list);
 //站点设置信息注入，方便后代组件访问
 provide("site-meta", readonly(siteMeta));
-/**
- * 根据窗口滚动切换回到顶部按钮可见性
- * @param {Number} wsy window scroll y
- * @param {Number} wh window inner height
- */
-const switchBackToTopVisible = function (wsy, wh) {
-    backToTopVisible.value = wsy > wh ? true : false;
-};
 //侦听一个getter
 //https://v3.cn.vuejs.org/guide/reactivity-computed-watchers.html#watch
 //侦听路由名称变化，以选择不同的着陆页组件
 watch(
     () => route.name,
     (n, o) => {
-        if (["author", "category", "tag"].includes(n)) {
-            routeName.value = "archive";
-        } else if (n === "post") {
-            routeName.value = "post";
-        } else {
-            routeName.value = "home";
+        if (n && typeof n === "string") {
+            if (["author", "category", "tag"].includes(n)) {
+                landingType.value = NoHomeLandingType.archive;
+            } else if (n === "post") {
+                landingType.value = NoHomeLandingType.post;
+            } else {
+                landingType.value = "home";
+            }
         }
     }
 );
@@ -119,7 +119,7 @@ onMounted(() => {
     dataLoadingText.value = "正在加载站点数据";
     //加载标签列表并存储进vuex
     getTagList().then(() => {
-        store.commit("storeTagList", tagList.value);
+        store.commit("tagModule/storeTagList", tagList.value);
         dataLoadingText.value = "标签列表准备完成";
         dataLoadingCompletedItem.value += 1;
     });
@@ -130,13 +130,13 @@ onMounted(() => {
     });
     //加载分类列表并存储进vuex
     getCategoryList().then(() => {
-        store.commit("storeCategoryList", categoryList.value);
+        store.commit("categoryModule/storeCategoryList", categoryList.value);
         dataLoadingText.value = "分类列表准备完成";
         dataLoadingCompletedItem.value += 1;
     });
     //加载用户（作者）列表并存储进vuex
     getUserList().then(() => {
-        store.commit("storeUserList", userList.value);
+        store.commit("userModule/storeUserList", userList.value);
         dataLoadingText.value = "作者列表准备完成";
         dataLoadingCompletedItem.value += 1;
     });
@@ -164,7 +164,7 @@ onMounted(() => {
     <KeepAlive>
         <component
             :is="currentLandingComponent"
-            :landingType="routeName"
+            :landingType="landingType"
         ></component
     ></KeepAlive>
     <!--着陆页组件切换end-->
@@ -173,35 +173,36 @@ onMounted(() => {
         <div class="primary-content">
             <div class="site-content">
                 <SitePrimaryBreadcrumb
-                    :categoryList="breadcrumbNavList"
+                    :list="breadcrumbNavList"
                 ></SitePrimaryBreadcrumb>
                 <main>
                     <RouterView></RouterView>
                 </main>
             </div>
-            <SiteSidebar position="left">
+            <SiteSidebar :position="SidebarPosition.left">
                 <template v-slot:top>侧边栏1</template>
                 <template v-slot:body>
                     <SiteSidebarItem
-                        itemTitle="分类"
-                        funcClass="post-categories"
+                        title="分类"
+                        :feature="SidebarItemFeature['post-categories']"
                     >
-                        <Category
-                            :categoryList="hierarchicCategoryList"
-                        ></Category>
+                        <Category :list="hierarchicCategoryList"></Category>
                     </SiteSidebarItem>
                 </template>
             </SiteSidebar>
-            <SiteSidebar position="right">
+            <SiteSidebar :position="SidebarPosition.right">
                 <template v-slot:top>侧边栏2</template>
                 <template v-slot:body>
                     <SiteSidebarItem
-                        itemTitle="标签云"
-                        funcClass="post-tag-cloud"
+                        title="标签云"
+                        :feature="SidebarItemFeature['post-tag-cloud']"
                     >
-                        <Tag :tagList="tagList"></Tag>
+                        <Tag :list="tagList"></Tag>
                     </SiteSidebarItem>
-                    <SiteSidebarItem itemTitle="日历" funcClass="post-calendar">
+                    <SiteSidebarItem
+                        title="日历"
+                        :feature="SidebarItemFeature['post-calendar']"
+                    >
                         <Calendar
                             :current="currentDate"
                             :hasPostDates="dateList"

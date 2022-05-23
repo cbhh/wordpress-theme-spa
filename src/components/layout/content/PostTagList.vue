@@ -1,15 +1,16 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import PostTagListItem from "./PostTagListItem.vue";
-const props = defineProps({
-    tagList: {
-        type: Array,
-        required: true,
-    },
+import { PostDetailTagItemType } from "@/components/props";
+
+interface T {
+    list: PostDetailTagItemType[];
+}
+
+const props = withDefaults(defineProps<T>(), {
+    list: () => [],
 });
-const tagListLength = computed(() =>
-    props.tagList ? props.tagList.length : 0
-);
+const tagListLength = computed(() => (props.list ? props.list.length : 0));
 </script>
 
 <template>
@@ -17,7 +18,7 @@ const tagListLength = computed(() =>
         <i class="fa fa-tags"></i>
         <ul>
             <PostTagListItem
-                v-for="(item, index) in props.tagList"
+                v-for="(item, index) in props.list"
                 :key="item.id"
                 :slug="item.slug"
                 :name="item.name"

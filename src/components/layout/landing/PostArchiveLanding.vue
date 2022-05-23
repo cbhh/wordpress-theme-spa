@@ -1,43 +1,50 @@
-<script setup>
-import { useStore } from "vuex";
+<script setup lang="ts">
+import { appUseStore } from "@/store";
 import { computed } from "vue";
-import { convertDateFormat } from "../../../utils/date";
+import { convertDateFormat } from "@/utils/date";
+import { NoHomeLandingType } from "@/components/props";
 
-const props = defineProps({
-    landingType: {
-        type: String,
-        required: true,
-        validator: function (value) {
-            return ["post", "archive"].includes(value);
-        },
-    },
+interface T {
+    landingType: NoHomeLandingType;
+}
+
+const props = withDefaults(defineProps<T>(), {
+    landingType: NoHomeLandingType.post,
 });
 
-const store = useStore();
+const store = appUseStore();
 
-const bg = computed(() => store.state.post.bg);
-const title = computed(() => store.state.post.title);
-const time = computed(() => store.state.post.time);
+const background = computed(() => store.state.pageMetaModule.background),
+    title = computed(() => store.state.pageMetaModule.title),
+    time = computed(() => store.state.pageMetaModule.time);
 const className = computed(() => {
-    if (props.landingType === "post") return "post-landing";
-    if (props.landingType === "archive") return "archive-landing";
-    else return "";
+    switch (props.landingType) {
+        case NoHomeLandingType.post:
+            return "post-landing";
+        case NoHomeLandingType.archive:
+            return "archive-landing";
+        default:
+            return "";
+    }
 });
 </script>
 
 <template>
-    <div :class="className" :style="{ 'background-image': 'url(' + bg + ')' }">
+    <div
+        :class="className"
+        :style="{ 'background-image': 'url(' + background + ')' }"
+    >
         <div class="info">
             <h1>{{ title }}</h1>
             <div
                 class="middle-separate-line"
-                v-if="props.landingType === 'post'"
+                v-if="className === 'post-landing'"
             >
                 <div></div>
                 <div>❊</div>
                 <div></div>
             </div>
-            <time :datetime="time" v-if="props.landingType === 'post'">
+            <time :datetime="time" v-if="className === 'post-landing'">
                 {{ time ? convertDateFormat(time) : "" }}
             </time>
             <div class="block-corner-deco">

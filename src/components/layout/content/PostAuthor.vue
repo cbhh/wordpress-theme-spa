@@ -1,23 +1,21 @@
-<script setup>
+<script setup lang="ts">
 import { RouterLink } from "vue-router";
 import { computed } from "vue";
-const props = defineProps({
-    name: {
-        type: String,
-        required: true,
-    },
-    avatar: {
-        type: String,
-        required: true,
-    },
-    id: {
-        type: Number,
-        required: true,
-    },
-    description: {
-        type: String,
-        required: false,
-    },
+
+interface T {
+    name: string;
+    /**
+     * 头像图片URL
+     */
+    avatar: string;
+    id: number;
+    description: string;
+}
+const props = withDefaults(defineProps<T>(), {
+    id: 0,
+    name: "",
+    avatar: "",
+    description: "",
 });
 const title = computed(() => "作者：" + props.name);
 </script>

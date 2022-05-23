@@ -1,18 +1,17 @@
-<script setup>
+<script setup lang="ts">
 import wpAppConfig from "@wpAppConfig";
 import { computed } from "vue";
-const props = defineProps({
-    loadingText: {
-        type: String,
-        required: false,
-        default: "正在加载",
-    },
-    logoRequired: {
-        type: Boolean,
-        required: false,
-        default: true,
-    },
+
+interface T {
+    loadingText: string;
+    logoRequired: boolean;
+}
+
+const props = withDefaults(defineProps<T>(), {
+    loadingText: "正在加载",
+    logoRequired: true,
 });
+
 const logoUrl = computed(() => wpAppConfig.siteLogo);
 </script>
 

@@ -1,31 +1,37 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
-import ThemeButton from "../../common/ThemeButton.vue";
-const props = defineProps({
-    position: {
-        type: String,
-        required: true,
-        validator: function (pos) {
-            return ["left", "right"].includes(pos);
-        },
-    },
+import ThemeButton from "@/components/common/ThemeButton.vue";
+import { SidebarPosition } from "@/components/props";
+
+interface T {
+    position: SidebarPosition;
+}
+
+const props = withDefaults(defineProps<T>(), {
+    position: SidebarPosition.left,
 });
+
 const sidebarClass = computed(() => {
-    return props.position === "left"
-        ? "site-sidebar-left"
-        : "site-sidebar-right";
+    switch (props.position) {
+        case SidebarPosition.left:
+            return "site-sidebar-left";
+        case SidebarPosition.right:
+            return "site-sidebar-right";
+        default:
+            return "";
+    }
 });
 </script>
 
 <template>
     <aside class="site-sidebar" :class="sidebarClass">
-        <ThemeButton deco bg class="sidebar-top">
+        <ThemeButton background decoration class="sidebar-top">
             <slot name="top"></slot>
         </ThemeButton>
         <div class="sidebar-body">
             <slot name="body"></slot>
         </div>
-        <div class="sidebar-bottom" v-if="props.position === 'left'">
+        <div class="sidebar-bottom" v-if="sidebarClass === 'site-sidebar-left'">
             <div class="deco-image">
                 <div></div>
             </div>

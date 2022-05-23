@@ -1,35 +1,52 @@
-<script setup>
+<script setup lang="ts">
 import { RouterLink } from "vue-router";
-import { convertDateFormat } from "../../../utils/date";
-const props = defineProps({
-    thumbnail: {
-        type: String,
-        required: false,
-    },
-    category: {
-        type: Array,
-        required: false,
-    },
-    tag: {
-        type: Array,
-        required: false,
-    },
-    date: {
-        type: String,
-        required: true,
-    },
-    title: {
-        type: String,
-        required: true,
-    },
-    id: {
-        type: Number,
-        required: true,
-    },
-    excerpt: {
-        type: String,
-        required: true,
-    },
+import { convertDateFormat } from "@/utils/date";
+import {
+    PostListItemCategoryItemType,
+    PostListItemTagItemType,
+} from "@/components/props";
+//接口或对象字面类型可以包含从其他文件导入的类型引用，但是，传递给defineProps的泛型参数本身不能是一个导入的类型
+//https://staging-cn.vuejs.org/guide/typescript/composition-api.html#typing-component-props
+interface T {
+    /**
+     * post id
+     */
+    id: number;
+    /**
+     * 特色图片URL
+     */
+    thumbnail: string;
+    /**
+     * 所属分类 数组
+     */
+    category: PostListItemCategoryItemType[];
+    /**
+     * 所属标签 数组
+     */
+    tag: PostListItemTagItemType[];
+    /**
+     * 日期
+     */
+    date: string;
+    /**
+     * 标题
+     */
+    title: string;
+    /**
+     * 摘要
+     */
+    excerpt: string;
+}
+//props类型+默认值声明
+//https://v3.cn.vuejs.org/api/sfc-script-setup.html#仅限-typescript-的功能
+const props = withDefaults(defineProps<T>(), {
+    id: 0,
+    thumbnail: "",
+    category: () => [],
+    tag: () => [],
+    date: "",
+    title: "",
+    excerpt: "",
 });
 </script>
 
@@ -85,9 +102,9 @@ const props = defineProps({
             </div>
             <div class="post-title">
                 <span>❊</span
-                ><RouterLink :to="{ name: 'post', params: { pid: props.id } }">{{
-                    props.title
-                }}</RouterLink
+                ><RouterLink
+                    :to="{ name: 'post', params: { pid: props.id } }"
+                    >{{ props.title }}</RouterLink
                 ><span>❊</span>
             </div>
             <div class="post-excerpt" v-html="props.excerpt"></div>
