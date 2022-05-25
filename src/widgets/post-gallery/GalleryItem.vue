@@ -38,7 +38,7 @@ const props = withDefaults(defineProps<T>(), {
 
 <style lang="scss" scoped>
 .gallery-image-wrap {
-    transition: var(--theme-transition);
+    transition: all 0.25s linear;
     position: absolute;
     width: calc(100% - 6px);
     height: calc(100% - 6px);

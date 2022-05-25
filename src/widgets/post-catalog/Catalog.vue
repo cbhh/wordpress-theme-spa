@@ -12,36 +12,36 @@ const props = withDefaults(defineProps<T>(), {
     list: () => [],
     visible: true,
 });
-const emits = defineEmits<{
-    (e: "clickedItem", clickedItem: CatalogItemType): void;
-}>();
+const emits = defineEmits<{ (e: "getClickedIndex", v: number): void }>();
 /**
- * 将点击项的数据传递给父组件
+ * 将点击项的index传递给父组件
  */
-const getClickedItem = function (clickedItem: CatalogItemType) {
-    emits("clickedItem", clickedItem);
+const getClickedIndex = function (clickedItemIndex: number) {
+    emits("getClickedIndex", clickedItemIndex);
 };
 </script>
 
 <template>
-    <SiteSidebarItem
-        title="文章目录"
-        class="post-catalog"
-        :class="{ hidden: !props.visible }"
-    >
-        <div class="catalog-body">
-            <CatalogItem
-                v-for="item in props.list"
-                :key="item.headingAnchor"
-                :text="item.text"
-                :headingLevel="item.headingLevel"
-                :headingAnchor="item.headingAnchor"
-                :href="item.href"
-                :isCurrent="item.isCurrent"
-                @click="getClickedItem(item)"
-            ></CatalogItem>
-        </div>
-    </SiteSidebarItem>
+    <Teleport to="body">
+        <SiteSidebarItem
+            title="文章目录"
+            class="post-catalog"
+            :class="{ hidden: !props.visible }"
+        >
+            <div class="catalog-body">
+                <CatalogItem
+                    v-for="item in props.list"
+                    :key="item.headingIndex"
+                    :text="item.text"
+                    :headingLevel="item.headingLevel"
+                    :headingIndex="item.headingIndex"
+                    :href="item.href"
+                    :isCurrent="item.isCurrent"
+                    @click="getClickedIndex(item.headingIndex)"
+                ></CatalogItem>
+            </div>
+        </SiteSidebarItem>
+    </Teleport>
 </template>
 
 <style lang="scss" scoped>
@@ -66,7 +66,8 @@ const getClickedItem = function (clickedItem: CatalogItemType) {
     .catalog-body {
         max-height: 100%;
         max-width: 100%;
-        overflow: scroll;
+        overflow-y: scroll;
+        overflow-x: hidden;
     }
     @media (max-width: $media-small-size) {
         max-width: 25%;

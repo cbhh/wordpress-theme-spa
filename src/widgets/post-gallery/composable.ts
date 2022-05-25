@@ -70,19 +70,24 @@ export default function () {
         (n, o) => {
             //visible:true->false
             if (!n && o) {
-                //关闭画廊时清除状态
-                var list = galleryImageList.value,
-                    i = currentImageIndex.value,
-                    currentImage = list[i],
-                    preImage = list[i - 1],
-                    nextImage = list[i + 1];
-                currentImage.isCurrent = false;
-                if (preImage) {
-                    preImage.isCurrentPre = false;
-                }
-                if (nextImage) {
-                    nextImage.isCurrentNext = false;
-                }
+                //等待transform过渡完成
+                setTimeout(() => {
+                    //关闭画廊时清除状态
+                    var list = galleryImageList.value,
+                        i = currentImageIndex.value,
+                        currentImage = list[i],
+                        preImage = list[i - 1],
+                        nextImage = list[i + 1];
+                    currentImage.isCurrent = false;
+                    if (preImage) {
+                        preImage.isCurrentPre = false;
+                    }
+                    if (nextImage) {
+                        nextImage.isCurrentNext = false;
+                    }
+                    //重置currentImageIndex值
+                    currentImageIndex.value = -1;
+                }, 300);
             }
         }
     );
@@ -118,7 +123,10 @@ export default function () {
                 });
                 //img元素绑定点击事件
                 pImg.addEventListener("click", function () {
-                    if (!galleryVisible.value) {
+                    if (
+                        !galleryVisible.value &&
+                        currentImageIndex.value === -1
+                    ) {
                         var link = this.dataset.imgIndex as string;
                         currentImageIndex.value = parseInt(link);
                         galleryVisible.value = true;

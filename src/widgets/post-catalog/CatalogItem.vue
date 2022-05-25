@@ -2,14 +2,14 @@
 import { computed } from "vue";
 import { HeadingLevel } from "@/widgets/props";
 interface T {
-    headingAnchor: string;
+    headingIndex: number;
     text: string;
     headingLevel: HeadingLevel;
     href: string;
     isCurrent: boolean;
 }
 const props = withDefaults(defineProps<T>(), {
-    headingAnchor: "",
+    headingIndex: 0,
     text: "",
     headingLevel: HeadingLevel.H2,
     href: "",
@@ -22,7 +22,7 @@ const levelClass = computed(() => "catalog-h" + props.headingLevel);
     <a
         class="catalog-item"
         :class="[props.isCurrent ? 'current' : '', levelClass]"
-        :data-anchor="props.headingAnchor"
+        :data-heading-anchor="props.headingIndex"
         :href="'#' + props.href"
     >
         <div class="catalog-item-wrap">

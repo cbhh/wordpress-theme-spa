@@ -8,36 +8,32 @@ interface T {
 const props = withDefaults(defineProps<T>(), {
     catalogVisible: true,
 });
-const emits = defineEmits<{ (e: "switchButtonClicked"): void }>();
+const emits = defineEmits<{ (e: "update:catalogVisible", v: boolean): void }>();
 const buttonTip = computed(() =>
     props.catalogVisible ? "隐藏目录" : "显示目录"
 );
 const isMouseDown = ref(false);
-const mouseDown = function () {
-    isMouseDown.value = true;
-};
-const mouseUp = function () {
-    isMouseDown.value = false;
-};
 const clickSwitchButton = function () {
-    emits("switchButtonClicked");
+    emits("update:catalogVisible", !props.catalogVisible);
 };
 </script>
 
 <template>
-    <div
-        class="post-catalog-switcher"
-        :class="{
-            'catalog-status-hidden': !props.catalogVisible,
-            mousedown: isMouseDown,
-        }"
-        :title="buttonTip"
-        @mousedown="mouseDown"
-        @mouseup="mouseUp"
-        @click="clickSwitchButton"
-    >
-        <i class="fa fa-th-list"></i>
-    </div>
+    <Teleport to="body">
+        <div
+            class="post-catalog-switcher"
+            :class="{
+                'catalog-status-hidden': !props.catalogVisible,
+                mousedown: isMouseDown,
+            }"
+            :title="buttonTip"
+            @mousedown="isMouseDown = true"
+            @mouseup="isMouseDown = false"
+            @click="clickSwitchButton"
+        >
+            <i class="fa fa-th-list"></i>
+        </div>
+    </Teleport>
 </template>
 
 <style lang="scss" scoped>

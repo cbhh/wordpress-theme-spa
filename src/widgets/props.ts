@@ -11,9 +11,9 @@ export enum HeadingLevel {
  */
 export interface CatalogItemType {
     /**
-     * anchor值，用于标识所对应的heading元素
+     * heading所处位置的index，用于标识所对应的heading元素
      */
-    headingAnchor: string;
+    headingIndex: number;
     /**
      * 文本内容
      */

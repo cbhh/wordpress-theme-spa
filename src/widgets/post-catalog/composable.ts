@@ -1,6 +1,5 @@
 import { ref, computed } from "vue";
 import { CatalogItemType } from "@/widgets/props";
-import { randomString13 } from "@/utils/random";
 
 const headings = ["H2", "H3", "H4", "H5", "H6"];
 /**
@@ -51,8 +50,7 @@ export default function () {
                     tagCount[0] += 1;
                     lastTag = 1;
                 } else if (headings.includes(tag)) {
-                    var level = parseInt(tag.charAt(1)),
-                        nonce = randomString13(4);
+                    var level = parseInt(tag.charAt(1));
                     tagCount[level - 1] += 1;
                     if (level - lastTag > 1) {
                         console.warn(
@@ -60,9 +58,9 @@ export default function () {
                         );
                     }
                     if (!node.id) {
-                        node.id = `h${level}-${tagCount[level - 1]}-${nonce}`;
+                        node.id = `h${level}-${tagCount[level - 1]}`;
                     }
-                    node.dataset.anchor = nonce;
+                    node.dataset.headingAnchor = catalogItemCount.value + "";
                     headingArray.push(node);
                     lastTag = level;
                     catalogList.value.push({
@@ -70,7 +68,7 @@ export default function () {
                         headingLevel: level,
                         href: node.id,
                         isCurrent: false,
-                        headingAnchor: nonce,
+                        headingIndex: catalogItemCount.value,
                     });
                 }
             }
@@ -83,13 +81,13 @@ export default function () {
         for (var i = catalogItemCount.value - 1; i >= 0; i--) {
             var h = headingArray[i];
             if (h.getBoundingClientRect().top <= 80) {
-                var anchor = h.dataset.anchor;
-                //小小的优化：若当前所处heading与上一个heading相同，则不执行任何操作
-                if (anchor !== lastClickedCatalogItem.headingAnchor) {
-                    var dataItem = catalogList.value.find(
-                        (i) => i.headingAnchor === anchor
-                    );
-                    dataItem && setClickedCatalogItemStyle(dataItem);
+                var anchor = h.dataset.headingAnchor;
+                //若当前所处heading与上一个heading不同，则更新样式
+                if (
+                    anchor &&
+                    anchor !== lastClickedCatalogItem.headingIndex + ""
+                ) {
+                    setClickedCatalogItemStyle(parseInt(anchor));
                 }
                 break;
             }
@@ -97,18 +95,13 @@ export default function () {
     };
     /**
      * 设置选中目录项的样式
-     * @param clickedItem
+     * @param clickedItemIndex
      */
-    const setClickedCatalogItemStyle = function (clickedItem: CatalogItemType) {
+    const setClickedCatalogItemStyle = function (clickedItemIndex: number) {
         lastClickedCatalogItem.isCurrent = false;
-        clickedItem.isCurrent = true;
-        lastClickedCatalogItem = clickedItem;
-    };
-    /**
-     * 切换目录可见性
-     */
-    const switchCatalogVisible = function () {
-        catalogVisible.value = !catalogVisible.value;
+        var item = catalogList.value[clickedItemIndex];
+        item.isCurrent = true;
+        lastClickedCatalogItem = item;
     };
     return {
         catalogList,
@@ -116,7 +109,6 @@ export default function () {
         generateCatalogList,
         catalogVisible,
         setClickedCatalogItemStyle,
-        switchCatalogVisible,
         switchCurrentCatalogItem,
     };
 }

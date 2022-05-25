@@ -44,7 +44,6 @@ const {
     generateCatalogList,
     catalogVisible,
     setClickedCatalogItemStyle,
-    switchCatalogVisible,
     switchCurrentCatalogItem,
 } = catalogComposable();
 const {
@@ -195,12 +194,11 @@ onUnmounted(() => {
         v-if="catalogRequired"
         :list="catalogList"
         :visible="catalogVisible"
-        @clickedItem="setClickedCatalogItemStyle"
+        @getClickedIndex="setClickedCatalogItemStyle"
     ></catalog>
     <catalog-switch-button
         v-if="catalogRequired"
-        :catalogVisible="catalogVisible"
-        @switchButtonClicked="switchCatalogVisible"
+        v-model:catalogVisible="catalogVisible"
     ></catalog-switch-button>
     <gallery
         v-if="galleyRequired"

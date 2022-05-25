@@ -50,7 +50,7 @@ const clickNext = function () {
 
 <template>
     <Teleport to="body">
-        <div class="post-img-gallery" v-show="props.visible">
+        <div class="post-img-gallery" :class="{ hidden: !props.visible }">
             <div
                 class="gallery-close"
                 title="退出画廊"
@@ -108,8 +108,12 @@ const clickNext = function () {
     box-shadow: 0 0 3px var(--theme-color);
     background: url(@ass/7933259ae51d7b49d5291e7a1759d6f2.jpeg) repeat;
     background-size: 5%;
+    transition: all 0.3s linear;
     --mover-width: 50px;
     --close-side-length: 20px;
+    &.hidden {
+        transform: scale(0);
+    }
     > .gallery-close {
         position: absolute;
         line-height: var(--close-side-length);
