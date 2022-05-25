@@ -1,5 +1,7 @@
 /**
  * 站点及rest api配置信息，以下为示例配置，可自行修改
+ *
+ * 构建生产版本之前需要将该文件名称改为app.config.js
  */
 export default {
     /**
@@ -35,7 +37,7 @@ export default {
      */
     appPwd: "gxYX wxyy aSQJ tAEI 5NyB AarZ",
     /**
-     * wordpress古腾堡编辑器（区块编辑器）样式表文件
+     * wordpress古腾堡编辑器（区块编辑器）样式表文件，将[http://localhost:2222]字样改成自己的wordpress端URL即可
      *
      * 若在wordpress后台写文章时采用的是旧版富文本编辑器，则将该项置为""
      */
@@ -107,12 +109,23 @@ export default {
      */
     seo: {
         /**
-         * 搜索引擎站点认证，填写搜索引擎站长工具提供的meta字符串
+         * 搜索引擎站点认证，填写搜索引擎站长工具提供的meta字符串（一串字母数字的组合）
          */
         searchEngineValidate: {
             google: "",
             bing: "",
             baidu: "",
+        },
+        /**
+         * 流量分析/网站统计，填写分析工具提供的html字符串，请将html字符串包裹在``内
+         */
+        siteAnalytics: {
+            google: ``,
+            cnzz: ``,
+            /**
+             * Cloudflare Web Analytics
+             */
+            cloudflare: ``,
         },
         /**
          * 本站点标题（显示在浏览器标签上的）
@@ -138,6 +151,6 @@ export default {
         /**
          * 页脚内容，如果需要备案，则该项需要填写备案号，否则填写其它内容
          */
-        footerContent: "",
+        footerContent: "一些想要显示在页脚上的内容",
     },
 };

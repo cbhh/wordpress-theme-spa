@@ -14,7 +14,7 @@
 
 2. 在项目根目录运行 `npm install` 来安装 NPM 依赖包。请注意：本项目采用[vite](https://cn.vitejs.dev)打包构建，需要 Node.js 在 12.0.0 版本以上。
 
-3. 按照提示填写配置文件 `wp-app.config.js`，该文件位于项目根目录。
+3. 按照提示填写配置文件 `app.config.sample.js`，该文件位于项目根目录，完成后需要将该文件名称改为 `app.config.js`。或者单独创建一个名为 `app.config.js` 的文件用来填写真实的配置信息。
 
 4. 运行 `npm run build` 来构建生产版本，生成的文件会存放在 dist 目录下，直接将生成的文件用于静态网站根目录即可。
 

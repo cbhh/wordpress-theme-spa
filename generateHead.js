@@ -1,4 +1,4 @@
-import wpAppConfig from "./wp-app.config";
+import wpAppConfig from "./app.config";
 
 const cdnPrefix = "https://cdn.staticfile.org/";
 
@@ -113,4 +113,20 @@ export function generateBackgroundCss() {
             settings.scroll ? "scroll" : "fixed"
         }}</style>`;
     } else return "";
+}
+/**
+ * 加载更多脚本
+ * @returns script标签字符串
+ */
+export function loadMoreScripts() {
+    if (process.env.NODE_ENV === "production") {
+        var analytics = wpAppConfig.seo.siteAnalytics,
+            array = [];
+        for (var a in analytics) {
+            array.push(analytics[a]);
+        }
+        return array.join("");
+    } else {
+        return "";
+    }
 }

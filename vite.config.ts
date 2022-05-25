@@ -9,6 +9,7 @@ import {
     generateSiteLink,
     generateBackgroundCss,
     loadExternalDependencies,
+    loadMoreScripts,
 } from "./generateHead";
 
 // https://vitejs.dev/config/
@@ -23,6 +24,7 @@ export default defineConfig({
                     injectLink: generateSiteLink(),
                     injectStyle: generateBackgroundCss(),
                     injectScript: loadExternalDependencies(),
+                    injectMoreScripts: loadMoreScripts(),
                 },
             },
         }),
@@ -43,7 +45,7 @@ export default defineConfig({
         alias: {
             "@": resolve("src"),
             "@sty": resolve("src/style"),
-            "@wpAppConfig": resolve("./wp-app.config.js"),
+            "@wpAppConfig": resolve("./app.config.js"),
             "@ass": resolve("src/assets"),
         },
     },

@@ -4,48 +4,15 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title><%- title %></title>
-        <script>
-            const platform = (function () {
-                    var os = navigator.oscpu,
-                        pl1 = navigator.platform,
-                        pl2 =
-                            navigator.userAgentData &&
-                            navigator.userAgentData.platform;
-                    if (
-                        (os && os.includes("Windows")) ||
-                        (pl1 && pl1.includes("Win32")) ||
-                        (pl2 && pl2.includes("Windows"))
-                    ) {
-                        return "Win";
-                    }
-                    if (
-                        (os && os.includes("Mac OS")) ||
-                        (pl1 && pl1.includes("MacIntel")) ||
-                        (pl2 && pl2.includes("macOS"))
-                    ) {
-                        return "Mac";
-                    }
-                })(),
-                isSafari = navigator.vendor === "Apple Computer, Inc.",
-                isLowPixelRatio = window.devicePixelRatio < 1.5;
-            if (platform === "Win") {
-                document.documentElement.classList.add("platform-win");
-            }
-            if (isSafari) {
-                document.documentElement.classList.add("browser-safari");
-            }
-            if (isLowPixelRatio) {
-                document.documentElement.classList.add("pixel-ratio-low");
-            }
-        </script>
+        <!-- browser platform check start -->
+        <script>const platform=function(){var a=navigator.oscpu,i=navigator.platform,n=navigator.userAgentData&&navigator.userAgentData.platform;return a&&a.includes("Windows")||i&&i.includes("Win32")||n&&n.includes("Windows")?"Win":a&&a.includes("Mac OS")||i&&i.includes("MacIntel")||n&&n.includes("macOS")?"Mac":void 0}(),isSafari="Apple Computer, Inc."===navigator.vendor,isLowPixelRatio=window.devicePixelRatio<1.5;"Win"===platform&&document.documentElement.classList.add("platform-win"),isSafari&&document.documentElement.classList.add("browser-safari"),isLowPixelRatio&&document.documentElement.classList.add("pixel-ratio-low");</script>
+        <!-- browser platform check end -->
         <%- injectMeta %> <%- injectLink %> <%- injectStyle %> <%- injectScript
         %>
     </head>
     <body>
         <div id="app"></div>
-        <!-- 
-            <script type="module" src="/src/main.js"></script> 
-        -->
         <script type="module" src="/src/main.ts"></script>
+        <%- injectMoreScripts %>
     </body>
 </html>
