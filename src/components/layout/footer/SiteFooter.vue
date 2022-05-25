@@ -1,7 +1,15 @@
 <script setup>
-import { inject } from "vue";
+import { inject, computed } from "vue";
+import wpAppConfig from "@wpAppConfig";
 
 const siteMeta = inject("site-meta");
+
+const footerContent = computed(() => {
+    var footer = wpAppConfig.footer;
+    return footer.needFiling
+        ? `<a href="https://beian.miit.gov.cn/" target="_blank">${footer.footerContent}</a>`
+        : footer.footerContent;
+});
 </script>
 
 <template>
@@ -39,7 +47,7 @@ const siteMeta = inject("site-meta");
                     ><span>主题</span>
                 </div>
             </div>
-            <div class="extra-info">其余信息</div>
+            <div class="extra-info" v-html="footerContent"></div>
         </div>
     </footer>
 </template>
