@@ -1,6 +1,6 @@
 <script setup lang="ts">
 interface T {
-    imgLink: string;
+    imgIndex: number;
     isCurrent: boolean;
     isCurrentPre: boolean;
     isCurrentNext: boolean;
@@ -9,7 +9,7 @@ interface T {
 }
 
 const props = withDefaults(defineProps<T>(), {
-    imgLink: "",
+    imgIndex: 0,
     isCurrent: false,
     isCurrentPre: false,
     isCurrentNext: false,
@@ -26,7 +26,7 @@ const props = withDefaults(defineProps<T>(), {
             pre: props.isCurrentPre,
             next: props.isCurrentNext,
         }"
-        :data-img-link="props.imgLink"
+        :data-img-link="props.imgIndex"
     >
         <img
             class="gallery-image"

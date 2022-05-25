@@ -53,9 +53,6 @@ const {
     galleryVisible,
     currentImageIndex,
     generateGalleryImageList,
-    switchGalleyVisible,
-    moveToNext,
-    moveToPre,
 } = galleryComposable();
 
 const renderTimes = ref(0),
@@ -207,12 +204,9 @@ onUnmounted(() => {
     ></catalog-switch-button>
     <gallery
         v-if="galleyRequired"
-        v-show="galleryVisible"
         :list="galleryImageList"
-        :currentImageIndex="currentImageIndex"
-        @closeGallery="switchGalleyVisible(false)"
-        @moveNext="moveToNext"
-        @movePre="moveToPre"
+        v-model:visible="galleryVisible"
+        v-model:currentImageIndex="currentImageIndex"
     ></gallery>
 </template>
 

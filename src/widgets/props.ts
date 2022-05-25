@@ -36,9 +36,9 @@ export interface CatalogItemType {
  */
 export interface GalleryItemType {
     /**
-     * link值，用于标识article中所对应的img元素
+     * 图片所处位置的index，用于标识article中所对应的img元素
      */
-    imgLink: string;
+    imgIndex: number;
     /**
      * 是否当前选中
      */

@@ -4,74 +4,92 @@ import { computed } from "vue";
 import { GalleryItemType } from "../props";
 
 interface T {
+    /**
+     * 图片列表
+     */
     list: GalleryItemType[];
     /**
      * 当前图片在全部图片中的位置，从0开始
      */
     currentImageIndex: number;
+    /**
+     * 可见性
+     */
+    visible: boolean;
 }
 
 const props = withDefaults(defineProps<T>(), {
     list: () => [],
     currentImageIndex: 0,
+    visible: false,
 });
 
 const emits = defineEmits<{
-    (e: "closeGallery"): void;
-    (e: "movePre"): void;
-    (e: "moveNext"): void;
+    (e: "update:visible", v: boolean): void;
+    (e: "update:currentImageIndex", v: number): void;
 }>();
 const currentImageDescription = computed(() => {
-    var data = props.list[props.currentImageIndex];
-    return data ? data.description : "";
-});
+        var data = props.list[props.currentImageIndex];
+        return data ? data.description : "";
+    }),
+    imageCount = computed(() => props.list.length);
 const clickCloseButton = function () {
-    emits("closeGallery");
+    emits("update:visible", false);
 };
 const clickPre = function () {
-    emits("movePre");
+    if (props.currentImageIndex > 0) {
+        emits("update:currentImageIndex", props.currentImageIndex - 1);
+    }
 };
 const clickNext = function () {
-    emits("moveNext");
+    if (props.currentImageIndex < imageCount.value - 1) {
+        emits("update:currentImageIndex", props.currentImageIndex + 1);
+    }
 };
 </script>
 
 <template>
-    <div class="post-img-gallery">
-        <div class="gallery-close" title="退出画廊" @click="clickCloseButton">
-            <i class="fa fa-close"></i>
-        </div>
-        <div class="gallery-mover">
-            <div class="icon" title="前一张" @click="clickPre">
-                <i class="fa fa-chevron-left"></i>
+    <Teleport to="body">
+        <div class="post-img-gallery" v-show="props.visible">
+            <div
+                class="gallery-close"
+                title="退出画廊"
+                @click="clickCloseButton"
+            >
+                <i class="fa fa-close"></i>
+            </div>
+            <div class="gallery-mover">
+                <div class="icon" title="前一张" @click="clickPre">
+                    <i class="fa fa-chevron-left"></i>
+                </div>
+            </div>
+            <div class="gallery-content">
+                <div class="current-img-index">
+                    {{ props.currentImageIndex + 1 }}
+                </div>
+                <div class="img-container">
+                    <GalleryItem
+                        v-for="item in props.list"
+                        :key="item.imgIndex"
+                        :isCurrent="item.isCurrent"
+                        :isCurrentPre="item.isCurrentPre"
+                        :isCurrentNext="item.isCurrentNext"
+                        :imgSrc="item.imgSrc"
+                        :imgSrcset="item.imgSrcset"
+                        :imgIndex="item.imgIndex"
+                    ></GalleryItem>
+                </div>
+                <div class="current-img-description">
+                    {{ currentImageDescription }}
+                </div>
+            </div>
+            <div class="gallery-mover">
+                <div class="icon" title="后一张" @click="clickNext">
+                    <i class="fa fa-chevron-right"></i>
+                </div>
             </div>
         </div>
-        <div class="gallery-content">
-            <div class="current-img-index">
-                {{ props.currentImageIndex + 1 }}
-            </div>
-            <div class="img-container">
-                <GalleryItem
-                    v-for="item in props.list"
-                    :key="item.imgLink"
-                    :isCurrent="item.isCurrent"
-                    :isCurrentPre="item.isCurrentPre"
-                    :isCurrentNext="item.isCurrentNext"
-                    :imgSrc="item.imgSrc"
-                    :imgSrcset="item.imgSrcset"
-                    :imgLink="item.imgLink"
-                ></GalleryItem>
-            </div>
-            <div class="current-img-description">
-                {{ currentImageDescription }}
-            </div>
-        </div>
-        <div class="gallery-mover">
-            <div class="icon" title="后一张" @click="clickNext">
-                <i class="fa fa-chevron-right"></i>
-            </div>
-        </div>
-    </div>
+    </Teleport>
 </template>
 
 <style lang="scss" scoped>

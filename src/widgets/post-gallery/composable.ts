@@ -1,5 +1,4 @@
-import { ref, computed } from "vue";
-import { randomString13 } from "@/utils/random";
+import { ref, computed, watch } from "vue";
 import { GalleryItemType } from "../props";
 
 /**
@@ -50,17 +49,13 @@ export default function () {
      */
     const galleryImageList = ref<GalleryItemType[]>([]),
         /**
-         * link-index映射关系（对象形式方便查找）
-         */
-        linkIndexMap = {} as { [key: string]: number },
-        /**
          * 画廊可见性
          */
         galleryVisible = ref(false),
         /**
-         * 当前选中的图片位置，从0开始
+         * 当前选中的图片位置，从0开始，这里初始化为-1，方便watch侦听器运行
          */
-        currentImageIndex = ref(0);
+        currentImageIndex = ref(-1);
     /**
      * 图片总数
      */
@@ -69,7 +64,37 @@ export default function () {
          * 画廊是否需要
          */
         galleyRequired = computed(() => galleryItemCount.value > 0);
-
+    //监听galley可见性变化
+    watch(
+        () => galleryVisible.value,
+        (n, o) => {
+            //visible:true->false
+            if (!n && o) {
+                //关闭画廊时清除状态
+                var list = galleryImageList.value,
+                    i = currentImageIndex.value,
+                    currentImage = list[i],
+                    preImage = list[i - 1],
+                    nextImage = list[i + 1];
+                currentImage.isCurrent = false;
+                if (preImage) {
+                    preImage.isCurrentPre = false;
+                }
+                if (nextImage) {
+                    nextImage.isCurrentNext = false;
+                }
+            }
+        }
+    );
+    //监听currentImageIndex变化
+    watch(
+        () => currentImageIndex.value,
+        (n, o) => {
+            if (n >= 0 && n < galleryItemCount.value) {
+                setCurrentImage(n);
+            }
+        }
+    );
     /**
      * 生成图片列表
      * @param contentRef 内容dom的引用
@@ -79,12 +104,11 @@ export default function () {
             var els = contentRef.getElementsByTagName("img"),
                 count = els.length;
             for (var i = 0; i < count; i++) {
-                var pImg = els.item(i) as HTMLImageElement,
-                    nonce = randomString13(4);
+                var pImg = els.item(i) as HTMLImageElement;
                 pImg.title = "在画廊中查看";
-                pImg.dataset.imgLink = nonce;
+                pImg.dataset.imgIndex = i + "";
                 galleryImageList.value.push({
-                    imgLink: nonce,
+                    imgIndex: i,
                     imgSrc: pImg.src,
                     imgSrcset: pImg.srcset,
                     isCurrent: false,
@@ -92,14 +116,12 @@ export default function () {
                     isCurrentNext: false,
                     description: findImageDescription(pImg),
                 });
-                //保存imgLink-index的映射关系
-                linkIndexMap[nonce] = i;
                 //img元素绑定点击事件
                 pImg.addEventListener("click", function () {
                     if (!galleryVisible.value) {
-                        var link = this.dataset.imgLink as string;
-                        setCurrentImage(link);
-                        switchGalleyVisible(true);
+                        var link = this.dataset.imgIndex as string;
+                        currentImageIndex.value = parseInt(link);
+                        galleryVisible.value = true;
                     }
                 });
             }
@@ -107,79 +129,34 @@ export default function () {
     };
     /**
      * 设置当前图片
-     * @param selectedItem 当前图片link值（字符串）/index值（数字）
+     * @param selectedItemIndex 当前图片index值
      */
-    const setCurrentImage = function (selectedItem: string | number) {
-        if (typeof selectedItem === "string") {
-            currentImageIndex.value = linkIndexMap[selectedItem];
-        } else if (typeof selectedItem === "number") {
-            currentImageIndex.value = selectedItem;
-        } else return;
+    const setCurrentImage = function (selectedItemIndex: number) {
         var list = galleryImageList.value,
-            i = currentImageIndex.value,
-            currentImage = list[i];
+            currentImage = list[selectedItemIndex];
         if (currentImage) {
             //当前图片设置current属性，同时移除pre，next
             setGalleryImageStatus(currentImage, true, false, false);
             //前一张图片设置pre属性同时移除current，next，如果有的话
-            if (i > 0) {
-                var preImage = list[i - 1];
+            if (selectedItemIndex > 0) {
+                var preImage = list[selectedItemIndex - 1];
                 setGalleryImageStatus(preImage, false, true, false);
             }
             //前一张图片的再前一张清除状态
-            if (i > 1) {
-                var prePreImage = list[i - 2];
+            if (selectedItemIndex > 1) {
+                var prePreImage = list[selectedItemIndex - 2];
                 setGalleryImageStatus(prePreImage, false, false, false);
             }
             //后一张图片设置next属性同时移除current，pre，如果有的话
-            if (i < galleryItemCount.value - 1) {
-                var nextImage = list[i + 1];
+            if (selectedItemIndex < galleryItemCount.value - 1) {
+                var nextImage = list[selectedItemIndex + 1];
                 setGalleryImageStatus(nextImage, false, false, true);
             }
             //后一张图片的再后一张清除状态
-            if (i < galleryItemCount.value - 2) {
-                var nextNextImage = list[i + 2];
+            if (selectedItemIndex < galleryItemCount.value - 2) {
+                var nextNextImage = list[selectedItemIndex + 2];
                 setGalleryImageStatus(nextNextImage, false, false, false);
             }
-        }
-    };
-    /**
-     * 切换画廊可见性
-     * @param status 目标状态
-     */
-    const switchGalleyVisible = function (status: boolean) {
-        galleryVisible.value = status;
-        if (!status) {
-            //关闭画廊时清除状态
-            var list = galleryImageList.value,
-                i = currentImageIndex.value,
-                currentImage = list[i],
-                preImage = list[i - 1],
-                nextImage = list[i + 1];
-            currentImage.isCurrent = false;
-            if (preImage) {
-                preImage.isCurrentPre = false;
-            }
-            if (nextImage) {
-                nextImage.isCurrentNext = false;
-            }
-        }
-    };
-    /**
-     * 查看下一张图片
-     */
-    const moveToNext = function () {
-        if (currentImageIndex.value < galleryItemCount.value - 1) {
-            setCurrentImage(currentImageIndex.value + 1);
-        }
-    };
-
-    /**
-     * 查看上一张图片
-     */
-    const moveToPre = function () {
-        if (currentImageIndex.value > 0) {
-            setCurrentImage(currentImageIndex.value - 1);
         }
     };
 
@@ -190,8 +167,5 @@ export default function () {
         currentImageIndex,
         generateGalleryImageList,
         setCurrentImage,
-        switchGalleyVisible,
-        moveToNext,
-        moveToPre,
     };
 }
