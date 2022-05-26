@@ -244,3 +244,9 @@ const props = withDefaults(defineProps<T>(), {
     }
 }
 </style>
+<style lang="scss">
+.post-item-wrap > .post-excerpt > p {
+    overflow: inherit;
+    text-overflow: inherit;
+}
+</style>

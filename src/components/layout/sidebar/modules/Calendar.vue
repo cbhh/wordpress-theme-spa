@@ -29,12 +29,12 @@ const setCellStyle = (function () {
             var c = "",
                 v = cellData.value;
             if (v === todayDate.value) {
-                c += "today";
+                c += "today ";
             }
             if (props.hasPostDates && props.hasPostDates.includes(v)) {
-                c += "has-post";
+                c += "has-post ";
             }
-            return c;
+            return c.trim();
         };
     } else {
         return function (cellData: { value: number }) {
@@ -71,6 +71,9 @@ const setCellStyle = (function () {
     .has-post {
         color: var(--theme-color);
         font-weight: bold;
+        &.today {
+            background: var(--theme-color-palest);
+        }
     }
 }
 </style>

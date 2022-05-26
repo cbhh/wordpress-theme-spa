@@ -17,6 +17,7 @@ export default defineConfig({
     plugins: [
         vue(),
         createHtmlPlugin({
+            minify: true,
             inject: {
                 data: {
                     title: siteTitle,
