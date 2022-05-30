@@ -1,8 +1,8 @@
-import appFetch from "../utils/fetch";
+import appFetch from "@/utils/appFetch";
 import wpAppConfig from "@wpAppConfig";
-import { CategoryListItem } from "./apis";
+import CategoryListResponse from "@/context/category-list/categoryListResponse";
 
-const categoryEndpoint = `categories${
+const baseEndpoint = `categories${
     wpAppConfig.apiBackendPrettyUrlEnabled ? "?" : "&"
 }_fields=id,count,name,slug,parent&per_page=100&hide_empty=${
     wpAppConfig.hideEmptyCategory
@@ -11,4 +11,6 @@ const categoryEndpoint = `categories${
 /**
  * 获取category列表
  */
-export default appFetch<CategoryListItem[]>(categoryEndpoint);
+export default async function () {
+    return appFetch<CategoryListResponse>(baseEndpoint);
+}

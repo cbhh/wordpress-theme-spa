@@ -1,12 +1,14 @@
-import appFetch from "../utils/fetch";
+import appFetch from "@/utils/appFetch";
 import wpAppConfig from "@wpAppConfig";
-import { UserDetail } from "./apis";
+import UserListResponse from "@/context/user-list/userListResponse";
 
-const userEndpoint = `users${
+const baseEndpoint = `users${
     wpAppConfig.apiBackendPrettyUrlEnabled ? "?" : "&"
 }_fields=id,name,description,slug,avatar_urls`;
 
 /**
  * 获取用户列表
  */
-export default appFetch<UserDetail[]>(userEndpoint);
+export default async function () {
+    return await appFetch<UserListResponse>(baseEndpoint);
+}

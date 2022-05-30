@@ -1,12 +1,14 @@
-import appFetch from "../utils/fetch";
+import appFetch from "@/utils/appFetch";
 import wpAppConfig from "@wpAppConfig";
-import { SettingDetail } from "./apis";
+import SettingDetailResponse from "@/context/setting-detail/settingDetailResponse";
 
-const settingEndpoint = `settings${
+const baseEndpoint = `settings${
     wpAppConfig.apiBackendPrettyUrlEnabled ? "?" : "&"
 }_fields=title,description,site_logo`;
 
 /**
  * 获取站点设置
  */
-export default appFetch<SettingDetail>(settingEndpoint);
+export default async function () {
+    return await appFetch<SettingDetailResponse>(baseEndpoint);
+}
