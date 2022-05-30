@@ -1,0 +1,9 @@
+node_modules
+*.md
+.vscode
+dist
+public
+app.config.js
+app.config.sample.js
+generateHead.js
+src/assets

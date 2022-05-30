@@ -1,0 +1,41 @@
+{
+    "root": true,
+    "env": {
+        "browser": true
+    },
+    "parser": "vue-eslint-parser",
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:vue/vue3-strongly-recommended"
+    ],
+    "parserOptions": {
+        "parser": "@typescript-eslint/parser",
+        "sourceType": "module"
+    },
+    "rules": {
+        //4格缩进
+        "vue/html-indent": [
+            1,
+            4
+        ]
+    },
+    "overrides": [
+        {
+            "files": [
+                "src/*.ts"
+            ],
+            "parser": "@typescript-eslint/parser",
+            "plugins": [
+                "@typescript-eslint"
+            ],
+            "extends": [
+                "eslint:recommended",
+                "plugin:@typescript-eslint/recommended"
+            ]
+        }
+    ]
+}
