@@ -1,5 +1,7 @@
 import { ref } from "vue";
-import { CategoryListItem, TagListItem, PostListItem } from "@/apis/apis";
+import CategoryListItem from "@/context/category-list/categoryListItem";
+import TagListItem from "@/context/tag-list/tagListItem";
+import PostListItem from "@/context/post-list/postListItem";
 import { PostListItemType } from "@/components/props";
 /**
  * 根据API返回数据生成组件可用的post列表

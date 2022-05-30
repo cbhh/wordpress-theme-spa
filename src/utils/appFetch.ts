@@ -12,9 +12,9 @@ const credential = window.btoa(wpAppConfig.apiUser + ":" + wpAppConfig.appPwd),
         "/wp/v2/";
 /**
  * 发起get请求
- * @param endpoint 
+ * @param endpoint
  */
-export default async function <T>(endpoint: string) {
+export default async function <T>(endpoint: string): Promise<T | undefined> {
     var response = await fetch(restApiUrl + endpoint, {
         method: "GET",
         mode: mode,
@@ -34,9 +34,9 @@ export default async function <T>(endpoint: string) {
                 totalItems: parseInt(totalItems),
                 totalPages: parseInt(totalPages),
                 result: result,
-            } as unknown as T;
+            } as any;
         } else {
-            return result as T;
+            return result;
         }
     } else {
         console.error("fetch data failed");

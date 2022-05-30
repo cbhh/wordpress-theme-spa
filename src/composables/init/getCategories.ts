@@ -1,17 +1,19 @@
 import { ref } from "vue";
-import apis from "@/apis";
-import { CategoryListItem } from "@/apis/apis";
+import CategoryListItem from "@/context/category-list/categoryListItem";
+import getCategoryList from "@/apis/getCategoryList";
 /**
  * 加载category列表
  */
 export default function () {
     const categoryList = ref<CategoryListItem[]>([]);
-    const getCategoryList = async function () {
-        var { result } = await apis.getCategoryList();
-        categoryList.value = result;
+    const getCats = async function () {
+        var res = await getCategoryList();
+        if (res) {
+            categoryList.value = res.result;
+        }
     };
     return {
         categoryList,
-        getCategoryList,
+        getCategoryList: getCats,
     };
 }

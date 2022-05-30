@@ -1,17 +1,19 @@
 import { ref } from "vue";
-import apis from "@/apis";
-import { UserDetail } from "@/apis/apis";
+import getUserList from "@/apis/getUserList";
+import UserListItem from "@/context/user-list/userListItem";
 /**
  * 加载user列表
  */
 export default function () {
-    const userList = ref<UserDetail[]>([]);
-    const getUserList = async function () {
-        var { result } = await apis.getUserList();
-        userList.value = result;
+    const userList = ref<UserListItem[]>([]);
+    const getUsers = async function () {
+        var res = await getUserList();
+        if (res) {
+            userList.value = res.result;
+        }
     };
     return {
         userList,
-        getUserList,
+        getUserList: getUsers,
     };
 }

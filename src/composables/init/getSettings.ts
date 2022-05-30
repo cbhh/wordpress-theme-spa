@@ -1,6 +1,6 @@
 import { reactive } from "vue";
 import wpAppConfig from "@wpAppConfig";
-import apis from "@/apis";
+import getSiteSettings from "@/apis/getSiteSettings";
 
 export default function () {
     const siteMeta = reactive({
@@ -9,13 +9,15 @@ export default function () {
         description: "",
         home: wpAppConfig.siteUrl,
     });
-    const getSiteSettings = async function () {
-        const { title, description } = await apis.getSiteSettings();
-        siteMeta.title = title;
-        siteMeta.description = description;
+    const getSettings = async function () {
+        var res = await getSiteSettings();
+        if (res) {
+            siteMeta.title = res.title;
+            siteMeta.description = res.description;
+        }
     };
     return {
         siteMeta,
-        getSiteSettings,
+        getSiteSettings: getSettings,
     };
 }

@@ -1,5 +1,5 @@
 import { ref } from "vue";
-import { CategoryListItem } from "@/apis/apis";
+import CategoryListItem from "@/context/category-list/categoryListItem";
 /**
  * 查找后代分类
  * @param allCategories

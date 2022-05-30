@@ -1,17 +1,19 @@
 import { ref } from "vue";
-import apis from "@/apis";
-import { TagListItem } from "@/apis/apis";
+import getTagList from "@/apis/getTagList";
+import TagListItem from "@/context/tag-list/tagListItem";
 /**
  * 加载tag列表
  */
 export default function () {
     const tagList = ref<TagListItem[]>([]);
-    const getTagList = async function () {
-        var { result } = await apis.getTagList();
-        tagList.value = result;
+    const getTags = async function () {
+        var res = await getTagList();
+        if (res) {
+            tagList.value = res.result;
+        }
     };
     return {
         tagList,
-        getTagList,
+        getTagList: getTags,
     };
 }
