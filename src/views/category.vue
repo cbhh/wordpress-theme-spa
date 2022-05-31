@@ -26,9 +26,9 @@ const renderTimes = ref(0),
     dataLoadingText = ref("");
 
 const renderView = function (currentCatSlug: string) {
-    var currentCat = allCategories.value.find((c) => c.slug === currentCatSlug);
+    const currentCat = allCategories.value.find((c) => c.slug === currentCatSlug);
     if (currentCat) {
-        var currentCatId = currentCat.id;
+        const currentCatId = currentCat.id;
         loadingMaskRequired.value = true;
         dataLoadingText.value = `正在加载分类【${currentCat.name}】`;
         //landing组件
@@ -63,7 +63,7 @@ const renderView = function (currentCatSlug: string) {
 
 watch(
     () => route.params["cat"],
-    (n, o) => {
+    (n) => {
         if (renderTimes.value && n) {
             renderView(n.toString());
         }
@@ -75,11 +75,17 @@ onUnmounted(() => store.commit("breadcrumbModule/setBreadcrumbNav", []));
 </script>
 
 <template>
-    <div class="postListLoadingMask" v-show="loadingMaskRequired">
+    <div
+        class="postListLoadingMask"
+        v-show="loadingMaskRequired"
+    >
         <ThemeLoading
-            :logoRequired="false"
-            :loadingText="dataLoadingText"
-        ></ThemeLoading>
+            :logo-required="false"
+            :loading-text="dataLoadingText"
+        />
     </div>
-    <PostList :list="postList" v-show="!loadingMaskRequired"></PostList>
+    <PostList
+        :list="postList"
+        v-show="!loadingMaskRequired"
+    />
 </template>

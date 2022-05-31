@@ -22,21 +22,29 @@ const title = computed(() => "作者：" + props.name);
 
 <template>
     <div class="post-author">
-        <div class="author-avatar" :title="title">
+        <div
+            class="author-avatar"
+            :title="title"
+        >
             <RouterLink :to="{ name: 'author', params: { uid: props.id } }">
-                <img :src="props.avatar" width="96" height="96" />
+                <img
+                    :src="props.avatar"
+                    width="96"
+                    height="96"
+                >
             </RouterLink>
         </div>
         <div class="author-profile">
             <div aria-label="文章作者">
-                <span>作者：</span
-                ><RouterLink
+                <span>作者：</span><RouterLink
                     :to="{ name: 'author', params: { uid: props.id } }"
                 >
                     {{ props.name }}
                 </RouterLink>
             </div>
-            <div class="description">{{ props.description }}</div>
+            <div class="description">
+                {{ props.description }}
+            </div>
         </div>
     </div>
 </template>

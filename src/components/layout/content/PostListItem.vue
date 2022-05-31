@@ -62,38 +62,45 @@ const props = withDefaults(defineProps<T>(), {
                 >
                     <div class="post-meta">
                         <div class="post-category">
-                            <i class="fa fa-folder-o"></i>
+                            <i class="fa fa-folder-o" />
                             <ul class="post-categories">
-                                <li v-for="cat in props.category" :key="cat.id">
+                                <li
+                                    v-for="cat in props.category"
+                                    :key="cat.id"
+                                >
                                     <RouterLink
                                         :to="{
                                             name: 'category',
                                             params: { cat: cat.slug },
                                         }"
                                     >
-                                        {{ cat.name }}</RouterLink
-                                    >
+                                        {{ cat.name }}
+                                    </RouterLink>
                                 </li>
                             </ul>
                         </div>
                         <div class="post-tag">
-                            <i class="fa fa-tag"></i>
+                            <i class="fa fa-tag" />
                             <ul>
-                                <li v-for="tag in props.tag" :key="tag.id">
+                                <li
+                                    v-for="t in props.tag"
+                                    :key="t.id"
+                                >
                                     <RouterLink
                                         :to="{
                                             name: 'tag',
-                                            params: { tag: tag.slug },
+                                            params: { tag: t.slug },
                                         }"
                                     >
-                                        {{ tag.name }}
+                                        {{ t.name }}
                                     </RouterLink>
                                 </li>
                             </ul>
                         </div>
                         <div class="post-time">
-                            <i class="fa fa-clock-o"></i
-                            ><time :datetime="props.date">
+                            <i class="fa fa-clock-o" /><time
+                                :datetime="props.date"
+                            >
                                 {{ convertDateFormat(props.date) }}
                             </time>
                         </div>
@@ -101,13 +108,14 @@ const props = withDefaults(defineProps<T>(), {
                 </div>
             </div>
             <div class="post-title">
-                <span>❊</span
-                ><RouterLink
-                    :to="{ name: 'post', params: { pid: props.id } }"
-                    >{{ props.title }}</RouterLink
-                ><span>❊</span>
+                <span>❊</span><RouterLink :to="{ name: 'post', params: { pid: props.id } }">
+                    {{ props.title }}
+                </RouterLink><span>❊</span>
             </div>
-            <div class="post-excerpt" v-html="props.excerpt"></div>
+            <div
+                class="post-excerpt"
+                v-html="props.excerpt"
+            />
         </div>
     </div>
 </template>

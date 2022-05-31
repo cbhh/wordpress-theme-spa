@@ -16,6 +16,7 @@ interface T {
 
 const props = withDefaults(defineProps<T>(), {
     current: () => new Date(),
+    hasPostDates: () => [],
 });
 
 const head = ["日", "一", "二", "三", "四", "五", "六"];
@@ -26,8 +27,8 @@ const todayDate = computed(() => props.current.getDate()),
 const setCellStyle = (function () {
     if (props.hasPostDates) {
         return function (cellData: { value: number }) {
-            var c = "",
-                v = cellData.value;
+            let c = "";
+            const v = cellData.value;
             if (v === todayDate.value) {
                 c += "today ";
             }
@@ -48,9 +49,9 @@ const setCellStyle = (function () {
     <ThemeTable
         :head="head"
         :body="monthData"
-        :customizeCellClass="setCellStyle"
+        :customize-cell-class="setCellStyle"
         class="month-calendar"
-    ></ThemeTable>
+    />
 </template>
 
 <style lang="scss">

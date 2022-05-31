@@ -50,17 +50,24 @@ const clickNext = function () {
 
 <template>
     <Teleport to="body">
-        <div class="post-img-gallery" :class="{ hidden: !props.visible }">
+        <div
+            class="post-img-gallery"
+            :class="{ hidden: !props.visible }"
+        >
             <div
                 class="gallery-close"
                 title="退出画廊"
                 @click="clickCloseButton"
             >
-                <i class="fa fa-close"></i>
+                <i class="fa fa-close" />
             </div>
             <div class="gallery-mover">
-                <div class="icon" title="前一张" @click="clickPre">
-                    <i class="fa fa-chevron-left"></i>
+                <div
+                    class="icon"
+                    title="前一张"
+                    @click="clickPre"
+                >
+                    <i class="fa fa-chevron-left" />
                 </div>
             </div>
             <div class="gallery-content">
@@ -71,21 +78,25 @@ const clickNext = function () {
                     <GalleryItem
                         v-for="item in props.list"
                         :key="item.imgIndex"
-                        :isCurrent="item.isCurrent"
-                        :isCurrentPre="item.isCurrentPre"
-                        :isCurrentNext="item.isCurrentNext"
-                        :imgSrc="item.imgSrc"
-                        :imgSrcset="item.imgSrcset"
-                        :imgIndex="item.imgIndex"
-                    ></GalleryItem>
+                        :is-current="item.isCurrent"
+                        :is-current-pre="item.isCurrentPre"
+                        :is-current-next="item.isCurrentNext"
+                        :img-src="item.imgSrc"
+                        :img-srcset="item.imgSrcset"
+                        :img-index="item.imgIndex"
+                    />
                 </div>
                 <div class="current-img-description">
                     {{ currentImageDescription }}
                 </div>
             </div>
             <div class="gallery-mover">
-                <div class="icon" title="后一张" @click="clickNext">
-                    <i class="fa fa-chevron-right"></i>
+                <div
+                    class="icon"
+                    title="后一张"
+                    @click="clickNext"
+                >
+                    <i class="fa fa-chevron-right" />
                 </div>
             </div>
         </div>

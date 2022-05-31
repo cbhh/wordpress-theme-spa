@@ -6,11 +6,11 @@ import { GalleryItemType } from "../props";
  * @param pImg
  * @returns 图片描述信息，来自紧跟该image元素的figcaption元素或者alt数据
  */
-function findImageDescription(pImg: HTMLImageElement) {
+function findImageDescription (pImg: HTMLImageElement) {
     if (pImg) {
         //查找figcaption
         if (pImg.parentElement && pImg.parentElement.tagName === "FIGURE") {
-            var figcaption = pImg.nextElementSibling as HTMLElement | null;
+            const figcaption = pImg.nextElementSibling as HTMLElement | null;
             if (
                 figcaption &&
                 figcaption.tagName === "FIGCAPTION" &&
@@ -30,7 +30,7 @@ function findImageDescription(pImg: HTMLImageElement) {
  * @param pre currentPre状态
  * @param next currentNext状态
  */
-function setGalleryImageStatus(
+function setGalleryImageStatus (
     galleryImage: GalleryItemType,
     cur: boolean,
     pre: boolean,
@@ -73,7 +73,7 @@ export default function () {
                 //等待transform过渡完成
                 setTimeout(() => {
                     //关闭画廊时清除状态
-                    var list = galleryImageList.value,
+                    const list = galleryImageList.value,
                         i = currentImageIndex.value,
                         currentImage = list[i],
                         preImage = list[i - 1],
@@ -94,7 +94,7 @@ export default function () {
     //监听currentImageIndex变化
     watch(
         () => currentImageIndex.value,
-        (n, o) => {
+        (n) => {
             if (n >= 0 && n < galleryItemCount.value) {
                 setCurrentImage(n);
             }
@@ -106,10 +106,10 @@ export default function () {
      */
     const generateGalleryImageList = function (contentRef: HTMLDivElement) {
         if (contentRef && contentRef instanceof HTMLDivElement) {
-            var els = contentRef.getElementsByTagName("img"),
+            const els = contentRef.getElementsByTagName("img"),
                 count = els.length;
-            for (var i = 0; i < count; i++) {
-                var pImg = els.item(i) as HTMLImageElement;
+            for (let i = 0; i < count; i++) {
+                const pImg = els.item(i) as HTMLImageElement;
                 pImg.title = "在画廊中查看";
                 pImg.dataset.imgIndex = i + "";
                 galleryImageList.value.push({
@@ -127,7 +127,7 @@ export default function () {
                         !galleryVisible.value &&
                         currentImageIndex.value === -1
                     ) {
-                        var link = this.dataset.imgIndex as string;
+                        const link = this.dataset.imgIndex as string;
                         currentImageIndex.value = parseInt(link);
                         galleryVisible.value = true;
                     }
@@ -140,29 +140,29 @@ export default function () {
      * @param selectedItemIndex 当前图片index值
      */
     const setCurrentImage = function (selectedItemIndex: number) {
-        var list = galleryImageList.value,
+        const list = galleryImageList.value,
             currentImage = list[selectedItemIndex];
         if (currentImage) {
             //当前图片设置current属性，同时移除pre，next
             setGalleryImageStatus(currentImage, true, false, false);
             //前一张图片设置pre属性同时移除current，next，如果有的话
             if (selectedItemIndex > 0) {
-                var preImage = list[selectedItemIndex - 1];
+                const preImage = list[selectedItemIndex - 1];
                 setGalleryImageStatus(preImage, false, true, false);
             }
             //前一张图片的再前一张清除状态
             if (selectedItemIndex > 1) {
-                var prePreImage = list[selectedItemIndex - 2];
+                const prePreImage = list[selectedItemIndex - 2];
                 setGalleryImageStatus(prePreImage, false, false, false);
             }
             //后一张图片设置next属性同时移除current，pre，如果有的话
             if (selectedItemIndex < galleryItemCount.value - 1) {
-                var nextImage = list[selectedItemIndex + 1];
+                const nextImage = list[selectedItemIndex + 1];
                 setGalleryImageStatus(nextImage, false, false, true);
             }
             //后一张图片的再后一张清除状态
             if (selectedItemIndex < galleryItemCount.value - 2) {
-                var nextNextImage = list[selectedItemIndex + 2];
+                const nextNextImage = list[selectedItemIndex + 2];
                 setGalleryImageStatus(nextNextImage, false, false, false);
             }
         }

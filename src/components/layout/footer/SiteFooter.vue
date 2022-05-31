@@ -16,38 +16,37 @@ const footerContent = computed(() => {
     <footer class="site-footer">
         <div class="footer-wrap">
             <div class="copyright">
-                <span>&copy;</span><span>{{ new Date().getFullYear() }}</span
-                ><span>{{ siteMeta.title }}</span>
+                <span>&copy;</span><span>{{ new Date().getFullYear() }}</span><span>{{ siteMeta.title }}</span>
             </div>
             <div class="acknowledgements">
                 <div class="ack-framework">
-                    <span>Powered By</span
-                    ><a
+                    <span>Powered By</span><a
                         class="ack-wp"
                         href="https://wordpress.org"
                         target="_blank"
                         title="WordPress是一款能让您建立出色网站、博客或应用程序的开源软件"
-                        >WordPress</a
-                    ><span>+</span
-                    ><a
+                    >WordPress</a><span>+</span><a
                         class="ack-js"
                         href="https://vuejs.org/"
                         target="_blank"
                         title="Vue.js - The 渐进式 JavaScript 框架"
-                        >Vue.js</a
-                    >
+                    >Vue.js</a>
                 </div>
-                <div class="ack-separate">❊</div>
+                <div class="ack-separate">
+                    ❊
+                </div>
                 <div class="ack-theme">
                     <a
                         href="https://github.com/cbhh/wordpress-theme-spa"
                         target="_blank"
                         title="复古中国风WordPress主题SPA版本"
-                        >梦回长安</a
-                    ><span>主题</span>
+                    >梦回长安</a><span>主题</span>
                 </div>
             </div>
-            <div class="extra-info" v-html="footerContent"></div>
+            <div
+                class="extra-info"
+                v-html="footerContent"
+            />
         </div>
     </footer>
 </template>

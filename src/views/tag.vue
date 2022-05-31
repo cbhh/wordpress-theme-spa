@@ -20,9 +20,9 @@ const renderTimes = ref(0),
     dataLoadingText = ref("");
 
 const renderView = function (currentTagSlug: string) {
-    var currentTag = allTags.value.find((t) => t.slug === currentTagSlug);
+    const currentTag = allTags.value.find((t) => t.slug === currentTagSlug);
     if (currentTag) {
-        var currentTagId = currentTag.id;
+        const currentTagId = currentTag.id;
         loadingMaskRequired.value = true;
         dataLoadingText.value = `正在加载标签【${currentTag.name}】`;
         //landing组件
@@ -48,7 +48,7 @@ const renderView = function (currentTagSlug: string) {
 
 watch(
     () => route.params["tag"],
-    (n, o) => {
+    (n) => {
         if (renderTimes.value && n) {
             renderView(n.toString());
         }
@@ -62,11 +62,17 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="postListLoadingMask" v-show="loadingMaskRequired">
+    <div
+        class="postListLoadingMask"
+        v-show="loadingMaskRequired"
+    >
         <ThemeLoading
-            :logoRequired="false"
-            :loadingText="dataLoadingText"
-        ></ThemeLoading>
+            :logo-required="false"
+            :loading-text="dataLoadingText"
+        />
     </div>
-    <PostList :list="postList" v-show="!loadingMaskRequired"></PostList>
+    <PostList
+        :list="postList"
+        v-show="!loadingMaskRequired"
+    />
 </template>

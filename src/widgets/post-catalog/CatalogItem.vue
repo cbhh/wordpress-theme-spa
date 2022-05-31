@@ -26,7 +26,7 @@ const levelClass = computed(() => "catalog-h" + props.headingLevel);
         :href="'#' + props.href"
     >
         <div class="catalog-item-wrap">
-            <div class="item-deco"></div>
+            <div class="item-deco" />
             <span class="item-text">{{ props.text }}</span>
         </div>
     </a>

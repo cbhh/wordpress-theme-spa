@@ -33,12 +33,12 @@ const getClickedIndex = function (clickedItemIndex: number) {
                     v-for="item in props.list"
                     :key="item.headingIndex"
                     :text="item.text"
-                    :headingLevel="item.headingLevel"
-                    :headingIndex="item.headingIndex"
+                    :heading-level="item.headingLevel"
+                    :heading-index="item.headingIndex"
                     :href="item.href"
-                    :isCurrent="item.isCurrent"
+                    :is-current="item.isCurrent"
                     @click="getClickedIndex(item.headingIndex)"
-                ></CatalogItem>
+                />
             </div>
         </SiteSidebarItem>
     </Teleport>

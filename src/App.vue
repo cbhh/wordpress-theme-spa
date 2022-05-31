@@ -63,13 +63,13 @@ const dataLoadingText = ref(""),
  */
 const currentLandingComponent = computed(() => {
         switch (landingType.value) {
-            case "home":
-                return HomeLanding;
-            case NoHomeLandingType.archive:
-            case NoHomeLandingType.post:
-                return PostArchiveLanding;
-            default:
-                return null;
+        case "home":
+            return HomeLanding;
+        case NoHomeLandingType.archive:
+        case NoHomeLandingType.post:
+            return PostArchiveLanding;
+        default:
+            return null;
         }
     }),
     /**
@@ -89,7 +89,7 @@ provide("site-meta", readonly(siteMeta));
 //侦听路由名称变化，以选择不同的着陆页组件
 watch(
     () => route.name,
-    (n, o) => {
+    (n) => {
         if (n && typeof n === "string") {
             if (["author", "category", "tag"].includes(n)) {
                 landingType.value = NoHomeLandingType.archive;
@@ -153,51 +153,58 @@ onMounted(() => {
 </script>
 
 <template>
-    <div id="loading-mask" v-if="loadingMaskRequired">
+    <div
+        id="loading-mask"
+        v-if="loadingMaskRequired"
+    >
         <ThemeLoading
-            :logoRequired="true"
-            :loadingText="dataLoadingText"
-        ></ThemeLoading>
+            :logo-required="true"
+            :loading-text="dataLoadingText"
+        />
     </div>
-    <SiteHeader></SiteHeader>
+    <SiteHeader />
     <!--着陆页组件切换start-->
     <KeepAlive>
         <component
             :is="currentLandingComponent"
-            :landingType="landingType"
-        ></component
-    ></KeepAlive>
+            :landing-type="landingType"
+        />
+    </KeepAlive>
     <!--着陆页组件切换end-->
     <div id="primary">
-        <SitePrimaryMaskTop></SitePrimaryMaskTop>
+        <SitePrimaryMaskTop />
         <div class="primary-content">
             <div class="site-content">
                 <SitePrimaryBreadcrumb
                     :list="breadcrumbNavList"
-                ></SitePrimaryBreadcrumb>
+                />
                 <main>
-                    <RouterView></RouterView>
+                    <RouterView />
                 </main>
             </div>
             <SiteSidebar :position="SidebarPosition.left">
-                <template v-slot:top>侧边栏1</template>
-                <template v-slot:body>
+                <template #top>
+                    侧边栏1
+                </template>
+                <template #body>
                     <SiteSidebarItem
                         title="分类"
                         :feature="SidebarItemFeature['post-categories']"
                     >
-                        <Category :list="hierarchicCategoryList"></Category>
+                        <Category :list="hierarchicCategoryList" />
                     </SiteSidebarItem>
                 </template>
             </SiteSidebar>
             <SiteSidebar :position="SidebarPosition.right">
-                <template v-slot:top>侧边栏2</template>
-                <template v-slot:body>
+                <template #top>
+                    侧边栏2
+                </template>
+                <template #body>
                     <SiteSidebarItem
                         title="标签云"
                         :feature="SidebarItemFeature['post-tag-cloud']"
                     >
-                        <Tag :list="tagList"></Tag>
+                        <Tag :list="tagList" />
                     </SiteSidebarItem>
                     <SiteSidebarItem
                         title="日历"
@@ -205,15 +212,15 @@ onMounted(() => {
                     >
                         <Calendar
                             :current="currentDate"
-                            :hasPostDates="dateList"
-                        ></Calendar>
+                            :has-post-dates="dateList"
+                        />
                     </SiteSidebarItem>
                 </template>
             </SiteSidebar>
         </div>
     </div>
-    <SiteFooter></SiteFooter>
-    <back-to-top :visible="backToTopVisible"></back-to-top>
+    <SiteFooter />
+    <back-to-top :visible="backToTopVisible" />
 </template>
 
 <style lang="scss">

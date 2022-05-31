@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import externalGlobals from "rollup-plugin-external-globals";

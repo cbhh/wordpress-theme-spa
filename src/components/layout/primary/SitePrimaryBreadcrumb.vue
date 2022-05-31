@@ -15,16 +15,19 @@ const props = withDefaults(defineProps<BreadcrumbListType>(), {
 <template>
     <div class="breadcrumb-area">
         <div class="breadcrumb-nav">
-            <RouterLink class="to-home" :to="{ name: 'home' }">
-                <i class="fa fa-home"></i>首页</RouterLink
+            <RouterLink
+                class="to-home"
+                :to="{ name: 'home' }"
             >
+                <i class="fa fa-home" />首页
+            </RouterLink>
             <SitePrimaryBreadcrumbItem
                 v-for="item in props.list"
                 :key="item.id"
                 :slug="item.slug"
                 :id="item.id"
                 :name="item.name"
-            ></SitePrimaryBreadcrumbItem>
+            />
         </div>
     </div>
 </template>

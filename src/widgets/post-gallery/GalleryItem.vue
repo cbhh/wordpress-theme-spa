@@ -32,7 +32,7 @@ const props = withDefaults(defineProps<T>(), {
             class="gallery-image"
             :src="props.imgSrc"
             :srcset="props.imgSrcset"
-        />
+        >
     </div>
 </template>
 

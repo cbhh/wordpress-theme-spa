@@ -23,8 +23,7 @@ const props = withDefaults(defineProps<PostListType>(), {
             :date="post.date"
             :title="post.title"
             :excerpt="post.excerpt"
-        >
-        </PostListItem>
+        />
     </div>
 </template>
 

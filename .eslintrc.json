@@ -22,6 +22,8 @@
             1,
             4
         ],
+        //组件名多个单词off
+        "vue/multi-word-component-names": "off",
         //类型注释后空格
         "@typescript-eslint/type-annotation-spacing": "warn",
         //标识符命名规范

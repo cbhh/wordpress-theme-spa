@@ -13,11 +13,16 @@ const props = withDefaults(defineProps<T>(), {
 </script>
 
 <template>
-    <div class="sidebar-item" :class="props.feature">
+    <div
+        class="sidebar-item"
+        :class="props.feature"
+    >
         <div class="sidebar-item-wrap">
-            <div class="sidebar-item-title">{{ props.title }}</div>
+            <div class="sidebar-item-title">
+                {{ props.title }}
+            </div>
             <div class="sidebar-item-body">
-                <slot></slot>
+                <slot />
             </div>
         </div>
     </div>

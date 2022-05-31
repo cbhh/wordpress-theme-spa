@@ -21,7 +21,7 @@ export default function () {
     /**
      * 上一次选中的目录项对应的数据
      */
-    var lastClickedCatalogItem = {} as CatalogItemType;
+    let lastClickedCatalogItem = {} as CatalogItemType;
     /**
      * 目录项总数
      */
@@ -36,12 +36,12 @@ export default function () {
      */
     const generateCatalogList = function (contentRef: HTMLDivElement) {
         if (contentRef && contentRef instanceof HTMLDivElement) {
-            var children = contentRef.children,
+            const children = contentRef.children,
                 count = contentRef.childElementCount,
-                lastTag = 1,
                 tagCount = [1, 0, 0, 0, 0, 0];
-            for (var i = 0; i < count; i++) {
-                var node = children.item(i) as HTMLHeadingElement,
+            let lastTag = 1;
+            for (let i = 0; i < count; i++) {
+                const node = children.item(i) as HTMLHeadingElement,
                     tag = node.tagName;
                 if (tag === "H1") {
                     console.error(
@@ -50,7 +50,7 @@ export default function () {
                     tagCount[0] += 1;
                     lastTag = 1;
                 } else if (headings.includes(tag)) {
-                    var level = parseInt(tag.charAt(1));
+                    const level = parseInt(tag.charAt(1));
                     tagCount[level - 1] += 1;
                     if (level - lastTag > 1) {
                         console.warn(
@@ -78,10 +78,10 @@ export default function () {
      * 监听窗口滚动，动态更新目录列表当前项
      */
     const switchCurrentCatalogItem = function () {
-        for (var i = catalogItemCount.value - 1; i >= 0; i--) {
-            var h = headingArray[i];
+        for (let i = catalogItemCount.value - 1; i >= 0; i--) {
+            const h = headingArray[i];
             if (h.getBoundingClientRect().top <= 80) {
-                var anchor = h.dataset.headingAnchor;
+                const anchor = h.dataset.headingAnchor;
                 //若当前所处heading与上一个heading不同，则更新样式
                 if (
                     anchor &&
@@ -99,7 +99,7 @@ export default function () {
      */
     const setClickedCatalogItemStyle = function (clickedItemIndex: number) {
         lastClickedCatalogItem.isCurrent = false;
-        var item = catalogList.value[clickedItemIndex];
+        const item = catalogList.value[clickedItemIndex];
         item.isCurrent = true;
         lastClickedCatalogItem = item;
     };

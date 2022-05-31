@@ -21,7 +21,7 @@ const renderTimes = ref(0),
     dataLoadingText = ref("");
 
 const renderView = function (currentUserId: number) {
-    var currentUser = allUsers.value.find((u) => u.id === currentUserId);
+    const currentUser = allUsers.value.find((u) => u.id === currentUserId);
     if (currentUser) {
         loadingMaskRequired.value = true;
         dataLoadingText.value = `正在加载作者【${currentUser.name}】`;
@@ -48,7 +48,7 @@ const renderView = function (currentUserId: number) {
 
 watch(
     () => route.params["uid"],
-    (n, o) => {
+    (n) => {
         if (renderTimes.value && n) {
             renderView(parseInt(n.toString()));
         }
@@ -62,11 +62,17 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="postListLoadingMask" v-show="loadingMaskRequired">
+    <div
+        class="postListLoadingMask"
+        v-show="loadingMaskRequired"
+    >
         <ThemeLoading
-            :logoRequired="false"
-            :loadingText="dataLoadingText"
-        ></ThemeLoading>
+            :logo-required="false"
+            :loading-text="dataLoadingText"
+        />
     </div>
-    <PostList :list="postList" v-show="!loadingMaskRequired"></PostList>
+    <PostList
+        :list="postList"
+        v-show="!loadingMaskRequired"
+    />
 </template>

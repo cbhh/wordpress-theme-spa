@@ -31,7 +31,7 @@ onMounted(() => {
     //若设为圆形按钮，则在dom渲染完毕后根据按钮宽度计算按钮高度
     if (props.circle) {
         nextTick().then(() => {
-            var el = buttonBody.value;
+            const el = buttonBody.value;
             buttonHeight.value = el ? el.getBoundingClientRect().width : 0;
         });
     }
@@ -49,7 +49,7 @@ onMounted(() => {
             ref="buttonBody"
             :style="{ height: buttonHeightPx }"
         >
-            <slot></slot>
+            <slot />
         </div>
     </button>
 </template>

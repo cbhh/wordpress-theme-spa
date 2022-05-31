@@ -19,12 +19,12 @@ const background = computed(() => store.state.pageMetaModule.background),
     time = computed(() => store.state.pageMetaModule.time);
 const className = computed(() => {
     switch (props.landingType) {
-        case NoHomeLandingType.post:
-            return "post-landing";
-        case NoHomeLandingType.archive:
-            return "archive-landing";
-        default:
-            return "";
+    case NoHomeLandingType.post:
+        return "post-landing";
+    case NoHomeLandingType.archive:
+        return "archive-landing";
+    default:
+        return "";
     }
 });
 </script>
@@ -40,11 +40,14 @@ const className = computed(() => {
                 class="middle-separate-line"
                 v-if="className === 'post-landing'"
             >
-                <div></div>
+                <div />
                 <div>❊</div>
-                <div></div>
+                <div />
             </div>
-            <time :datetime="time" v-if="className === 'post-landing'">
+            <time
+                :datetime="time"
+                v-if="className === 'post-landing'"
+            >
                 {{ time ? convertDateFormat(time) : "" }}
             </time>
             <div class="block-corner-deco">
@@ -54,10 +57,10 @@ const className = computed(() => {
                 <span class="br">❊</span>
             </div>
             <div class="block-edge-deco arc">
-                <span class="t"></span>
-                <span class="r"></span>
-                <span class="b"></span>
-                <span class="l"></span>
+                <span class="t" />
+                <span class="r" />
+                <span class="b" />
+                <span class="l" />
             </div>
         </div>
     </div>

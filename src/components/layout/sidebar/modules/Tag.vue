@@ -20,6 +20,5 @@ const props = withDefaults(defineProps<T>(), {
         :id="item.id"
         :name="item.name"
         :size="item.size"
-    >
-    </TagItem>
+    />
 </template>

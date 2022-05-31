@@ -8,13 +8,18 @@ const siteMeta = inject("site-meta");
 <template>
     <div class="site-branding">
         <div class="site-logo">
-            <img v-if="siteMeta.logo" :src="siteMeta.logo" />
+            <img
+                v-if="siteMeta.logo"
+                :src="siteMeta.logo"
+            >
         </div>
         <div class="site-title">
             <h1>
-                <RouterLink :to="{ name: 'home' }">{{
-                    siteMeta.title
-                }}</RouterLink>
+                <RouterLink :to="{ name: 'home' }">
+                    {{
+                        siteMeta.title
+                    }}
+                </RouterLink>
             </h1>
         </div>
     </div>

@@ -1,10 +1,10 @@
 <script setup>
-import SiteHeaderBranding from './SiteHeaderBranding.vue';
+import SiteHeaderBranding from "./SiteHeaderBranding.vue";
 </script>
 
 <template>
     <header id="masthead">
-        <SiteHeaderBranding></SiteHeaderBranding>
+        <SiteHeaderBranding />
     </header>
 </template>
 

@@ -6,4 +6,5 @@ public
 app.config.js
 app.config.sample.js
 generateHead.js
+vite.config.ts
 src/assets

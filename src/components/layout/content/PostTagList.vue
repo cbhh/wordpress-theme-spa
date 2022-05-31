@@ -15,7 +15,7 @@ const tagListLength = computed(() => (props.list ? props.list.length : 0));
 
 <template>
     <div class="post-tag">
-        <i class="fa fa-tags"></i>
+        <i class="fa fa-tags" />
         <ul>
             <PostTagListItem
                 v-for="(item, index) in props.list"
@@ -23,7 +23,7 @@ const tagListLength = computed(() => (props.list ? props.list.length : 0));
                 :slug="item.slug"
                 :name="item.name"
                 :divider="index !== tagListLength - 1"
-            ></PostTagListItem>
+            />
         </ul>
     </div>
 </template>

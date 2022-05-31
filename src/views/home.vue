@@ -30,11 +30,17 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="postListLoadingMask" v-show="loadingMaskRequired">
+    <div
+        class="postListLoadingMask"
+        v-show="loadingMaskRequired"
+    >
         <ThemeLoading
-            :logoRequired="false"
-            :loadingText="dataLoadingText"
-        ></ThemeLoading>
+            :logo-required="false"
+            :loading-text="dataLoadingText"
+        />
     </div>
-    <PostList :list="postList" v-show="!loadingMaskRequired"></PostList>
+    <PostList
+        :list="postList"
+        v-show="!loadingMaskRequired"
+    />
 </template>

@@ -18,14 +18,14 @@ const logoUrl = computed(() => wpAppConfig.siteLogo);
 <template>
     <div class="theme-loading">
         <div class="loading-icon">
-            <i class="fa fa-spinner fa-pulse fa-5x"></i>
+            <i class="fa fa-spinner fa-pulse fa-5x" />
         </div>
         <div class="loading-info">
             <img
                 class="site-logo"
                 v-if="props.logoRequired && logoUrl"
                 :src="logoUrl"
-            />
+            >
             <p class="loading-tip">
                 {{ props.loadingText }}
             </p>

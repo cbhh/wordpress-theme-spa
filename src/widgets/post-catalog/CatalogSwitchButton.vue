@@ -31,7 +31,7 @@ const clickSwitchButton = function () {
             @mouseup="isMouseDown = false"
             @click="clickSwitchButton"
         >
-            <i class="fa fa-th-list"></i>
+            <i class="fa fa-th-list" />
         </div>
     </Teleport>
 </template>

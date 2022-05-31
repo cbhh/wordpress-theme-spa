@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 export enum HeadingLevel {
     H1 = 1,
     H2,

@@ -7,11 +7,13 @@ const siteMeta = inject("site-meta");
 <template>
     <div class="home-landing">
         <div class="landing-content">
-            <div class="site-title">{{ siteMeta.title }}</div>
+            <div class="site-title">
+                {{ siteMeta.title }}
+            </div>
             <div class="middle-separate-line">
-                <div></div>
+                <div />
                 <div>✤</div>
-                <div></div>
+                <div />
             </div>
             <div class="site-tagline">
                 {{ siteMeta.description }}

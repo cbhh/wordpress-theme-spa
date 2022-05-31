@@ -13,27 +13,37 @@ const props = withDefaults(defineProps<T>(), {
 
 const sidebarClass = computed(() => {
     switch (props.position) {
-        case SidebarPosition.left:
-            return "site-sidebar-left";
-        case SidebarPosition.right:
-            return "site-sidebar-right";
-        default:
-            return "";
+    case SidebarPosition.left:
+        return "site-sidebar-left";
+    case SidebarPosition.right:
+        return "site-sidebar-right";
+    default:
+        return "";
     }
 });
 </script>
 
 <template>
-    <aside class="site-sidebar" :class="sidebarClass">
-        <ThemeButton background decoration class="sidebar-top">
-            <slot name="top"></slot>
+    <aside
+        class="site-sidebar"
+        :class="sidebarClass"
+    >
+        <ThemeButton
+            background
+            decoration
+            class="sidebar-top"
+        >
+            <slot name="top" />
         </ThemeButton>
         <div class="sidebar-body">
-            <slot name="body"></slot>
+            <slot name="body" />
         </div>
-        <div class="sidebar-bottom" v-if="sidebarClass === 'site-sidebar-left'">
+        <div
+            class="sidebar-bottom"
+            v-if="sidebarClass === 'site-sidebar-left'"
+        >
             <div class="deco-image">
-                <div></div>
+                <div />
             </div>
         </div>
     </aside>

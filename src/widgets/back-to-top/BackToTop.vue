@@ -19,7 +19,7 @@ const mouseUp = function () {
 };
 
 const move = function () {
-    var view = document.documentElement,
+    const view = document.documentElement,
         totalScrollTop = view.scrollTop,
         managedScroll = window.innerHeight,
         totalScrollDuration = totalScrollTop / 5 / managedScroll,
@@ -30,7 +30,7 @@ const move = function () {
             behavior: "smooth",
         });
     } else {
-        var timer = setInterval(function () {
+        let timer = setInterval(function () {
             if (view.scrollTop <= 0) {
                 clearInterval(timer);
             } else {
@@ -49,7 +49,7 @@ const move = function () {
         @mousedown="mouseDown"
         @mouseup="mouseUp"
     >
-        <div><i class="fa fa-arrow-up"></i></div>
+        <div><i class="fa fa-arrow-up" /></div>
     </div>
 </template>
 

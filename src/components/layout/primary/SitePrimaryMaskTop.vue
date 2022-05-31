@@ -2,7 +2,7 @@
 
 <template>
     <div class="primary-mask-top">
-        <div></div>
+        <div />
     </div>
 </template>
 

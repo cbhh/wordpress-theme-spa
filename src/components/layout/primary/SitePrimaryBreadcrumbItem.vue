@@ -25,14 +25,14 @@ const props = withDefaults(defineProps<T>(), {
 
 <template>
     <span class="breadcrumb-separator">
-        <i class="fa fa-angle-right"></i>
+        <i class="fa fa-angle-right" />
     </span>
     <RouterLink
         :to="{ name: 'category', params: { cat: props.slug } }"
         class="breadcrumb-category"
     >
-        {{ props.name }}</RouterLink
-    >
+        {{ props.name }}
+    </RouterLink>
 </template>
 
 <style lang="scss" scoped>

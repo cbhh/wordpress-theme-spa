@@ -13,6 +13,7 @@ const props = withDefaults(defineProps<T>(), {
     count: 0,
     name: "",
     id: 0,
+    size: 0,
 });
 </script>
 

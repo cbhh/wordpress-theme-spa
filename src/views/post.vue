@@ -71,47 +71,49 @@ const renderView = function (currentPostId: number) {
     dataLoadingText.value = "正在加载文章数据";
     getPostDetail(currentPostId)
         .then(function (data) {
-            if (!data) return;
-            contentHtml.value = data.content.rendered;
-            //landing组件
-            store.commit("pageMetaModule/setPageMeta", {
-                title: data.title.rendered,
-                time: data.date,
-                background: data.featured_image_url || "",
-            });
-            //PostTagList组件
-            tagList.value = data.tags.map(function (t) {
-                var tagMeta = allTags.value.find((v) => v.id === t);
-                return {
-                    id: t,
-                    slug: (tagMeta && tagMeta.slug) || "",
-                    name: (tagMeta && tagMeta.name) || "",
-                };
-            });
-            //面包屑导航：递归查找父级分类，直到父级分类为0，即达到顶层分类
-            //如果有多个分类，则只显示最后一个分类
-            var currentCatId = data.categories[data.categories.length - 1],
-                currentCat = allCategories.value.find(
-                    (c) => c.id === currentCatId
+            if (data) {
+                contentHtml.value = data.content.rendered;
+                //landing组件
+                store.commit("pageMetaModule/setPageMeta", {
+                    title: data.title.rendered,
+                    time: data.date,
+                    background: data.featured_image_url || "",
+                });
+                //PostTagList组件
+                tagList.value = data.tags.map(function (t) {
+                    const tagMeta = allTags.value.find((v) => v.id === t);
+                    return {
+                        id: t,
+                        slug: (tagMeta && tagMeta.slug) || "",
+                        name: (tagMeta && tagMeta.name) || "",
+                    };
+                });
+                //面包屑导航：递归查找父级分类，直到父级分类为0，即达到顶层分类
+                //如果有多个分类，则只显示最后一个分类
+                const currentCatId =
+                        data.categories[data.categories.length - 1],
+                    currentCat = allCategories.value.find(
+                        (c) => c.id === currentCatId
+                    );
+                if (currentCat) {
+                    ancestors.value = [];
+                    ancestors.value.push(currentCat);
+                    getParent(currentCat);
+                    store.commit(
+                        "breadcrumbModule/setBreadcrumbNav",
+                        ancestors.value
+                    );
+                }
+                //PostAuthor组件
+                const currentAuthor = allUsers.value.find(
+                    (a) => a.id === data.author
                 );
-            if (currentCat) {
-                ancestors.value = [];
-                ancestors.value.push(currentCat);
-                getParent(currentCat);
-                store.commit(
-                    "breadcrumbModule/setBreadcrumbNav",
-                    ancestors.value
-                );
-            }
-            //PostAuthor组件
-            var currentAuthor = allUsers.value.find(
-                (a) => a.id === data.author
-            );
-            if (currentAuthor) {
-                authorMeta.avatar = currentAuthor.avatar_urls["96"];
-                authorMeta.description = currentAuthor.description;
-                authorMeta.id = currentAuthor.id;
-                authorMeta.name = currentAuthor.name;
+                if (currentAuthor) {
+                    authorMeta.avatar = currentAuthor.avatar_urls["96"];
+                    authorMeta.description = currentAuthor.description;
+                    authorMeta.id = currentAuthor.id;
+                    authorMeta.name = currentAuthor.name;
+                }
             }
             renderTimes.value += 1;
         })
@@ -152,27 +154,36 @@ onUnmounted(() => {
 
 <template>
     <article class="post">
-        <div class="postLoadingMask" v-show="loadingMaskRequired">
+        <div
+            class="postLoadingMask"
+            v-show="loadingMaskRequired"
+        >
             <ThemeLoading
-                :logoRequired="false"
-                :loadingText="dataLoadingText"
-            ></ThemeLoading>
+                :logo-required="false"
+                :loading-text="dataLoadingText"
+            />
         </div>
         <div
             class="entry-content"
             v-show="!loadingMaskRequired"
             v-html="contentHtml"
             ref="content"
-        ></div>
-        <footer class="entry-footer" v-show="!loadingMaskRequired">
+        />
+        <footer
+            class="entry-footer"
+            v-show="!loadingMaskRequired"
+        >
             <div class="extra-meta">
-                <PostTagList v-if="tagList[0]" :list="tagList"></PostTagList>
+                <PostTagList
+                    v-if="tagList[0]"
+                    :list="tagList"
+                />
                 <PostAuthor
                     :name="authorMeta.name"
                     :id="authorMeta.id"
                     :description="authorMeta.description"
                     :avatar="authorMeta.avatar"
-                ></PostAuthor>
+                />
             </div>
             <div class="block-corner-deco">
                 <span class="tl">❊</span>
@@ -186,18 +197,18 @@ onUnmounted(() => {
         v-if="catalogRequired"
         :list="catalogList"
         :visible="catalogVisible"
-        @getClickedIndex="setClickedCatalogItemStyle"
-    ></catalog>
+        @get-clicked-index="setClickedCatalogItemStyle"
+    />
     <catalog-switch-button
         v-if="catalogRequired"
         v-model:catalogVisible="catalogVisible"
-    ></catalog-switch-button>
+    />
     <gallery
         v-if="galleyRequired"
         :list="galleryImageList"
         v-model:visible="galleryVisible"
         v-model:currentImageIndex="currentImageIndex"
-    ></gallery>
+    />
 </template>
 
 <style lang="scss" scoped>

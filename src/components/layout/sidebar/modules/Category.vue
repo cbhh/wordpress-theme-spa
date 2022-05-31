@@ -19,6 +19,5 @@ const props = withDefaults(defineProps<T>(), {
         :id="item.id"
         :name="item.name"
         :children="item.children"
-    >
-    </CategoryItem>
+    />
 </template>
