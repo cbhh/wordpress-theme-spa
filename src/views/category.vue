@@ -1,28 +1,15 @@
 <script setup lang="ts">
 import PostList from "../components/layout/content/PostList.vue";
 import ThemeLoading from "../components/common/ThemeLoading.vue";
-import {
-    getCurrentInstance,
-    onMounted,
-    ref,
-    computed,
-    onUnmounted,
-    watch,
-} from "vue";
+import { onMounted, ref, computed, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import { appUseStore } from "@/store";
-import { ApiList } from "@/apis/apis";
 import getAncestorCategories from "../composables/getAncestorCategories";
 import getDescendantCategories from "../composables/getDescendantCategories";
 import generatePostList from "../composables/generatePostList";
+import getPostList from "@/apis/getPostList";
 
-const $apis: ApiList = (function () {
-        var ins = getCurrentInstance();
-        if (ins) {
-            return ins.appContext.config.globalProperties.$apis;
-        }
-    })(),
-    route = useRoute(),
+const route = useRoute(),
     store = appUseStore();
 
 const allCategories = computed(() => store.state.categoryModule.categoryList),
@@ -40,7 +27,7 @@ const renderTimes = ref(0),
 
 const renderView = function (currentCatSlug: string) {
     var currentCat = allCategories.value.find((c) => c.slug === currentCatSlug);
-    if (currentCat && $apis) {
+    if (currentCat) {
         var currentCatId = currentCat.id;
         loadingMaskRequired.value = true;
         dataLoadingText.value = `正在加载分类【${currentCat.name}】`;
@@ -60,16 +47,16 @@ const renderView = function (currentCatSlug: string) {
         descendants.value.push(currentCatId);
         getNextLvCats(currentCatId);
         //查找当前分类下所有post
-        $apis
-            .getPostList({ categories: descendants.value.join(",") })
-            .then(function (data) {
+        getPostList({ categories: descendants.value }).then(function (data) {
+            if (data) {
                 postList.value = [];
                 generateList(allCategories.value, allTags.value, data.result);
                 dataLoadingText.value = `分类【${
                     currentCat && currentCat.name
                 }】加载成功`;
                 setTimeout(() => (loadingMaskRequired.value = false), 500);
-            });
+            }
+        });
         renderTimes.value += 1;
     }
 };

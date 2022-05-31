@@ -1,4 +1,4 @@
-import { TagListItem } from "@/apis/apis";
+import TagListItem from "@/context/tag-list/tagListItem";
 
 export default interface TagModuleTypes {
     tagList: TagListItemWithSize[] | TagListItem[];

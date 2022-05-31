@@ -1,4 +1,4 @@
-import { CategoryListItem } from "@/apis/apis";
+import CategoryListItem from "@/context/category-list/categoryListItem";
 
 export default interface CategoryModuleTypes {
     /**

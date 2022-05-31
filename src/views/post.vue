@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {
     ref,
-    getCurrentInstance,
     onMounted,
     computed,
     reactive,
@@ -11,7 +10,6 @@ import {
 } from "vue";
 import { appUseStore } from "@/store";
 import { useRoute } from "vue-router";
-import { ApiList } from "@/apis/apis";
 import PostTagList from "@/components/layout/content/PostTagList.vue";
 import PostAuthor from "@/components/layout/content/PostAuthor.vue";
 import ThemeLoading from "@/components/common/ThemeLoading.vue";
@@ -23,14 +21,9 @@ import galleryComposable from "@/widgets/post-gallery/composable";
 import getAncestorCategories from "@/composables/getAncestorCategories";
 import { PostDetailTagItemType } from "@/components/props";
 import windowScroll from "@/global/windowScroll";
+import getPostDetail from "@/apis/getPostDetail";
 
-const $apis: ApiList = (function () {
-        var ins = getCurrentInstance();
-        if (ins) {
-            return ins.appContext.config.globalProperties.$apis;
-        }
-    })(),
-    route = useRoute(),
+const route = useRoute(),
     store = appUseStore();
 
 const allCategories = computed(() => store.state.categoryModule.categoryList),
@@ -76,65 +69,64 @@ const renderTimes = ref(0),
 const renderView = function (currentPostId: number) {
     loadingMaskRequired.value = true;
     dataLoadingText.value = "正在加载文章数据";
-    $apis &&
-        $apis
-            .getPostDetail(currentPostId)
-            .then(function (data) {
-                contentHtml.value = data.content.rendered;
-                //landing组件
-                store.commit("pageMetaModule/setPageMeta", {
-                    title: data.title.rendered,
-                    time: data.date,
-                    background: data.featured_image_url || "",
-                });
-                //PostTagList组件
-                tagList.value = data.tags.map(function (t) {
-                    var tagMeta = allTags.value.find((v) => v.id === t);
-                    return {
-                        id: t,
-                        slug: (tagMeta && tagMeta.slug) || "",
-                        name: (tagMeta && tagMeta.name) || "",
-                    };
-                });
-                //面包屑导航：递归查找父级分类，直到父级分类为0，即达到顶层分类
-                //如果有多个分类，则只显示最后一个分类
-                var currentCatId = data.categories[data.categories.length - 1],
-                    currentCat = allCategories.value.find(
-                        (c) => c.id === currentCatId
-                    );
-                if (currentCat) {
-                    ancestors.value = [];
-                    ancestors.value.push(currentCat);
-                    getParent(currentCat);
-                    store.commit(
-                        "breadcrumbModule/setBreadcrumbNav",
-                        ancestors.value
-                    );
-                }
-                //PostAuthor组件
-                var currentAuthor = allUsers.value.find(
-                    (a) => a.id === data.author
-                );
-                if (currentAuthor) {
-                    authorMeta.avatar = currentAuthor.avatar_urls["96"];
-                    authorMeta.description = currentAuthor.description;
-                    authorMeta.id = currentAuthor.id;
-                    authorMeta.name = currentAuthor.name;
-                }
-                renderTimes.value += 1;
-            })
-            .then(function () {
-                nextTick().then(function () {
-                    if (content.value) {
-                        //生成文章目录
-                        generateCatalogList(content.value);
-                        //生成文章图片画廊
-                        generateGalleryImageList(content.value);
-                    }
-                    dataLoadingText.value = "文章数据加载成功";
-                    setTimeout(() => (loadingMaskRequired.value = false), 500);
-                });
+    getPostDetail(currentPostId)
+        .then(function (data) {
+            if (!data) return;
+            contentHtml.value = data.content.rendered;
+            //landing组件
+            store.commit("pageMetaModule/setPageMeta", {
+                title: data.title.rendered,
+                time: data.date,
+                background: data.featured_image_url || "",
             });
+            //PostTagList组件
+            tagList.value = data.tags.map(function (t) {
+                var tagMeta = allTags.value.find((v) => v.id === t);
+                return {
+                    id: t,
+                    slug: (tagMeta && tagMeta.slug) || "",
+                    name: (tagMeta && tagMeta.name) || "",
+                };
+            });
+            //面包屑导航：递归查找父级分类，直到父级分类为0，即达到顶层分类
+            //如果有多个分类，则只显示最后一个分类
+            var currentCatId = data.categories[data.categories.length - 1],
+                currentCat = allCategories.value.find(
+                    (c) => c.id === currentCatId
+                );
+            if (currentCat) {
+                ancestors.value = [];
+                ancestors.value.push(currentCat);
+                getParent(currentCat);
+                store.commit(
+                    "breadcrumbModule/setBreadcrumbNav",
+                    ancestors.value
+                );
+            }
+            //PostAuthor组件
+            var currentAuthor = allUsers.value.find(
+                (a) => a.id === data.author
+            );
+            if (currentAuthor) {
+                authorMeta.avatar = currentAuthor.avatar_urls["96"];
+                authorMeta.description = currentAuthor.description;
+                authorMeta.id = currentAuthor.id;
+                authorMeta.name = currentAuthor.name;
+            }
+            renderTimes.value += 1;
+        })
+        .then(function () {
+            nextTick().then(function () {
+                if (content.value) {
+                    //生成文章目录
+                    generateCatalogList(content.value);
+                    //生成文章图片画廊
+                    generateGalleryImageList(content.value);
+                }
+                dataLoadingText.value = "文章数据加载成功";
+                setTimeout(() => (loadingMaskRequired.value = false), 500);
+            });
+        });
 };
 //监听路由变化，加载不同文章
 watch(

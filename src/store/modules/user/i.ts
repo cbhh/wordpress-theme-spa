@@ -1,9 +1,9 @@
-import { UserDetail } from "@/apis/apis";
+import UserListItem from "@/context/user-list/userListItem";
 
 export default interface UserModuleTypes {
-    userList: UserDetail[];
+    userList: UserListItem[];
 }
 /**
  * 原始User类型
  */
-export type User = UserDetail;
+export type User = UserListItem;

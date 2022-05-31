@@ -1,19 +1,13 @@
 <script setup lang="ts">
 import PostList from "../components/layout/content/PostList.vue";
 import ThemeLoading from "../components/common/ThemeLoading.vue";
-import { getCurrentInstance, onMounted, ref, computed, watch } from "vue";
+import { onMounted, ref, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { appUseStore } from "@/store";
-import { ApiList } from "@/apis/apis";
 import generatePostList from "../composables/generatePostList";
+import getPostList from "@/apis/getPostList";
 
-const $apis: ApiList = (function () {
-        var ins = getCurrentInstance();
-        if (ins) {
-            return ins.appContext.config.globalProperties.$apis;
-        }
-    })(),
-    route = useRoute(),
+const route = useRoute(),
     store = appUseStore();
 
 const allCategories = computed(() => store.state.categoryModule.categoryList),
@@ -28,7 +22,7 @@ const renderTimes = ref(0),
 
 const renderView = function (currentUserId: number) {
     var currentUser = allUsers.value.find((u) => u.id === currentUserId);
-    if (currentUser && $apis) {
+    if (currentUser) {
         loadingMaskRequired.value = true;
         dataLoadingText.value = `正在加载作者【${currentUser.name}】`;
         //landing组件
@@ -38,13 +32,15 @@ const renderView = function (currentUserId: number) {
             background: "",
         });
         //查找当前作者下所有post
-        $apis.getPostList({ author: currentUserId }).then(function (data) {
-            postList.value = [];
-            generateList(allCategories.value, allTags.value, data.result);
-            dataLoadingText.value = `作者【${
-                currentUser && currentUser.name
-            }】加载成功`;
-            setTimeout(() => (loadingMaskRequired.value = false), 500);
+        getPostList({ author: currentUserId }).then(function (data) {
+            if (data) {
+                postList.value = [];
+                generateList(allCategories.value, allTags.value, data.result);
+                dataLoadingText.value = `作者【${
+                    currentUser && currentUser.name
+                }】加载成功`;
+                setTimeout(() => (loadingMaskRequired.value = false), 500);
+            }
         });
         renderTimes.value += 1;
     }

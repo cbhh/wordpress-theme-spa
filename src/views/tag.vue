@@ -1,19 +1,13 @@
 <script setup lang="ts">
 import PostList from "../components/layout/content/PostList.vue";
 import ThemeLoading from "../components/common/ThemeLoading.vue";
-import { getCurrentInstance, onMounted, ref, computed, watch } from "vue";
+import { onMounted, ref, computed, watch } from "vue";
 import { useRoute } from "vue-router";
 import { appUseStore } from "@/store";
-import { ApiList } from "@/apis/apis";
 import generatePostList from "../composables/generatePostList";
+import getPostList from "@/apis/getPostList";
 
-const $apis: ApiList = (function () {
-        var ins = getCurrentInstance();
-        if (ins) {
-            return ins.appContext.config.globalProperties.$apis;
-        }
-    })(),
-    route = useRoute(),
+const route = useRoute(),
     store = appUseStore();
 
 const allCategories = computed(() => store.state.categoryModule.categoryList),
@@ -27,7 +21,7 @@ const renderTimes = ref(0),
 
 const renderView = function (currentTagSlug: string) {
     var currentTag = allTags.value.find((t) => t.slug === currentTagSlug);
-    if (currentTag && $apis) {
+    if (currentTag) {
         var currentTagId = currentTag.id;
         loadingMaskRequired.value = true;
         dataLoadingText.value = `正在加载标签【${currentTag.name}】`;
@@ -38,13 +32,15 @@ const renderView = function (currentTagSlug: string) {
             background: "",
         });
         //查找当前标签下所有post
-        $apis.getPostList({ tags: currentTagId }).then(function (data) {
-            postList.value = [];
-            generateList(allCategories.value, allTags.value, data.result);
-            dataLoadingText.value = `标签【${
-                currentTag && currentTag.name
-            }】加载成功`;
-            setTimeout(() => (loadingMaskRequired.value = false), 500);
+        getPostList({ tags: [currentTagId] }).then(function (data) {
+            if (data) {
+                postList.value = [];
+                generateList(allCategories.value, allTags.value, data.result);
+                dataLoadingText.value = `标签【${
+                    currentTag && currentTag.name
+                }】加载成功`;
+                setTimeout(() => (loadingMaskRequired.value = false), 500);
+            }
         });
         renderTimes.value += 1;
     }

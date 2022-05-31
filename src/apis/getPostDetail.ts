@@ -8,7 +8,7 @@ const baseEndpoint = [
     "posts/",
     `${
         wpAppConfig.apiBackendPrettyUrlEnabled ? "?" : "&"
-    }_fields=author,id,content,title,categories,tags,date,modified,featured_media,featured_image_url`,
+    }_fields=author,id,content,title,categories,tags,date,featured_media,featured_image_url`,
 ];
 
 /**
