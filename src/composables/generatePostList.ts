@@ -20,17 +20,17 @@ export default function () {
         data: PostListItem[]
     ) {
         data.forEach(function (item) {
-            var meta: PostListItemType = {
-                    id: item.id,
-                    thumbnail: item.featured_image_url || "",
-                    date: item.date,
-                    title: item.title.rendered,
-                    excerpt: item.excerpt.rendered,
-                    category: [],
-                    tag: [],
-                },
+            const meta: PostListItemType = {
+                id: item.id,
+                thumbnail: item.featured_image_url || "",
+                date: item.date,
+                title: item.title.rendered,
+                excerpt: item.excerpt.rendered,
+                category: [],
+                tag: [],
+            },
                 category = item.categories.map(function (c) {
-                    var catMeta = allCategories.find((v) => v.id === c);
+                    const catMeta = allCategories.find((v) => v.id === c);
                     return {
                         id: c,
                         slug: (catMeta && catMeta.slug) || "",
@@ -38,7 +38,7 @@ export default function () {
                     };
                 }),
                 tag = item.tags.map(function (t) {
-                    var tagMeta = allTags.find((v) => v.id === t);
+                    const tagMeta = allTags.find((v) => v.id === t);
                     return {
                         id: t,
                         slug: (tagMeta && tagMeta.slug) || "",

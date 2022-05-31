@@ -11,9 +11,9 @@ export default function (allCategories: CategoryListItem[]) {
      * @param cat
      */
     const getParent = function (cat: CategoryListItem) {
-        var pid = cat.parent;
+        const pid = cat.parent;
         if (pid > 0) {
-            var pnode = allCategories.find((c) => c.id === pid);
+            const pnode = allCategories.find((c) => c.id === pid);
             if (pnode) {
                 ancestors.value.unshift(pnode);
                 getParent(pnode);

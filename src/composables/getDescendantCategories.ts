@@ -11,7 +11,7 @@ export default function (allCategories: CategoryListItem[]) {
      * @param catId
      */
     const getNextLvCats = function (catId: number) {
-        var nextLvNodes = allCategories.filter((c) => c.parent === catId);
+        const nextLvNodes = allCategories.filter((c) => c.parent === catId);
         nextLvNodes.length &&
             nextLvNodes.forEach(function (n) {
                 descendants.value.push(n.id);

@@ -15,6 +15,7 @@ import breadcrumbModule from "./modules/breadcrumb";
 export default createStore<RootStateTypes>({
     state: {
         //RootStateTypes中定义的state
+        ver: "0.21",
     },
     modules: {
         categoryModule,

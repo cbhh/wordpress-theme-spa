@@ -11,11 +11,11 @@ export default function () {
      * @param end 结束日期，y-mm-dd表示法
      */
     const getDates = async function (start: string, end: string) {
-        var res = await getPostList({ after: start, before: end });
+        const res = await getPostList({ after: start, before: end });
         if (res) {
-            var temp: number[] = [];
+            const temp: number[] = [];
             res.result.forEach(function (item) {
-                var dateStr = item.date,
+                const dateStr = item.date,
                     day = dateStr.split("T")[0].split("-")[2],
                     dayNum = parseInt(
                         day.startsWith("0") ? day.charAt(1) : day

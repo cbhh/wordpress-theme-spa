@@ -13,7 +13,7 @@ const breadcrumbModule: Module<BreadcrumbModuleTypes, RootStateTypes> = {
          * @param state
          * @param data
          */
-        setBreadcrumbNav(state, data) {
+        setBreadcrumbNav (state, data) {
             state.list = data;
         },
     },

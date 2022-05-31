@@ -13,7 +13,7 @@ const userModule: Module<UserModuleTypes, RootStateTypes> = {
          * @param state
          * @param data
          */
-        storeUserList(state, data: User[]) {
+        storeUserList (state, data: User[]) {
             state.userList = data;
         },
     },

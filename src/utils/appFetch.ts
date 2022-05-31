@@ -14,16 +14,17 @@ const credential = window.btoa(wpAppConfig.apiUser + ":" + wpAppConfig.appPwd),
  * 发起get请求
  * @param endpoint
  */
-export default async function <T>(endpoint: string): Promise<T | undefined> {
-    var response = await fetch(restApiUrl + endpoint, {
+export default async function <T> (endpoint: string): Promise<T | undefined> {
+    const response = await fetch(restApiUrl + endpoint, {
         method: "GET",
         mode: mode,
         headers: {
+            // eslint-disable-next-line @typescript-eslint/naming-convention
             Authorization: "Basic " + credential,
         },
     });
     if (response.ok) {
-        var headers = response.headers,
+        const headers = response.headers,
             totalItems = headers.get("X-WP-Total") || headers.get("x-wp-total"),
             totalPages =
                 headers.get("X-WP-TotalPages") ||
@@ -34,7 +35,7 @@ export default async function <T>(endpoint: string): Promise<T | undefined> {
                 totalItems: parseInt(totalItems),
                 totalPages: parseInt(totalPages),
                 result: result,
-            } as any;
+            } as never;
         } else {
             return result;
         }

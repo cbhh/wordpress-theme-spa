@@ -12,7 +12,7 @@ const baseEndpoint = `posts${
  * @param query 查询参数
  */
 export default async function (query?: PostListArguments) {
-    var ep = baseEndpoint;
+    let ep = baseEndpoint;
     if (query) {
         if (query.after) {
             ep += `&after=${query.after}T00:00:00`;

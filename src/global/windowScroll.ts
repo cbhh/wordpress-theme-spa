@@ -2,17 +2,17 @@ import { deleteSpecificItemFromObjArray } from "@/utils/array";
 
 interface HandleType {
     name: string;
-    thisArg: any;
+    thisArg: unknown;
     callback: (wsy: number, wh: number) => void;
 }
 
-function windowScroller() {
-    var timer = 0,
-        handles: HandleType[] = [];
+function windowScroller () {
+    let timer = 0;
+    const handles: HandleType[] = [];
     window.addEventListener("scroll", function () {
         if (!timer) {
             timer = window.setTimeout(function () {
-                var wsy = window.scrollY,
+                const wsy = window.scrollY,
                     wh = window.innerHeight;
                 handles.forEach(function (item) {
                     item.callback.call(item.thisArg, wsy, wh);
@@ -27,12 +27,12 @@ function windowScroller() {
      * @param thisArg 用于传入回调函数的this对象
      * @param callback 事件处理器函数，wsy为当前窗口垂直方向滚动距离，wh为当前窗口高度，全局scroll事件处理会向每个回调函数自动注入这两个参数
      */
-    var addHandle = function (
+    const addHandle = function (
         name: string,
-        thisArg: any,
+        thisArg: unknown,
         callback: (wsy: number, wh: number) => void
     ) {
-        var isNameNoRepeated = handles.every(function (item) {
+        const isNameNoRepeated = handles.every(function (item) {
             return item.name !== name;
         });
         if (isNameNoRepeated) {
@@ -43,7 +43,7 @@ function windowScroller() {
      * 根据name移除一个scroll事件处理器
      * @param name
      */
-    var deleteHandle = function (name: string) {
+    const deleteHandle = function (name: string) {
         deleteSpecificItemFromObjArray(handles, "name", name);
     };
     return {

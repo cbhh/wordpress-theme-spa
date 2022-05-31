@@ -12,5 +12,5 @@ const baseEndpoint = `categories${
  * 获取category列表
  */
 export default async function () {
-    return appFetch<CategoryListResponse>(baseEndpoint);
+    return await appFetch<CategoryListResponse>(baseEndpoint);
 }

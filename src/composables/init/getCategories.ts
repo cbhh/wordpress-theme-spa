@@ -7,7 +7,7 @@ import getCategoryList from "@/apis/getCategoryList";
 export default function () {
     const categoryList = ref<CategoryListItem[]>([]);
     const getCats = async function () {
-        var res = await getCategoryList();
+        const res = await getCategoryList();
         if (res) {
             categoryList.value = res.result;
         }

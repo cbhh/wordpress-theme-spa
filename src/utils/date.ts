@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 const monthMap: { [key: string]: string } = {
     "01": "一",
     "02": "二",
@@ -16,8 +17,8 @@ const monthMap: { [key: string]: string } = {
  * 转换日期格式，e.g. 2022-03-07=>三月 7，2022
  * @param dateStr wordpress api返回的日期字符串，e.g.2022-03-07T13:35:30
  */
-export function convertDateFormat(dateStr: string) {
-    var date = dateStr && dateStr.split("T")[0],
+export function convertDateFormat (dateStr: string) {
+    const date = dateStr && dateStr.split("T")[0],
         dateSplits = date && date.split("-");
     if (dateSplits) {
         return (
@@ -36,8 +37,8 @@ export function convertDateFormat(dateStr: string) {
  * @param current 当前日期
  * @returns 本月月历二维数组，按照星期划分，没有日期的补空格
  */
-export function generateCalendarData(current: Date) {
-    var currentMonth = current.getMonth(),
+export function generateCalendarData (current: Date) {
+    const currentMonth = current.getMonth(),
         currentDate = current.getDate(),
         currentWeekDay = current.getDay(),
         currentYear = current.getFullYear(),
@@ -49,42 +50,40 @@ export function generateCalendarData(current: Date) {
         totalWeeks = totalDays
             ? getMonthTotalWeeks(totalDays, firstDayOfMonth)
             : 0,
-        data = [],
-        start = 1;
-    for (var w = 1; w <= totalWeeks; w++) {
-        var weekData = [];
+        data = [];
+    let start = 1;
+    for (let w = 1; w <= totalWeeks; w++) {
+        const weekData = [];
         //第一周
         if (w === 1) {
             //补空格数量
-            var offset = firstDayOfMonth,
+            const offset = firstDayOfMonth,
                 rest = 7 - offset;
-            for (var o = 0; o < offset; o++) {
+            for (let o = 0; o < offset; o++) {
                 weekData.push("");
             }
             //本周剩下天数
-            for (var r = 0; r < rest; r++) {
+            for (let r = 0; r < rest; r++) {
                 weekData.push(start);
                 start += 1;
             }
-        }
-        //其余周，除了最后一个周
-        else if (w !== totalWeeks) {
-            for (var e = 0; e < 7; e++) {
+        } else if (w !== totalWeeks) {
+            //其余周，除了最后一周
+            for (let e = 0; e < 7; e++) {
                 weekData.push(start);
                 start += 1;
             }
-        }
-        //最后一周
-        else {
-            var lastDaysOfMonth = totalDays ? totalDays - start + 1 : -1,
+        } else {
+            //最后一周
+            const lastDaysOfMonth = totalDays ? totalDays - start + 1 : -1,
                 blanks = 7 - lastDaysOfMonth;
             if (lastDaysOfMonth >= 0) {
-                for (var l = 0; l < lastDaysOfMonth; l++) {
+                for (let l = 0; l < lastDaysOfMonth; l++) {
                     weekData.push(start);
                     start += 1;
                 }
                 //补空格
-                for (var b = 0; b < blanks; b++) {
+                for (let b = 0; b < blanks; b++) {
                     weekData.push("");
                 }
             }
@@ -99,8 +98,8 @@ export function generateCalendarData(current: Date) {
  * @param currentWeekDay
  * @returns 本月1号是星期几，0-6，0表示星期天
  */
-function getFirstDay(currentDate: number, currentWeekDay: number) {
-    var elapse = currentDate - 1;
+function getFirstDay (currentDate: number, currentWeekDay: number) {
+    const elapse = currentDate - 1;
     return (7 + (currentWeekDay - (elapse % 7))) % 7;
 }
 /**
@@ -109,8 +108,8 @@ function getFirstDay(currentDate: number, currentWeekDay: number) {
  * @param year
  * @returns 31/30/29/28
  */
-function getMonthTotalDays(month: number, year: number) {
-    var m = month + 1;
+function getMonthTotalDays (month: number, year: number) {
+    const m = month + 1;
     if ([1, 3, 5, 7, 8, 10, 12].includes(m)) {
         return 31;
     } else if (m === 2) {
@@ -129,8 +128,8 @@ function getMonthTotalDays(month: number, year: number) {
  * @param weekOfFirstDay 本月1号是星期几，0-6，0表示星期天
  * @returns 该月总星期数
  */
-function getMonthTotalWeeks(totalDays: number, weekOfFirstDay: number) {
-    var firstWeekDays = 7 - weekOfFirstDay,
+function getMonthTotalWeeks (totalDays: number, weekOfFirstDay: number) {
+    const firstWeekDays = 7 - weekOfFirstDay,
         restDays = totalDays - firstWeekDays,
         restWholeWeeks = parseInt((restDays / 7).toString());
     if (restWholeWeeks * 7 === restDays) {

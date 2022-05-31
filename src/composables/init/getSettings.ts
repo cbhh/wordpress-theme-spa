@@ -10,7 +10,7 @@ export default function () {
         home: wpAppConfig.siteUrl,
     });
     const getSettings = async function () {
-        var res = await getSiteSettings();
+        const res = await getSiteSettings();
         if (res) {
             siteMeta.title = res.title;
             siteMeta.description = res.description;

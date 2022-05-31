@@ -7,7 +7,7 @@ import TagListItem from "@/context/tag-list/tagListItem";
 export default function () {
     const tagList = ref<TagListItem[]>([]);
     const getTags = async function () {
-        var res = await getTagList();
+        const res = await getTagList(); 
         if (res) {
             tagList.value = res.result;
         }

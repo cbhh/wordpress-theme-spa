@@ -4,13 +4,13 @@
  * @param specificKey
  *  @param specificValue
  */
-export function deleteSpecificItemFromObjArray(
-    objArray: any[],
+export function deleteSpecificItemFromObjArray (
+    objArray: { [key: string]: string }[],
     specificKey: string,
     specificValue: string
 ) {
-    var len = objArray.length;
-    for (var i = 0; i < len; i++) {
+    const len = objArray.length;
+    for (let i = 0; i < len; i++) {
         if (objArray[i][specificKey] === specificValue) {
             objArray.splice(i, 1);
         }

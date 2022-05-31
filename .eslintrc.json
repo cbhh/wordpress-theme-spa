@@ -17,10 +17,89 @@
         "sourceType": "module"
     },
     "rules": {
-        //4格缩进
+        //模板4格缩进
         "vue/html-indent": [
             1,
             4
+        ],
+        //类型注释后空格
+        "@typescript-eslint/type-annotation-spacing": "warn",
+        //标识符命名规范
+        "@typescript-eslint/naming-convention": [
+            "error",
+            {
+                "selector": "default",
+                "format": [
+                    "camelCase"
+                ],
+                "leadingUnderscore": "allow",
+                "trailingUnderscore": "allow"
+            },
+            {
+                "selector": "variable",
+                "format": [
+                    "camelCase",
+                    "UPPER_CASE"
+                ],
+                "leadingUnderscore": "allow",
+                "trailingUnderscore": "allow"
+            },
+            {
+                "selector": "typeLike",
+                "format": [
+                    "PascalCase"
+                ]
+            }
+        ],
+        //分号结束语句
+        "@typescript-eslint/semi": "warn",
+        //逗号后空格
+        "comma-spacing": "warn",
+        //ts4格缩进
+        "indent": [
+            "warn",
+            4
+        ],
+        //双引号字符串
+        "quotes": [
+            "error",
+            "double"
+        ],
+        //关键字两侧空格
+        "keyword-spacing": [
+            "warn",
+            {
+                "before": true,
+                "after": true
+            }
+        ],
+        //中缀运算符两侧空格
+        "space-infix-ops": "warn",
+        //一元运算符空格
+        "space-unary-ops": "warn",
+        //function ()括号之前空格
+        "space-before-function-paren": "warn",
+        //代码块两侧空格
+        "block-spacing": "warn",
+        //大括号中内容空格
+        "object-curly-spacing": [
+            "warn",
+            "always"
+        ],
+        //大括号位置
+        "brace-style": "warn",
+        //控制语句使用大括号包裹
+        "curly": "error",
+        //使用严格等于===比较
+        "eqeqeq": "error",
+        //async与await一起使用
+        "require-await": "error",
+        //箭头函数参数带括号
+        "arrow-parens": "error",
+        //使用unix换行符\n
+        "linebreak-style": [
+            "error",
+            "unix"
         ]
     },
     "overrides": [

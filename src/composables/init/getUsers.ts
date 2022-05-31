@@ -7,7 +7,7 @@ import UserListItem from "@/context/user-list/userListItem";
 export default function () {
     const userList = ref<UserListItem[]>([]);
     const getUsers = async function () {
-        var res = await getUserList();
+        const res = await getUserList();
         if (res) {
             userList.value = res.result;
         }

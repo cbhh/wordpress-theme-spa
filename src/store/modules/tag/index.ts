@@ -18,16 +18,20 @@ const tagModule: Module<TagModuleTypes, RootStateTypes> = {
          * @param state
          * @param data
          */
-        storeTagList(state, data: OriginTagListItem[]) {
+        storeTagList (state, data: OriginTagListItem[]) {
             //处理data，添加size属性
-            var { min, max } = wpAppConfig.tagFontSize;
+            let { min, max } = wpAppConfig.tagFontSize;
             if (min && max && max > min) {
-                if (min < 0.4) min = 0.4;
-                if (max > 2) max = 2;
+                if (min < 0.4) {
+                    min = 0.4;
+                }
+                if (max > 2) {
+                    max = 2;
+                }
                 /**
                  * data的深copy
                  */
-                var copy: TempTagListItem[] = [],
+                const copy: TempTagListItem[] = [],
                     /**
                      * 所有count的值列表
                      */
@@ -47,14 +51,14 @@ const tagModule: Module<TagModuleTypes, RootStateTypes> = {
                 if (allCountList.length !== 1) {
                     //按照count值从小到大排序
                     copy.sort((a, b) => a.count - b.count);
-                    var total = copy.length,
+                    const total = copy.length,
                         minCount = copy[0].count,
                         maxCount = copy[total - 1].count,
-                        step = (max - min) / (allCountList.length - 1);
-                    /**
-                     * 最小值的查找停止位置
-                     */
-                    var stopMinIndex = findSameCountItem(
+                        step = (max - min) / (allCountList.length - 1),
+                        /**
+                         * 最小值的查找停止位置
+                         */
+                        stopMinIndex = findSameCountItem(
                             data,
                             copy,
                             0,
@@ -73,18 +77,18 @@ const tagModule: Module<TagModuleTypes, RootStateTypes> = {
                             maxCount,
                             max,
                             true
-                        ),
-                        size = min + step;
+                        );
+                    let size = min + step;
                     //TODO:[1,1,1,1,2,3]类似这种情况时，最大值最小值查找停止位置都是4
                     if (stopMinIndex === stopMaxIndex) {
-                        var c = copy[stopMinIndex],
+                        const c = copy[stopMinIndex],
                             d = data[c.map] as TagListItemWithSize;
                         d["size"] = size;
                     } else {
                         //中间值查找位于stopMinIndex和stopMaxIndex之间
-                        var currentIndex = stopMinIndex;
+                        let currentIndex = stopMinIndex;
                         while (currentIndex < stopMaxIndex) {
-                            var stopIndex = findSameCountItem(
+                            const stopIndex = findSameCountItem(
                                 data,
                                 copy,
                                 currentIndex,
@@ -122,23 +126,27 @@ const findSameCountItem = function (
     end: number,
     count: number,
     size: number,
-    reverse: boolean = false
+    reverse = false
 ): number {
     if (!reverse) {
-        for (var f = start; f <= end; f++) {
-            var c = copy[f];
+        for (let f = start; f <= end; f++) {
+            const c = copy[f];
             if (c.count === count) {
                 data[c.map]["size"] = size;
-            } else return f;
+            } else {
+                return f;
+            }
         }
         //没有不符合条件的值（不中途return），直接返回指定的end值
         return end;
     } else {
-        for (var f = start; f >= end; f--) {
-            var c = copy[f];
+        for (let f = start; f >= end; f--) {
+            const c = copy[f];
             if (c.count === count) {
                 data[c.map]["size"] = size;
-            } else return f;
+            } else {
+                return f;
+            }
         }
         return end;
     }
