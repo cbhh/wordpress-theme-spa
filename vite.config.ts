@@ -12,6 +12,8 @@ import {
     loadMoreScripts,
 } from "./generateHead";
 
+const appVersion = ["dev-0.21", "20220531"];
+
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
@@ -20,6 +22,7 @@ export default defineConfig({
             minify: true,
             inject: {
                 data: {
+                    appVersionMeta: `<meta name="appVersion" content=version:${appVersion[0]},build:${appVersion[1]}>`,
                     title: siteTitle,
                     injectMeta: generateSiteMeta(),
                     injectLink: generateSiteLink(),

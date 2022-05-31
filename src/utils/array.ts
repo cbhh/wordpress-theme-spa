@@ -5,7 +5,8 @@
  *  @param specificValue
  */
 export function deleteSpecificItemFromObjArray (
-    objArray: { [key: string]: string }[],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    objArray: { [key: string]: any }[],
     specificKey: string,
     specificValue: string
 ) {

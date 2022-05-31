@@ -3,9 +3,35 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <%- appVersionMeta %>
         <title><%- title %></title>
         <!-- browser platform check start -->
-        <script>const platform=function(){var a=navigator.oscpu,i=navigator.platform,n=navigator.userAgentData&&navigator.userAgentData.platform;return a&&a.includes("Windows")||i&&i.includes("Win32")||n&&n.includes("Windows")?"Win":a&&a.includes("Mac OS")||i&&i.includes("MacIntel")||n&&n.includes("macOS")?"Mac":void 0}(),isSafari="Apple Computer, Inc."===navigator.vendor,isLowPixelRatio=window.devicePixelRatio<1.5;"Win"===platform&&document.documentElement.classList.add("platform-win"),isSafari&&document.documentElement.classList.add("browser-safari"),isLowPixelRatio&&document.documentElement.classList.add("pixel-ratio-low");</script>
+        <script>
+            const platform = (function () {
+                    var a = navigator.oscpu,
+                        i = navigator.platform,
+                        n =
+                            navigator.userAgentData &&
+                            navigator.userAgentData.platform;
+                    return (a && a.includes("Windows")) ||
+                        (i && i.includes("Win32")) ||
+                        (n && n.includes("Windows"))
+                        ? "Win"
+                        : (a && a.includes("Mac OS")) ||
+                          (i && i.includes("MacIntel")) ||
+                          (n && n.includes("macOS"))
+                        ? "Mac"
+                        : void 0;
+                })(),
+                isSafari = "Apple Computer, Inc." === navigator.vendor,
+                isLowPixelRatio = window.devicePixelRatio < 1.5;
+            "Win" === platform &&
+                document.documentElement.classList.add("platform-win"),
+                isSafari &&
+                    document.documentElement.classList.add("browser-safari"),
+                isLowPixelRatio &&
+                    document.documentElement.classList.add("pixel-ratio-low");
+        </script>
         <!-- browser platform check end -->
         <%- injectMeta %> <%- injectLink %> <%- injectStyle %> <%- injectScript
         %>
@@ -13,6 +39,16 @@
     <body>
         <div id="app"></div>
         <script type="module" src="/src/main.ts"></script>
+        <script>
+            const version = Array.prototype.slice
+                .apply(document.head.getElementsByTagName("meta"))
+                .find((m) => m.name === "appVersion");
+            console.log(
+                `%c梦回长安 WordPress SPA 主题%c${version && version.content}`,
+                "display:inline-block;color:#96655c;background:#f7f1e5;padding:1px 3px;border-top-left-radius:3px;border-bottom-left-radius:3px",
+                "display:inline-block;color:#f7f1e5;background:#96655c;padding:1px 3px;border-top-right-radius:3px;border-bottom-right-radius:3px"
+            );
+        </script>
         <%- injectMoreScripts %>
     </body>
 </html>
