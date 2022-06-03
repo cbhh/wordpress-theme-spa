@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /**
  * 文章列表项
+ * @see [wordpress-rest-api-posts-schema](https://developer.wordpress.org/rest-api/reference/posts/#schema)
  */
 export default interface PostListItem {
     /**

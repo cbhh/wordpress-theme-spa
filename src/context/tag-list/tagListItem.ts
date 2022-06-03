@@ -1,5 +1,6 @@
 /**
  * 标签列表项
+ * @see [wordpress-rest-api-tags-schema](https://developer.wordpress.org/rest-api/reference/tags/#schema)
  */
 export default interface TagListItem {
     /**

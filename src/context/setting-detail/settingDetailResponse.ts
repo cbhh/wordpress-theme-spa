@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /**
  * 站点设置返回结果
+ * @see [wordpress-rest-api-settings-schema](https://developer.wordpress.org/rest-api/reference/settings/#schema)
  */
 export default interface SettingDetailResponse {
     /**

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /**
  * 用户列表项/用户详情
+ * @see [wordpress-rest-api-users-schema](https://developer.wordpress.org/rest-api/reference/users/#schema)
  */
 export default interface UserListItem {
     /**

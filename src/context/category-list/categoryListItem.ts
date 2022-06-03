@@ -1,5 +1,6 @@
 /**
  * 分类列表项
+ * @see [wordpress-rest-api-categories-schema](https://developer.wordpress.org/rest-api/reference/categories/#schema)
  */
 export default interface CategoryListItem {
     /**

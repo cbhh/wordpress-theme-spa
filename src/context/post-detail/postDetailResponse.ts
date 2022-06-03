@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 /**
  * 文章详情返回结果
+ * @see [wordpress-rest-api-posts-schema](https://developer.wordpress.org/rest-api/reference/posts/#schema)
  */
 export default interface PostDetailResponse {
     /**
