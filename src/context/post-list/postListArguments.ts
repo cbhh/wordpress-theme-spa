@@ -1,5 +1,7 @@
+import { YearMonthDay } from "@/common/date";
 /**
  * 文章列表查询参数
+ * @see [wordpress-rest-api-posts-args](https://developer.wordpress.org/rest-api/reference/posts/#arguments)
  */
 export default interface PostListArguments {
     /**
@@ -9,14 +11,14 @@ export default interface PostListArguments {
     author?: number;
     /**
      * 起始日期
-     * @example 2022-05-01
+     * @example [2022,5,1]
      */
-    after?: string;
+    start?: YearMonthDay;
     /**
      * 结束日期
-     * @example 2022-05-31
+     * @example [2022,6,1]
      */
-    before?: string;
+    end?: YearMonthDay;
     /**
      * 分类列表
      * @example [1,2,3]

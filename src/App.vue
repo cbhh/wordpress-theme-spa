@@ -140,13 +140,8 @@ onMounted(() => {
         dataLoadingText.value = "作者列表准备完成";
         dataLoadingCompletedItem.value += 1;
     });
-    const month = currentDate.getMonth() + 1,
-        year = currentDate.getFullYear();
     //查找当前月中发布了post的日期（仅供日历显示用）
-    getDates(
-        `${year}-${month > 9 ? month : "0" + month}-01`,
-        `${year}-${month > 9 ? month : "0" + month}-31`
-    );
+    getDates(currentDate);
     //添加切换回到顶部按钮可见性的窗口滚动事件处理器
     windowScroll.addHandle("back-to-top-visible", null, switchBackToTopVisible);
 });
