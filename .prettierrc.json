@@ -1,0 +1,10 @@
+{
+    "endOfLine": "lf",
+    "arrowParens": "always",
+    "semi": true,
+    "singleQuote": false,
+    "vueIndentScriptAndStyle": false,
+    "tabWidth": 4,
+    "singleAttributePerLine": true,
+    "bracketSpacing": true
+}
