@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import externalGlobals from "rollup-plugin-external-globals";
+import createExternal from "vite-plugin-external";
 import { createHtmlPlugin } from "vite-plugin-html";
 import { resolve } from "path";
 import {
@@ -37,10 +37,12 @@ export default defineConfig({
         rollupOptions: {
             external: ["vue", "vuex", "vue-router"],
             plugins: [
-                externalGlobals({
-                    vue: "Vue",
-                    vuex: "Vuex",
-                    "vue-router": "VueRouter",
+                createExternal({
+                    externals: {
+                        vue: "Vue",
+                        vuex: "Vuex",
+                        "vue-router": "VueRouter",
+                    },
                 }),
             ],
         },

@@ -8,10 +8,10 @@ specifiers:
   eslint: ^8.16.0
   eslint-plugin-vue: ^9.0.1
   pinia: ^2.0.14
-  rollup-plugin-external-globals: ^0.6.1
   sass: ^1.49.11
   typescript: ^4.7.2
   vite: ^2.9.0
+  vite-plugin-external: ^1.2.3
   vite-plugin-html: ^3.2.0
   vue: ^3.2.25
   vue-router: ^4.0.14
@@ -31,10 +31,10 @@ devDependencies:
   '@vitejs/plugin-vue': 2.3.3_vite@2.9.9+vue@3.2.36
   eslint: 8.17.0
   eslint-plugin-vue: 9.1.0_eslint@8.17.0
-  rollup-plugin-external-globals: 0.6.1
   sass: 1.52.2
   typescript: 4.7.3
   vite: 2.9.9_sass@1.52.2
+  vite-plugin-external: 1.2.3
   vite-plugin-html: 3.2.0_vite@2.9.9
   vue-tsc: 0.34.17_typescript@4.7.3
 
@@ -154,10 +154,6 @@ packages:
     dependencies:
       estree-walker: 2.0.2
       picomatch: 2.3.1
-    dev: true
-
-  /@types/estree/0.0.51:
-    resolution: {integrity: sha512-CuPgU6f3eT/XgKKPqKd/gLZV1Xmvf1a2R5POBOGQa6uv82xpls89HU5zKeVoyR8XzHd1RGNOlQlvUe3CFkjWNQ==}
     dev: true
 
   /@types/json-schema/7.0.11:
@@ -1287,12 +1283,6 @@ packages:
     engines: {node: '>=0.12.0'}
     dev: true
 
-  /is-reference/1.2.1:
-    resolution: {integrity: sha512-U82MsXXiFIrjCK4otLT+o2NA2Cd2g5MLoOVXUZjIOhLurrRxpEXzI8O0KZHr3IjLvlAH1kTPYSuqer5T9ZVBKQ==}
-    dependencies:
-      '@types/estree': 0.0.51
-    dev: true
-
   /isexe/2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
     dev: true
@@ -1590,17 +1580,6 @@ packages:
       glob: 7.2.3
     dev: true
 
-  /rollup-plugin-external-globals/0.6.1:
-    resolution: {integrity: sha512-mlp3KNa5sE4Sp9UUR2rjBrxjG79OyZAh/QC18RHIjM+iYkbBwNXSo8DHRMZWtzJTrH8GxQ+SJvCTN3i14uMXIA==}
-    peerDependencies:
-      rollup: ^2.25.0
-    dependencies:
-      '@rollup/pluginutils': 4.2.1
-      estree-walker: 2.0.2
-      is-reference: 1.2.1
-      magic-string: 0.25.9
-    dev: true
-
   /rollup/2.75.5:
     resolution: {integrity: sha512-JzNlJZDison3o2mOxVmb44Oz7t74EfSd1SQrplQk0wSaXV7uLQXtVdHbxlcT3w+8tZ1TL4r/eLfc7nAbz38BBA==}
     engines: {node: '>=10.0.0'}
@@ -1770,6 +1749,12 @@ packages:
 
   /v8-compile-cache/2.3.0:
     resolution: {integrity: sha512-l8lCEmLcLYZh4nbunNZvQCJc5pv7+RCwa8q/LdUx8u7lsWvPDKmpodJAJNwkAhJC//dFY48KuIEmjtd4RViDrA==}
+    dev: true
+
+  /vite-plugin-external/1.2.3:
+    resolution: {integrity: sha512-NCVDWVY7J/t8Z6/au5fqY+lDIMfv0CFayyO2OaJFnVCB0PVH8qh+b99Zq2BarS3/cRLdZLCzjlhqzLfc60OkSg==}
+    dependencies:
+      fs-extra: 10.1.0
     dev: true
 
   /vite-plugin-html/3.2.0_vite@2.9.9:

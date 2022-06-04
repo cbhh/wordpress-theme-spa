@@ -59,8 +59,9 @@ const sidebarClass = computed(() => {
     background-repeat: repeat;
     background-position: center;
     background-size: 75%;
-    @include has-single-pseudo-el(after, "");
+    position: relative;
     &::after {
+        position: absolute;
         height: 100%;
         width: 10px;
         top: -5px;
