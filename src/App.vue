@@ -1,10 +1,12 @@
-<script setup lang="ts">
+<script
+    setup
+    lang="ts"
+>
 import { provide, readonly, onMounted, computed, ref, watch } from "vue";
 import { appUseStore } from "./store";
 import { RouterView, useRoute, useRouter } from "vue-router";
 import getTags from "./composables/init/getTags";
 import getSettings from "./composables/init/getSettings";
-import getCategories from "./composables/init/getCategories";
 import getUsers from "./composables/init/getUsers";
 import getMonthPostDates from "./composables/getMonthPostDates";
 import SiteHeader from "./components/layout/header/SiteHeader.vue";
@@ -27,17 +29,18 @@ import {
     SidebarPosition,
     SidebarItemFeature,
 } from "./components/props";
+import stores from "./stores";
 
 const { tagList, getTagList } = getTags(),
     { siteMeta, getSiteSettings } = getSettings(),
-    { categoryList, getCategoryList } = getCategories(),
     { userList, getUserList } = getUsers(),
     { dateList, getDates } = getMonthPostDates(),
     { backToTopVisible, switchBackToTopVisible } = backToTopComposable();
 //初始化store和router
 const store = appUseStore(),
-    route = useRoute(),
-    router = useRouter();
+    route = useRoute();
+const { useCategoryStore } = stores,
+    categoryStore = useCategoryStore();
 /**
  * 数据加载状态，显示在loading组件中
  */
@@ -57,7 +60,11 @@ const dataLoadingText = ref(""),
     /**
      * 当前landing组件类型
      */
-    landingType = ref<NoHomeLandingType | "home">("home");
+    landingType = ref<NoHomeLandingType | "home">("home"),
+    /**
+     * 树形目录数据
+     */
+    hCatData = ref([]);
 /**
  * 当前选用的着陆页组件
  */
@@ -73,15 +80,10 @@ const currentLandingComponent = computed(() => {
         }
     }),
     /**
-     * 层次型分类列表，由wordpress api返回的扁平型列表计算得出
-     */
-    hierarchicCategoryList = computed(
-        () => store.state.categoryModule.hierarchicCategoryList
-    ),
-    /**
      * 面包屑导航（除了"首页"以外的部分）列表
      */
     breadcrumbNavList = computed(() => store.state.breadcrumbModule.list);
+//catTree = computed(() => categoryStore.catTree);
 //站点设置信息注入，方便后代组件访问
 provide("site-meta", readonly(siteMeta));
 //侦听一个getter
@@ -108,7 +110,7 @@ watch(
         if (n === 4 && o < 4) {
             dataLoadingText.value = "即将跳转至首页";
             setTimeout(() => {
-                router.push({ name: "home" });
+                //router.push({ name: "home" });
                 loadingMaskRequired.value = false;
             }, 1000);
         }
@@ -128,9 +130,10 @@ onMounted(() => {
         dataLoadingText.value = "站点设置准备完成";
         dataLoadingCompletedItem.value += 1;
     });
-    //加载分类列表并存储进vuex
-    getCategoryList().then(() => {
-        store.commit("categoryModule/storeCategoryList", categoryList.value);
+    //调用state中的加载分类列表action
+    categoryStore.getCategorylist().then(() => {
+        //直接给组件传递store里的数据组件不会自动更新，所以定义一个ref来接收这个数据再把ref传递给组件
+        hCatData.value = categoryStore.hierarchicCategoryList as never;
         dataLoadingText.value = "分类列表准备完成";
         dataLoadingCompletedItem.value += 1;
     });
@@ -170,9 +173,7 @@ onMounted(() => {
         <SitePrimaryMaskTop />
         <div class="primary-content">
             <div class="site-content">
-                <SitePrimaryBreadcrumb
-                    :list="breadcrumbNavList"
-                />
+                <SitePrimaryBreadcrumb :list="breadcrumbNavList" />
                 <main>
                     <RouterView />
                 </main>
@@ -186,7 +187,7 @@ onMounted(() => {
                         title="分类"
                         :feature="SidebarItemFeature['post-categories']"
                     >
-                        <Category :list="hierarchicCategoryList" />
+                        <Category :list="hCatData" />
                     </SiteSidebarItem>
                 </template>
             </SiteSidebar>
