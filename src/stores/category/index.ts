@@ -135,9 +135,12 @@ export default defineStore("category", {
             };
             for (const item of hierarchic) {
                 gather(item);
-                this.hierarchicCategoryList.push(item);
             }
+            this.hierarchicCategoryList = hierarchic;
         },
+        /**
+         * 获取扁平category列表
+         */
         async getCategorylist () {
             const res = await getCategoryList();
             if (res) {
