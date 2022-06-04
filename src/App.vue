@@ -9,9 +9,10 @@ import Category from "./components/layout/sidebar/modules/Category.vue";
 import Tag from "./components/layout/sidebar/modules/Tag.vue";
 import Layout from "./components/layout/layout.vue";
 
-const { useCategoryStore, useTagStore } = stores,
+const { useCategoryStore, useTagStore, useUserStore } = stores,
     categoryStore = useCategoryStore(),
     tagStore = useTagStore(),
+    userStore = useUserStore(),
     router = useRouter();
 
 const flag = ref(0);
@@ -19,7 +20,7 @@ const flag = ref(0);
 watch(
     () => flag.value,
     (n, o) => {
-        if (n === 2 && o < 2) {
+        if (n === 3 && o < 3) {
             router.push({ name: "home" });
         }
     }
@@ -32,6 +33,10 @@ onMounted(() => {
     });
     //调用state中的加载tag列表action
     tagStore.getTagList().then(() => {
+        flag.value += 1;
+    });
+    //调用state中的加载user列表action
+    userStore.getUserlist().then(() => {
         flag.value += 1;
     });
 });
