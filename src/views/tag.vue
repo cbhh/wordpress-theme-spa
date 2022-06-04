@@ -1,17 +1,19 @@
-<script setup lang="ts">
+<script
+    setup
+    lang="ts"
+>
 import PostList from "../components/layout/content/PostList.vue";
 import ThemeLoading from "../components/common/ThemeLoading.vue";
-import { onMounted, ref, computed, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
-import { appUseStore } from "@/store";
+import stores from "@/stores";
 import generatePostList from "../composables/generatePostList";
 import getPostList from "@/apis/getPostList";
 
 const route = useRoute(),
-    store = appUseStore();
-
-const allCategories = computed(() => store.state.categoryModule.categoryList),
-    allTags = computed(() => store.state.tagModule.tagList);
+    { useTagStore, useCategoryStore } = stores,
+    tagStore = useTagStore(),
+    categoryStore = useCategoryStore();
 
 const { postList, generateList } = generatePostList();
 
@@ -20,22 +22,20 @@ const renderTimes = ref(0),
     dataLoadingText = ref("");
 
 const renderView = function (currentTagSlug: string) {
-    const currentTag = allTags.value.find((t) => t.slug === currentTagSlug);
+    const currentTag = tagStore.getTagDetailBySlug(currentTagSlug);
     if (currentTag) {
         const currentTagId = currentTag.id;
         loadingMaskRequired.value = true;
         dataLoadingText.value = `正在加载标签【${currentTag.name}】`;
-        //landing组件
-        store.commit("pageMetaModule/setPageMeta", {
-            title: "标签：" + currentTag.name,
-            time: "",
-            background: "",
-        });
         //查找当前标签下所有post
         getPostList({ tags: [currentTagId] }).then(function (data) {
             if (data) {
                 postList.value = [];
-                generateList(allCategories.value, allTags.value, data.result);
+                generateList(
+                    categoryStore.categoryList,
+                    tagStore.tagList,
+                    data.result
+                );
                 dataLoadingText.value = `标签【${
                     currentTag && currentTag.name
                 }】加载成功`;
@@ -56,7 +56,6 @@ watch(
 );
 
 onMounted(() => {
-    store.commit("breadcrumbModule/setBreadcrumbNav", []);
     renderView(route.params["tag"].toString());
 });
 </script>
