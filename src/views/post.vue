@@ -1,14 +1,9 @@
-<script setup lang="ts">
-import {
-    ref,
-    onMounted,
-    computed,
-    reactive,
-    onUnmounted,
-    watch,
-    nextTick,
-} from "vue";
-import { appUseStore } from "@/store";
+<script
+    setup
+    lang="ts"
+>
+import { ref, onMounted, reactive, onUnmounted, watch, nextTick } from "vue";
+import stores from "@/stores";
 import { useRoute } from "vue-router";
 import PostTagList from "@/components/layout/content/PostTagList.vue";
 import PostAuthor from "@/components/layout/content/PostAuthor.vue";
@@ -19,18 +14,19 @@ import catalogComposable from "@/widgets/post-catalog/composable";
 import Gallery from "@/widgets/post-gallery/Gallery.vue";
 import galleryComposable from "@/widgets/post-gallery/composable";
 import getAncestorCategories from "@/composables/getAncestorCategories";
-import { PostDetailTagItemType } from "@/components/props";
+import { PostDetailTagItemType, PostDetaiAuthorType } from "@/components/props";
 import windowScroll from "@/global/windowScroll";
 import getPostDetail from "@/apis/getPostDetail";
 
 const route = useRoute(),
-    store = appUseStore();
+    { useTagStore, useCategoryStore, useUserStore } = stores,
+    tagStore = useTagStore(),
+    categoryStore = useCategoryStore(),
+    userStore = useUserStore();
 
-const allCategories = computed(() => store.state.categoryModule.categoryList),
-    allTags = computed(() => store.state.tagModule.tagList),
-    allUsers = computed(() => store.state.userModule.userList);
-
-const { ancestors, getParent } = getAncestorCategories(allCategories.value);
+const { ancestors, getParent } = getAncestorCategories(
+    categoryStore.categoryList
+);
 const {
     catalogList,
     catalogRequired,
@@ -54,11 +50,11 @@ const renderTimes = ref(0),
     content = ref<HTMLDivElement>(),
     contentHtml = ref(""),
     tagList = ref<PostDetailTagItemType[]>([]),
-    authorMeta = reactive({
+    authorMeta = reactive<PostDetaiAuthorType>({
         name: "",
-        avatar: "",
         id: 0,
         description: "",
+        avatar: "",
     }),
     loadingMaskRequired = ref(true),
     dataLoadingText = ref("");
@@ -73,41 +69,17 @@ const renderView = function (currentPostId: number) {
         .then(function (data) {
             if (data) {
                 contentHtml.value = data.content.rendered;
-                //landing组件
-                store.commit("pageMetaModule/setPageMeta", {
-                    title: data.title.rendered,
-                    time: data.date,
-                    background: data.featured_image_url || "",
-                });
                 //PostTagList组件
                 tagList.value = data.tags.map(function (t) {
-                    const tagMeta = allTags.value.find((v) => v.id === t);
+                    const tagMeta = tagStore.getTagDetailById(t);
                     return {
                         id: t,
                         slug: (tagMeta && tagMeta.slug) || "",
                         name: (tagMeta && tagMeta.name) || "",
                     };
                 });
-                //面包屑导航：递归查找父级分类，直到父级分类为0，即达到顶层分类
-                //如果有多个分类，则只显示最后一个分类
-                const currentCatId =
-                        data.categories[data.categories.length - 1],
-                    currentCat = allCategories.value.find(
-                        (c) => c.id === currentCatId
-                    );
-                if (currentCat) {
-                    ancestors.value = [];
-                    ancestors.value.push(currentCat);
-                    getParent(currentCat);
-                    store.commit(
-                        "breadcrumbModule/setBreadcrumbNav",
-                        ancestors.value
-                    );
-                }
                 //PostAuthor组件
-                const currentAuthor = allUsers.value.find(
-                    (a) => a.id === data.author
-                );
+                const currentAuthor = userStore.getUserDetailById(data.author);
                 if (currentAuthor) {
                     authorMeta.avatar = currentAuthor.avatar_urls["96"];
                     authorMeta.description = currentAuthor.description;
@@ -146,7 +118,6 @@ onMounted(() => {
     windowScroll.addHandle("catalog-move", null, switchCurrentCatalogItem);
 });
 onUnmounted(() => {
-    store.commit("breadcrumbModule/setBreadcrumbNav", []);
     //移除更新目录的窗口滚动事件处理器
     windowScroll.deleteHandle("catalog-move");
 });
@@ -211,7 +182,10 @@ onUnmounted(() => {
     />
 </template>
 
-<style lang="scss" scoped>
+<style
+    lang="scss"
+    scoped
+>
 @import "@sty/mixin.scss";
 @import "@sty/variable.scss";
 .post {

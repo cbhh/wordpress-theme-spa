@@ -91,6 +91,15 @@ export interface PostDetailTagItemType {
     divider?: boolean;
 }
 /**
+ *（文章详情中的）文章作者
+ */
+export interface PostDetaiAuthorType {
+    name: string;
+    avatar: string;
+    id: number;
+    description: string;
+}
+/**
  * 面包屑（分类）导航项
  */
 export interface BreadcrumbItemType {
