@@ -10,8 +10,7 @@
     "dependencies": {
         "pinia": "^2.0.14",
         "vue": "^3.2.25",
-        "vue-router": "^4.0.14",
-        "vuex": "^4.0.2"
+        "vue-router": "^4.0.14"
     },
     "devDependencies": {
         "@types/node": "^17.0.33",
@@ -20,11 +19,12 @@
         "@vitejs/plugin-vue": "^2.3.0",
         "eslint": "^8.16.0",
         "eslint-plugin-vue": "^9.0.1",
+        "rollup": "2.25.0",
+        "rollup-plugin-external-globals": "^0.6.1",
         "sass": "^1.49.11",
         "typescript": "^4.7.2",
         "vite": "^2.9.0",
-        "vite-plugin-external": "^1.2.3",
         "vite-plugin-html": "^3.2.0",
-        "vue-tsc": "^0.34.15"
+        "vue-tsc": "^0.36.1"
     }
 }

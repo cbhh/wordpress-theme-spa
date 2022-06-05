@@ -77,11 +77,12 @@ export function generateSiteLink() {
 export function loadExternalDependencies() {
     if (process.env.NODE_ENV === "production") {
         var prefix = `<script src='${cdnPrefix}`,
-            suffix = ".global.prod.min.js'></script>";
+            suffix = ".min.js'></script>";
         return [
-            `${prefix}vue/3.2.25/vue.runtime${suffix}`,
-            `${prefix}vue-router/4.0.14/vue-router${suffix}`,
-            `${prefix}vuex/4.0.2/vuex${suffix}`,
+            `${prefix}vue/3.2.25/vue.runtime.global.prod${suffix}`,
+            `${prefix}vue-router/4.0.14/vue-router.global.prod${suffix}`,
+            `${prefix}vue-demi/0.13.1/index.iife${suffix}`,
+            `${prefix}pinia/2.0.14/pinia.iife.prod${suffix}`,
         ].join("");
     } else return "";
 }

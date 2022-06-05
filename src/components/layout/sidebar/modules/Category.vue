@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import CategoryItem from "./CategoryItem.vue";
-import { CategoryTree } from "@/store/modules/category/i";
+import { CategoryTree } from "@/stores/category/i";
 
 interface T {
     list: CategoryTree[];

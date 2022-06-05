@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TagItem from "./TagItem.vue";
-import { TagListItemWithSize } from "@/store/modules/tag/i";
+import { TagListItemWithSize } from "@/stores/tag/i";
 
 interface T {
     list: TagListItemWithSize[];

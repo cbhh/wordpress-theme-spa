@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import createExternal from "vite-plugin-external";
+import externalGlobals from "rollup-plugin-external-globals";
 import { createHtmlPlugin } from "vite-plugin-html";
 import { resolve } from "path";
 import {
@@ -12,7 +12,7 @@ import {
     loadMoreScripts,
 } from "./generateHead";
 
-const appVersion = ["dev-0.21", "20220531"];
+const appVersion = ["dev-0.3", "20220605"];
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -35,14 +35,12 @@ export default defineConfig({
     ],
     build: {
         rollupOptions: {
-            external: ["vue", "vuex", "vue-router"],
+            external: ["vue", "pinia", "vue-router"],
             plugins: [
-                createExternal({
-                    externals: {
-                        vue: "Vue",
-                        vuex: "Vuex",
-                        "vue-router": "VueRouter",
-                    },
+                externalGlobals({
+                    vue: "Vue",
+                    pinia: "Pinia",
+                    "vue-router": "VueRouter",
                 }),
             ],
         },
