@@ -12,7 +12,7 @@
 
 1. 在[仓库首页](https://github.com/cbhh/wordpress-theme-spa)克隆仓库，或直接下载 zip 压缩包至本地。
 
-2. 在项目根目录运行 `npm install` 来安装 NPM 依赖包。请注意：本项目采用[vite](https://cn.vitejs.dev)打包构建，需要 Node.js 在 12.0.0 版本以上。
+2. 在项目根目录运行 `npm install` 或 `pnpm install` 来安装 NPM 依赖包。请注意：本项目采用[vite](https://cn.vitejs.dev)打包构建，需要 Node.js 在 12.0.0 版本以上。
 
 3. 按照提示填写配置文件 `app.config.sample.js`，该文件位于项目根目录，完成后需要将该文件名称改为 `app.config.js`。或者单独创建一个名为 `app.config.js` 的文件用来填写真实的配置信息。
 
@@ -56,3 +56,7 @@ typescript 重构完成。
 
     1. 控制台输出应用程序版本号。
     2. 该版本以优化及代码规范为主。
+
+### dev-0.3(2022-06-05)
+
+pinia 重构完成。
