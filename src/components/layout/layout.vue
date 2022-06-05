@@ -5,7 +5,6 @@
 import SiteHeader from "./header/SiteHeader.vue";
 import SiteFooter from "./footer/SiteFooter.vue";
 import SitePrimaryMaskTop from "./primary/SitePrimaryMaskTop.vue";
-import SitePrimaryBreadcrumb from "./primary/SitePrimaryBreadcrumb.vue";
 import SiteSidebar from "./sidebar/SiteSidebar.vue";
 import SiteSidebarItem from "./sidebar/SiteSidebarItem.vue";
 import {
@@ -21,7 +20,7 @@ import {
         <SitePrimaryMaskTop />
         <div class="primary-content">
             <div class="site-content">
-                <SitePrimaryBreadcrumb />
+                <slot name="breadcrumb-nav" />
                 <main>
                     <slot name="view" />
                 </main>

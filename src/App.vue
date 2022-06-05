@@ -7,12 +7,14 @@ import { onMounted, ref, watch } from "vue";
 import { useRouter, RouterView } from "vue-router";
 import Category from "./components/layout/sidebar/modules/Category.vue";
 import Tag from "./components/layout/sidebar/modules/Tag.vue";
+import SitePrimaryBreadcrumb from "./components/layout/primary/SitePrimaryBreadcrumb.vue";
 import Layout from "./components/layout/layout.vue";
 
-const { useCategoryStore, useTagStore, useUserStore } = stores,
+const { useCategoryStore, useTagStore, useUserStore, useBreadcrumbStore } = stores,
     categoryStore = useCategoryStore(),
     tagStore = useTagStore(),
     userStore = useUserStore(),
+    breadcrumbStore = useBreadcrumbStore(),
     router = useRouter();
 
 const flag = ref(0);
@@ -44,6 +46,9 @@ onMounted(() => {
 
 <template>
     <Layout>
+        <template #breadcrumb-nav>
+            <SitePrimaryBreadcrumb :list="breadcrumbStore.list" />
+        </template>
         <template #view>
             <RouterView />
         </template>

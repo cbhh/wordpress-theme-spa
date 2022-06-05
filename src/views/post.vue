@@ -19,10 +19,12 @@ import windowScroll from "@/global/windowScroll";
 import getPostDetail from "@/apis/getPostDetail";
 
 const route = useRoute(),
-    { useTagStore, useCategoryStore, useUserStore } = stores,
+    { useTagStore, useCategoryStore, useUserStore, useBreadcrumbStore } =
+        stores,
     tagStore = useTagStore(),
     categoryStore = useCategoryStore(),
-    userStore = useUserStore();
+    userStore = useUserStore(),
+    breadcrumbStore = useBreadcrumbStore();
 
 const { ancestors, getParent } = getAncestorCategories(
     categoryStore.categoryList
@@ -69,6 +71,18 @@ const renderView = function (currentPostId: number) {
         .then(function (data) {
             if (data) {
                 contentHtml.value = data.content.rendered;
+                //breadcrumb nav：递归查找父级分类，直到父级分类为0，即达到顶层分类
+                //多个category时只选取最后一个
+                const currentCatId =
+                        data.categories[data.categories.length - 1],
+                    currentCat =
+                        categoryStore.getCategoryDetailById(currentCatId);
+                if (currentCat) {
+                    ancestors.value = [];
+                    ancestors.value.push(currentCat);
+                    getParent(currentCat);
+                    breadcrumbStore.storeBreadcrumbList(ancestors.value);
+                }
                 //PostTagList组件
                 tagList.value = data.tags.map(function (t) {
                     const tagMeta = tagStore.getTagDetailById(t);
@@ -120,6 +134,7 @@ onMounted(() => {
 onUnmounted(() => {
     //移除更新目录的窗口滚动事件处理器
     windowScroll.deleteHandle("catalog-move");
+    breadcrumbStore.storeBreadcrumbList([]);
 });
 </script>
 
