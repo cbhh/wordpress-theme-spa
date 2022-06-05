@@ -11,9 +11,10 @@ import generatePostList from "../composables/generatePostList";
 import getPostList from "@/apis/getPostList";
 
 const route = useRoute(),
-    { useTagStore, useCategoryStore } = stores,
+    { useTagStore, useCategoryStore, usePageMetaStore } = stores,
     tagStore = useTagStore(),
-    categoryStore = useCategoryStore();
+    categoryStore = useCategoryStore(),
+    pageMetaStore = usePageMetaStore();
 
 const { postList, generateList } = generatePostList();
 
@@ -27,6 +28,10 @@ const renderView = function (currentTagSlug: string) {
         const currentTagId = currentTag.id;
         loadingMaskRequired.value = true;
         dataLoadingText.value = `正在加载标签【${currentTag.name}】`;
+        //landing组件
+        pageMetaStore.storeBreadcrumbList({
+            title: "标签：" + currentTag.name,
+        });
         //查找当前标签下所有post
         getPostList({ tags: [currentTagId] }).then(function (data) {
             if (data) {

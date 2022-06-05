@@ -2,8 +2,15 @@ import { reactive } from "vue";
 import wpAppConfig from "@wpAppConfig";
 import getSiteSettings from "@/apis/getSiteSettings";
 
+interface SiteMeta {
+    title: string;
+    logo: string;
+    description: string;
+    home: string;
+}
+
 export default function () {
-    const siteMeta = reactive({
+    const siteMeta = reactive<SiteMeta>({
         title: "",
         logo: wpAppConfig.siteLogo,
         description: "",

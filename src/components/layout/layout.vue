@@ -2,20 +2,47 @@
     lang="ts"
     setup
 >
+import { computed } from "vue";
 import SiteHeader from "./header/SiteHeader.vue";
 import SiteFooter from "./footer/SiteFooter.vue";
 import SitePrimaryMaskTop from "./primary/SitePrimaryMaskTop.vue";
 import SiteSidebar from "./sidebar/SiteSidebar.vue";
 import SiteSidebarItem from "./sidebar/SiteSidebarItem.vue";
+import HomeLanding from "./landing/HomeLanding.vue";
+import PostArchiveLanding from "./landing/PostArchiveLanding.vue";
 import {
     SidebarItemFeature,
     SidebarPosition,
+    LandingType,
 } from "../props";
 
+const props = withDefaults(
+    defineProps<{ landingType?: LandingType }>(),
+    {
+        landingType: LandingType.home,
+    }
+);
+const landingComponent = computed(() => {
+    switch (props.landingType) {
+    case LandingType.home:
+        return HomeLanding;
+    case LandingType.post:
+    case LandingType.archive:
+        return PostArchiveLanding;
+    default:
+        return null;
+    }
+});
 </script>
 
 <template>
-    <!-- <SiteHeader /> -->
+    <SiteHeader />
+    <KeepAlive>
+        <Component
+            :is="landingComponent"
+            :landing-type="props.landingType"
+        />
+    </KeepAlive>
     <div id="primary">
         <SitePrimaryMaskTop />
         <div class="primary-content">
@@ -59,7 +86,7 @@ import {
             </SiteSidebar>
         </div>
     </div>
-    <!-- <SiteFooter /> -->
+    <SiteFooter />
 </template>
 
 <style lang="scss">

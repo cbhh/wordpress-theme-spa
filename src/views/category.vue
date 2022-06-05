@@ -13,10 +13,11 @@ import generatePostList from "../composables/generatePostList";
 import getPostList from "@/apis/getPostList";
 
 const route = useRoute(),
-    { useTagStore, useCategoryStore, useBreadcrumbStore } = stores,
+    { useTagStore, useCategoryStore, useBreadcrumbStore, usePageMetaStore } = stores,
     tagStore = useTagStore(),
     categoryStore = useCategoryStore(),
-    breadcrumbStore = useBreadcrumbStore();
+    breadcrumbStore = useBreadcrumbStore(),
+    pageMetaStore = usePageMetaStore();
 
 const { ancestors, getParent } = getAncestorCategories(
         categoryStore.categoryList
@@ -36,6 +37,10 @@ const renderView = function (currentCatSlug: string) {
         const currentCatId = currentCat.id;
         loadingMaskRequired.value = true;
         dataLoadingText.value = `正在加载分类【${currentCat.name}】`;
+        //landing组件
+        pageMetaStore.storeBreadcrumbList({
+            title: "分类：" + currentCat.name,
+        });
         //breadcrumb nav：递归查找父级分类，直到父级分类为0，即达到顶层分类
         ancestors.value = [];
         ancestors.value.push(currentCat);

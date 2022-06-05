@@ -19,12 +19,18 @@ import windowScroll from "@/global/windowScroll";
 import getPostDetail from "@/apis/getPostDetail";
 
 const route = useRoute(),
-    { useTagStore, useCategoryStore, useUserStore, useBreadcrumbStore } =
-        stores,
+    {
+        useTagStore,
+        useCategoryStore,
+        useUserStore,
+        useBreadcrumbStore,
+        usePageMetaStore,
+    } = stores,
     tagStore = useTagStore(),
     categoryStore = useCategoryStore(),
     userStore = useUserStore(),
-    breadcrumbStore = useBreadcrumbStore();
+    breadcrumbStore = useBreadcrumbStore(),
+    pageMetaStore = usePageMetaStore();
 
 const { ancestors, getParent } = getAncestorCategories(
     categoryStore.categoryList
@@ -71,6 +77,12 @@ const renderView = function (currentPostId: number) {
         .then(function (data) {
             if (data) {
                 contentHtml.value = data.content.rendered;
+                //landing组件
+                pageMetaStore.storeBreadcrumbList({
+                    title: data.title.rendered,
+                    time: data.date,
+                    background: data.featured_image_url || "",
+                });
                 //breadcrumb nav：递归查找父级分类，直到父级分类为0，即达到顶层分类
                 //多个category时只选取最后一个
                 const currentCatId =

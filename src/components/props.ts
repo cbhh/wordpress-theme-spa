@@ -117,11 +117,12 @@ export interface BreadcrumbItemType {
     name: string;
 }
 /**
- * 非home的landing组件类型
+ * landing组件类型
  */
-export enum NoHomeLandingType {
+export enum LandingType {
+    home,
     post,
-    archive,
+    archive
 }
 /**
  * sidebar组件位置

@@ -1,27 +1,29 @@
-<script setup lang="ts">
-import { appUseStore } from "@/store";
+<script
+    setup
+    lang="ts"
+>
+import stores from "@/stores";
 import { computed } from "vue";
 import { convertDateFormat } from "@/utils/date";
-import { NoHomeLandingType } from "@/components/props";
+import { LandingType } from "@/components/props";
 
-interface T {
-    landingType: NoHomeLandingType;
-}
+const props = withDefaults(
+    defineProps<{
+        landingType: LandingType;
+    }>(),
+    {
+        landingType: LandingType.post,
+    }
+);
 
-const props = withDefaults(defineProps<T>(), {
-    landingType: NoHomeLandingType.post,
-});
+const { usePageMetaStore } = stores,
+    pageMetaStore = usePageMetaStore();
 
-const store = appUseStore();
-
-const background = computed(() => store.state.pageMetaModule.background),
-    title = computed(() => store.state.pageMetaModule.title),
-    time = computed(() => store.state.pageMetaModule.time);
 const className = computed(() => {
     switch (props.landingType) {
-    case NoHomeLandingType.post:
+    case LandingType.post:
         return "post-landing";
-    case NoHomeLandingType.archive:
+    case LandingType.archive:
         return "archive-landing";
     default:
         return "";
@@ -32,10 +34,10 @@ const className = computed(() => {
 <template>
     <div
         :class="className"
-        :style="{ 'background-image': 'url(' + background + ')' }"
+        :style="{ 'background-image': 'url(' + pageMetaStore.background + ')' }"
     >
         <div class="info">
-            <h1>{{ title }}</h1>
+            <h1>{{ pageMetaStore.title }}</h1>
             <div
                 class="middle-separate-line"
                 v-if="className === 'post-landing'"
@@ -45,10 +47,14 @@ const className = computed(() => {
                 <div />
             </div>
             <time
-                :datetime="time"
+                :datetime="pageMetaStore.time"
                 v-if="className === 'post-landing'"
             >
-                {{ time ? convertDateFormat(time) : "" }}
+                {{
+                    pageMetaStore.time
+                        ? convertDateFormat(pageMetaStore.time)
+                        : ""
+                }}
             </time>
             <div class="block-corner-deco">
                 <span class="tl">❊</span>
@@ -66,7 +72,10 @@ const className = computed(() => {
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style
+    lang="scss"
+    scoped
+>
 @import "@sty/mixin.scss";
 @import "@sty/variable.scss";
 .post-landing {

@@ -3,49 +3,52 @@
     lang="ts"
 >
 import stores from "./stores";
-import { onMounted, ref, watch } from "vue";
-import { useRouter, RouterView } from "vue-router";
+import { onMounted, provide, readonly } from "vue";
+import { useRouter, RouterView, useRoute } from "vue-router";
 import Category from "./components/layout/sidebar/modules/Category.vue";
 import Tag from "./components/layout/sidebar/modules/Tag.vue";
 import SitePrimaryBreadcrumb from "./components/layout/primary/SitePrimaryBreadcrumb.vue";
 import Layout from "./components/layout/layout.vue";
+import useRouteListener from "./composables/init/useRouteListener";
+import getSettings from "./composables/init/getSettings";
 
-const { useCategoryStore, useTagStore, useUserStore, useBreadcrumbStore } = stores,
+const { useCategoryStore, useTagStore, useUserStore, useBreadcrumbStore } =
+        stores,
     categoryStore = useCategoryStore(),
     tagStore = useTagStore(),
     userStore = useUserStore(),
     breadcrumbStore = useBreadcrumbStore(),
-    router = useRouter();
+    router = useRouter(),
+    route = useRoute();
 
-const flag = ref(0);
+const { loadingFlag, landingType } = useRouteListener(route, router, 4),
+    { siteMeta, getSiteSettings } = getSettings();
 
-watch(
-    () => flag.value,
-    (n, o) => {
-        if (n === 3 && o < 3) {
-            router.push({ name: "home" });
-        }
-    }
-);
+//注入site meta数据
+provide("site-meta", readonly(siteMeta));
 
 onMounted(() => {
+    //加载站点设置
+    getSiteSettings().then(() => {
+        loadingFlag.value += 1;
+    });
     //调用state中的加载category列表action
     categoryStore.getCategorylist().then(() => {
-        flag.value += 1;
+        loadingFlag.value += 1;
     });
     //调用state中的加载tag列表action
     tagStore.getTagList().then(() => {
-        flag.value += 1;
+        loadingFlag.value += 1;
     });
     //调用state中的加载user列表action
     userStore.getUserlist().then(() => {
-        flag.value += 1;
+        loadingFlag.value += 1;
     });
 });
 </script>
 
 <template>
-    <Layout>
+    <Layout :landing-type="landingType">
         <template #breadcrumb-nav>
             <SitePrimaryBreadcrumb :list="breadcrumbStore.list" />
         </template>

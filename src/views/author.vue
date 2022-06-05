@@ -11,10 +11,11 @@ import generatePostList from "../composables/generatePostList";
 import getPostList from "@/apis/getPostList";
 
 const route = useRoute(),
-    { useTagStore, useCategoryStore, useUserStore } = stores,
+    { useTagStore, useCategoryStore, useUserStore, usePageMetaStore } = stores,
     tagStore = useTagStore(),
     categoryStore = useCategoryStore(),
-    userStore = useUserStore();
+    userStore = useUserStore(),
+    pageMetaStore = usePageMetaStore();
 
 const { postList, generateList } = generatePostList();
 
@@ -27,6 +28,10 @@ const renderView = function (currentUserId: number) {
     if (currentUser) {
         loadingMaskRequired.value = true;
         dataLoadingText.value = `正在加载作者【${currentUser.name}】`;
+        //landing组件
+        pageMetaStore.storeBreadcrumbList({
+            title: "作者：" + currentUser.name,
+        });
         //查找当前作者下所有post
         getPostList({ author: currentUserId }).then(function (data) {
             if (data) {
