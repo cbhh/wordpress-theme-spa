@@ -13,20 +13,20 @@ export default function (
     router: Router,
     resourceCount: number
 ) {
-    /**
-     * 资源加载标志，每加载完成一个资源将其+1
-     */
     const loadingFlag = ref(0),
-        /**
-         * landing组件类型
-         */
+        loadingMaskRequired = ref(true),
+        loadingText = ref("正在加载站点数据"),
         landingType = ref<LandingType>(LandingType.home);
     //加载完数据跳转至首页
     watch(
         () => loadingFlag.value,
         (n, o) => {
             if (n === resourceCount && o < resourceCount) {
-                router.push({ name: "home" });
+                loadingText.value = "即将跳转至首页";
+                setTimeout(() => {
+                    router.push({ name: "home" });
+                    loadingMaskRequired.value = false;
+                }, 1000);
             }
         }
     );
@@ -50,6 +50,14 @@ export default function (
          * 资源加载标志，每加载完成一个资源将其+1
          */
         loadingFlag,
+        /**
+         * 资源加载信息
+         */
+        loadingText,
+        /**
+         * 加载遮罩层是否需要
+         */
+        loadingMaskRequired,
         /**
          * landing组件类型
          */
