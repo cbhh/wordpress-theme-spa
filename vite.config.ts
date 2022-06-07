@@ -43,7 +43,13 @@ export default defineConfig({
                     "vue-router": "VueRouter",
                 }),
             ],
+            output: {
+                chunkFileNames: "js/[hash].js",
+                entryFileNames: "js/[hash].js",
+                assetFileNames: "[ext]/[hash].[ext]"
+            },
         },
+        cssCodeSplit: false,
     },
     resolve: {
         alias: {
