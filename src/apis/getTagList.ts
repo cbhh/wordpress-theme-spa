@@ -1,6 +1,6 @@
 import appFetch from "@/utils/appFetch";
 import wpAppConfig from "@wpAppConfig";
-import TagListResponse from "@/context/tag-list/tagListResponse";
+import { TagListResponse } from "@/context/tag-list/tagListResponse";
 
 const baseEndpoint = `tags${
     wpAppConfig.apiBackendPrettyUrlEnabled ? "?" : "&"

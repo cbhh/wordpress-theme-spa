@@ -1,8 +1,8 @@
 import wpAppConfig from "@wpAppConfig";
 import appFetch from "@/utils/appFetch";
 import PostListArguments from "@/context/post-list/postListArguments";
-import PostListResponse from "@/context/post-list/postListResponse";
-import { YearMonthDay } from "@/common/date";
+import { PostListResponse } from "@/context/post-list/postListResponse";
+import { YearMonthDay } from "@/context/common/date";
 
 const baseEndpoint = `posts${
     wpAppConfig.apiBackendPrettyUrlEnabled ? "?" : "&"

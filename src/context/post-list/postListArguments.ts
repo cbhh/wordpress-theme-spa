@@ -1,4 +1,4 @@
-import { YearMonthDay } from "@/common/date";
+import { YearMonthDay } from "../common/date";
 /**
  * 文章列表查询参数
  * @see [wordpress-rest-api-posts-args](https://developer.wordpress.org/rest-api/reference/posts/#arguments)

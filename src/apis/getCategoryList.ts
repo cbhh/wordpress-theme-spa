@@ -1,6 +1,6 @@
 import appFetch from "@/utils/appFetch";
 import wpAppConfig from "@wpAppConfig";
-import CategoryListResponse from "@/context/category-list/categoryListResponse";
+import { CategoryListResponse } from "@/context/category-list/categoryListResponse";
 
 const baseEndpoint = `categories${
     wpAppConfig.apiBackendPrettyUrlEnabled ? "?" : "&"
