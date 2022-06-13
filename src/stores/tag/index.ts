@@ -5,7 +5,7 @@ import TagStateTypes, {
     TempTagListItem,
     OriginTagListItem,
 } from "./i";
-import wpAppConfig from "@wpAppConfig";
+import { styleRuntime } from "@wpAppConfig";
 
 export default defineStore("tag", {
     state: (): TagStateTypes => ({
@@ -36,7 +36,7 @@ export default defineStore("tag", {
     actions: {
         storeTagList (data: TagListItemWithSize[]) {
             //处理data，添加size属性
-            let { min, max } = wpAppConfig.tagFontSize;
+            let { min, max } = styleRuntime.tagFontSize;
             if (min && max && max > min) {
                 if (min < 0.4) {
                     min = 0.4;

@@ -1,10 +1,10 @@
 import appFetch from "@/utils/appFetch";
-import wpAppConfig from "@wpAppConfig";
+import { api, styleRuntime } from "@wpAppConfig";
 import { TagListResponse } from "@/context/tag-list/tagListResponse";
 
 const baseEndpoint = `tags${
-    wpAppConfig.apiBackendPrettyUrlEnabled ? "?" : "&"
-}_fields=id,count,name,slug&hide_empty=${wpAppConfig.hideEmptyTag}`;
+    api.backendPrettyUrlEnabled ? "?" : "&"
+}_fields=id,count,name,slug&hide_empty=${styleRuntime.hideEmptyTag}`;
 
 /**
  * 获取tag列表

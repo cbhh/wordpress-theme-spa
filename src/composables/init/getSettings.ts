@@ -1,20 +1,14 @@
 import { reactive } from "vue";
-import wpAppConfig from "@wpAppConfig";
+import { site } from "@wpAppConfig";
 import getSiteSettings from "@/apis/getSiteSettings";
-
-interface SiteMeta {
-    title: string;
-    logo: string;
-    description: string;
-    home: string;
-}
+import { SiteMeta } from "@/context/common/provide-inject";
 
 export default function () {
     const siteMeta = reactive<SiteMeta>({
         title: "",
-        logo: wpAppConfig.siteLogo,
+        logo: site.logo,
         description: "",
-        home: wpAppConfig.siteUrl,
+        home: site.url,
     });
     const getSettings = async function () {
         const res = await getSiteSettings();

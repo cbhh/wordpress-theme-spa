@@ -1,11 +1,11 @@
 import appFetch from "@/utils/appFetch";
-import wpAppConfig from "@wpAppConfig";
+import { api, styleRuntime } from "@wpAppConfig";
 import { CategoryListResponse } from "@/context/category-list/categoryListResponse";
 
 const baseEndpoint = `categories${
-    wpAppConfig.apiBackendPrettyUrlEnabled ? "?" : "&"
+    api.backendPrettyUrlEnabled ? "?" : "&"
 }_fields=id,count,name,slug,parent&per_page=100&hide_empty=${
-    wpAppConfig.hideEmptyCategory
+    styleRuntime.hideEmptyCategory
 }`;
 
 /**

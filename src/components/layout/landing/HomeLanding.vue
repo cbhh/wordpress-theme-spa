@@ -1,7 +1,11 @@
-<script setup>
+<script
+    setup
+    lang="ts"
+>
 import { inject } from "vue";
+import { SiteMeta } from "@/context/common/provide-inject";
 
-const siteMeta = inject("site-meta");
+const siteMeta = inject("site-meta") as SiteMeta;
 </script>
 
 <template>
@@ -22,7 +26,10 @@ const siteMeta = inject("site-meta");
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style
+    lang="scss"
+    scoped
+>
 @import "@sty/mixin.scss";
 @import "@sty/variable.scss";
 .home-landing {

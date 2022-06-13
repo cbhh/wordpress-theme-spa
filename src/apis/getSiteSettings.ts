@@ -1,9 +1,9 @@
 import appFetch from "@/utils/appFetch";
-import wpAppConfig from "@wpAppConfig";
+import { api } from "@wpAppConfig";
 import SettingDetailResponse from "@/context/setting-detail/settingDetailResponse";
 
 const baseEndpoint = `settings${
-    wpAppConfig.apiBackendPrettyUrlEnabled ? "?" : "&"
+    api.backendPrettyUrlEnabled ? "?" : "&"
 }_fields=title,description,site_logo`;
 
 /**

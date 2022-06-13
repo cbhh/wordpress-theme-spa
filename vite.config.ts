@@ -55,7 +55,7 @@ export default defineConfig({
         alias: {
             "@": resolve("src"),
             "@sty": resolve("src/style"),
-            "@wpAppConfig": resolve("./app.config.js"),
+            "@wpAppConfig": resolve("./app.config.json"),
             "@ass": resolve("src/assets"),
         },
     },

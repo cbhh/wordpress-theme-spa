@@ -1,9 +1,9 @@
 import appFetch from "@/utils/appFetch";
-import wpAppConfig from "@wpAppConfig";
+import { api } from "@wpAppConfig";
 import { UserListResponse } from "@/context/user-list/userListResponse";
 
 const baseEndpoint = `users${
-    wpAppConfig.apiBackendPrettyUrlEnabled ? "?" : "&"
+    api.backendPrettyUrlEnabled ? "?" : "&"
 }_fields=id,name,description,slug,avatar_urls`;
 
 /**

@@ -1,0 +1,53 @@
+{
+    "site": {
+        "icon": "站点图标（显示在浏览器标签上）图片地址",
+        "logo": "站点LOGO（显示在页头）图片地址",
+        "url": "站点地址"
+    },
+    "api": {
+        "baseUrl": "API基准URL，例：https://api.foo.com",
+        "backendPrettyUrlEnabled": "布尔值。API端是否启用易于识别的URL，wordpress设置-固定链接中，如果启用了朴素型URL，则将该项置为false，否则填写true",
+        "user": "API用户名",
+        "applicationPassword": "应用程序密码，用来授权对wordpress rest api的访问，一个有效的应用程序密码长这样：gxYX wxyy aSQJ tAEI 5NyB AarZ"
+    },
+    "stylePre": {
+        "gutenbergEditorStylesheet": "古腾堡编辑器（区块编辑器）样式表文件URL，格式为：https://wordpress网站地址/wp-includes/css/dist/block-library/style.min.css。如果若在wordpress后台写文章时采用的是旧版富文本编辑器，则将该项置空",
+        "background": {
+            "image": "背景图片地址",
+            "position": {
+                "horizontal": "图片在水平方向的位置，可选值：left，center，right",
+                "vertical": "图片在垂直方向的位置，可选值：top，center，bottom"
+            },
+            "size": "图片尺寸，可选值：unset（原始）、contain（适合屏幕）、cover（填满屏幕）",
+            "repeat": "布尔值。重复背景图片，重复填写true，否则false",
+            "scroll": "布尔值。图片随页面滚动，滚动填写true，否则false"
+        }
+    },
+    "styleRuntime": {
+        "hideEmptyCategory": "布尔值。隐藏无内容的分类，隐藏填写true，否则false",
+        "hideEmptyTag": "布尔值。隐藏无内容的标签，隐藏填写true，否则false",
+        "tagFontSize": {
+            "min": "数字。标签文字尺寸最小值，不小于0.4",
+            "max": "数字。标签文字尺寸最大值，不大于2.0"
+        }
+    },
+    "seo": {
+        "searchEngineValidate": {
+            "google": "google搜索引擎站点认证，填写搜索引擎站长工具提供的meta字符串（一串字母数字的组合）",
+            "bing": "bing搜索引擎站点认证，填写搜索引擎站长工具提供的meta字符串（一串字母数字的组合）",
+            "baidu": "baidu搜索引擎站点认证，填写搜索引擎站长工具提供的meta字符串（一串字母数字的组合）"
+        },
+        "siteAnalytics": {
+            "google": "google分析，填写分析工具提供的html字符串，不要换行",
+            "cnzz": "cnzz分析，填写分析工具提供的html字符串，不要换行",
+            "cloudflare": "cloudflare分析，填写分析工具提供的html字符串，不要换行"
+        },
+        "title": "本站点标题（显示在浏览器标签上的）",
+        "description": "关于此站点的一些描述",
+        "keywords": "关于此站点的一些关键词，逗号隔开"
+    },
+    "footer": {
+        "needFiling": "布尔值。是否需要备案，需要填写true，否则填写false",
+        "footerContent": "页脚内容，如果需要备案，则该项需要填写备案号，否则填写其它内容"
+    }
+}

@@ -1,8 +1,12 @@
-<script setup>
+<script
+    setup
+    lang="ts"
+>
 import { inject } from "vue";
 import { RouterLink } from "vue-router";
+import { SiteMeta } from "@/context/common/provide-inject";
 
-const siteMeta = inject("site-meta");
+const siteMeta = inject("site-meta") as SiteMeta;
 </script>
 
 <template>
@@ -16,16 +20,17 @@ const siteMeta = inject("site-meta");
         <div class="site-title">
             <h1>
                 <RouterLink :to="{ name: 'home' }">
-                    {{
-                        siteMeta.title
-                    }}
+                    {{ siteMeta.title }}
                 </RouterLink>
             </h1>
         </div>
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style
+    lang="scss"
+    scoped
+>
 @import "@sty/mixin.scss";
 @import "@sty/variable.scss";
 .site-branding {

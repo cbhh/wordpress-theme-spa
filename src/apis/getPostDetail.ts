@@ -1,13 +1,11 @@
 import appFetch from "@/utils/appFetch";
-import wpAppConfig from "@wpAppConfig";
+import { api } from "@wpAppConfig";
 import PostDetailResponse from "@/context/post-detail/postDetailResponse";
-
-// const postDetailEndpoint = `posts/{id}${wpAppConfig.apiBackendPrettyUrlEnabled ? "?" : "&"}_fields=author,id,content,title,categories,tags,date,modified,featured_media,featured_image_url`;
 
 const baseEndpoint = [
     "posts/",
     `${
-        wpAppConfig.apiBackendPrettyUrlEnabled ? "?" : "&"
+        api.backendPrettyUrlEnabled ? "?" : "&"
     }_fields=author,id,content,title,categories,tags,date,featured_media,featured_image_url`,
 ];
 

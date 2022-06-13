@@ -2,7 +2,10 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
         <%- appVersionMeta %>
         <title><%- title %></title>
         <!-- browser platform check start -->
@@ -38,7 +41,11 @@
     </head>
     <body>
         <div id="app"></div>
-        <script type="module" src="/src/main.ts"></script>
+        <script
+            type="module"
+            src="/src/main.ts"
+        ></script>
+        <!-- log version info start -->
         <script>
             const version = Array.prototype.slice
                 .apply(document.head.getElementsByTagName("meta"))
@@ -49,6 +56,7 @@
                 "display:inline-block;color:#f7f1e5;background:#96655c;padding:1px 3px;border-top-right-radius:3px;border-bottom-right-radius:3px"
             );
         </script>
+        <!-- log version info end -->
         <%- injectMoreScripts %>
     </body>
 </html>

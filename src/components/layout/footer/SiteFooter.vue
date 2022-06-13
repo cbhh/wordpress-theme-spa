@@ -1,15 +1,16 @@
-<script setup>
-import { inject, computed } from "vue";
-import wpAppConfig from "@wpAppConfig";
+<script
+    setup
+    lang="ts"
+>
+import { inject } from "vue";
+import { footer } from "@wpAppConfig";
+import { SiteMeta } from "@/context/common/provide-inject";
 
-const siteMeta = inject("site-meta");
+const siteMeta = inject("site-meta") as SiteMeta;
 
-const footerContent = computed(() => {
-    var footer = wpAppConfig.footer;
-    return footer.needFiling
-        ? `<a href="https://beian.miit.gov.cn/" target="_blank">${footer.footerContent}</a>`
-        : footer.footerContent;
-});
+const footerContent = footer.needFiling
+    ? `<a href="https://beian.miit.gov.cn/" target="_blank">${footer.footerContent}</a>`
+    : footer.footerContent;
 </script>
 
 <template>
@@ -51,7 +52,10 @@ const footerContent = computed(() => {
     </footer>
 </template>
 
-<style lang="scss" scoped>
+<style
+    lang="scss"
+    scoped
+>
 @import "@sty/mixin.scss";
 @import "@sty/variable.scss";
 .site-footer {

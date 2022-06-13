@@ -1,28 +1,25 @@
-import wpAppConfig from "./app.config";
+import { site, seo, stylePre } from "./app.config.json";
 
 const cdnPrefix = "https://cdn.staticfile.org/";
 
 /**
  * 站点标题
  */
-export const siteTitle = wpAppConfig.seo.title;
+export const siteTitle = seo.title;
 /**
  * 生成站点元信息
  * @returns meta标签字符串
  */
 export function generateSiteMeta() {
     var metaArray = [],
-        seoSettings = wpAppConfig.seo,
-        sev = seoSettings.searchEngineValidate;
-    if (seoSettings.description) {
+        sev = seo.searchEngineValidate;
+    if (seo.description) {
         metaArray.push(
-            `<meta name="description" content="${seoSettings.description}"/>`
+            `<meta name="description" content="${seo.description}"/>`
         );
     }
-    if (seoSettings.keywords) {
-        metaArray.push(
-            `<meta name="keywords" content="${seoSettings.keywords}"/>`
-        );
+    if (seo.keywords) {
+        metaArray.push(`<meta name="keywords" content="${seo.keywords}"/>`);
     }
     if (sev.google) {
         metaArray.push(
@@ -45,11 +42,11 @@ export function generateSiteMeta() {
  */
 export function generateSiteLink() {
     var linkArray = [];
-    if (wpAppConfig.siteIcon) {
+    if (site.icon) {
         linkArray.push(
-            `<link rel="icon" href="${wpAppConfig.siteIcon}" sizes="32x32">`,
-            `<link rel="icon" href="${wpAppConfig.siteIcon}" sizes="192x192">`,
-            `<link rel="apple-touch-icon" href="${wpAppConfig.siteIcon}">`
+            `<link rel="icon" href="${site.icon}" sizes="32x32">`,
+            `<link rel="icon" href="${site.icon}" sizes="192x192">`,
+            `<link rel="apple-touch-icon" href="${site.icon}">`
         );
     }
     //加载icon样式表
@@ -63,9 +60,9 @@ export function generateSiteLink() {
         );
     }
     //加载区块编辑器样式表
-    if (wpAppConfig.gutenbergEditorStylesheet) {
+    if (stylePre.gutenbergEditorStylesheet) {
         linkArray.push(
-            `<link rel="stylesheet" id="wp-block-library-css" href="${wpAppConfig.gutenbergEditorStylesheet}" type="text/css" media="all">`
+            `<link rel="stylesheet" id="wp-block-library-css" href="${stylePre.gutenbergEditorStylesheet}" type="text/css" media="all">`
         );
     }
     return linkArray.join("");
@@ -91,7 +88,7 @@ export function loadExternalDependencies() {
  * @returns style标签字符串
  */
 export function generateBackgroundCss() {
-    var settings = wpAppConfig.background,
+    var settings = stylePre.background,
         isXPosValid = ["left", "center", "right"].includes(
             settings.position.horizontal
         ),
@@ -121,7 +118,7 @@ export function generateBackgroundCss() {
  */
 export function loadMoreScripts() {
     if (process.env.NODE_ENV === "production") {
-        var analytics = wpAppConfig.seo.siteAnalytics,
+        var analytics = seo.siteAnalytics,
             array = [];
         for (var a in analytics) {
             array.push(analytics[a]);

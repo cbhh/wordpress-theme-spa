@@ -23,7 +23,7 @@
                 "src/*"
             ],
             "@wpAppConfig": [
-                "./app.config.js"
+                "./app.config.json"
             ]
         }
     },

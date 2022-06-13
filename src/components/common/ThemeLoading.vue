@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import wpAppConfig from "@wpAppConfig";
-import { computed } from "vue";
+import { inject } from "vue";
+import { SiteMeta } from "@/context/common/provide-inject";
 
 interface T {
     loadingText: string;
@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<T>(), {
     logoRequired: true,
 });
 
-const logoUrl = computed(() => wpAppConfig.siteLogo);
+const siteMeta = inject("site-meta") as SiteMeta;
 </script>
 
 <template>
@@ -23,8 +23,8 @@ const logoUrl = computed(() => wpAppConfig.siteLogo);
         <div class="loading-info">
             <img
                 class="site-logo"
-                v-if="props.logoRequired && logoUrl"
-                :src="logoUrl"
+                v-if="props.logoRequired && siteMeta.logo"
+                :src="siteMeta.logo"
             >
             <p class="loading-tip">
                 {{ props.loadingText }}

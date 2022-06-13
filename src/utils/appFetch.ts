@@ -1,14 +1,10 @@
-import wpAppConfig from "@wpAppConfig";
+import { api, site } from "@wpAppConfig";
 
-const credential = window.btoa(wpAppConfig.apiUser + ":" + wpAppConfig.appPwd),
-    mode = wpAppConfig.apiBaseUrl.startsWith(wpAppConfig.siteUrl)
-        ? "same-origin"
-        : "cors",
+const credential = window.btoa(api.user + ":" + api.applicationPassword),
+    mode = api.baseUrl.startsWith(site.url) ? "same-origin" : "cors",
     restApiUrl =
-        wpAppConfig.apiBaseUrl +
-        (wpAppConfig.apiBackendPrettyUrlEnabled
-            ? "/wp-json"
-            : "/?rest_route=") +
+        api.baseUrl +
+        (api.backendPrettyUrlEnabled ? "/wp-json" : "/?rest_route=") +
         "/wp/v2/";
 /**
  * 发起get请求
