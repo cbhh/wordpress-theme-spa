@@ -40,7 +40,7 @@
         "siteAnalytics": {
             "google": "",
             "cnzz": "",
-            "cloudflare": "<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{token: abcd1234}'></script>"
+            "cloudflare": "<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{\"token\": \"abcd1234\"}'></script>"
         },
         "title": "小流星的梦",
         "description": "主题SPA版本开发测试",

@@ -20,44 +20,59 @@
 
 ### 🌰 配置文件选项
 
-- **`site`** 站点相关
+- **`site` 站点相关**
   - `icon` 站点图标（显示在浏览器标签上）图片链接
   - `logo` 站点 LOGO（显示在页头）图片链接
   - `url` 站点地址
-- **`api`** API 相关
+
+---
+
+- **`api` API 相关**
   - `baseUrl` API 基准 URL
   - `backendPrettyUrlEnabled` 布尔值。API 端是否启用易于识别的 URL，WordPress 设置-固定链接中，如果启用了朴素型 URL，则将该项置为 false，否则填写 true。
   - `user` API 用户
   - `applicationPassword` 应用程序密码，用来授权对 WordPress Rest API 的访问，一个有效的应用程序密码长这样：`gxYX wxyy aSQJ tAEI 5NyB AarZ`。
-- **`stylePre`** 预处理样式，将添加进 index.html 文件中
-  - `gutenbergEditorStylesheet` 古腾堡编辑器（区块编辑器）样式表文件 URL，格式为：http(s)://wordpress 网站地址/wp-includes/css/dist/block-library/style.min.css。如果若在 wordpress 后台写文章时采用的是旧版富文本编辑器，则将该项置空。
-  - `background`
-    - `image` 背景图片地址
+
+---
+
+- **`stylePre` 预处理样式，将添加进 index.html 文件中**
+  - `gutenbergEditorStylesheet` 古腾堡编辑器（区块编辑器）样式表文件 URL，格式为：`http(s)://wordpress网站地址/wp-includes/css/dist/block-library/style.min.css`。如果若在 wordpress 后台写文章时采用的是旧版富文本编辑器，则将该项置为空字符串。
+  - `background` 背景图片设置
+    - `image` 图片地址
     - `position` 图片位置
       - `horizontal` 图片在水平方向的位置，可选值：left，center，right。
       - `vertical` 图片在垂直方向的位置，可选值：top，center，bottom。
     - `size` 图片尺寸，可选值：unset（原始）、contain（适合屏幕）、cover（填满屏幕）。
     - `repeat` 布尔值。重复背景图片，重复填写 true，否则 false。
     - `scroll` 布尔值。图片随页面滚动，滚动填写 true，否则 false。
-- **`styleRuntime`** 运行时样式
+
+---
+
+- **`styleRuntime` 运行时样式**
   - `hideEmptyCategory` 布尔值。隐藏无内容的分类，隐藏填写 true，否则 false。
   - `hideEmptyTag` 布尔值。隐藏无内容的标签，隐藏填写 true，否则 false。
   - `tagFontSize` 标签文字尺寸
     - `min` 数字。标签文字尺寸最小值，不小于 0.4。
     - `max` 数字。标签文字尺寸最大值，不大于 2.0。
-- **`seo`** SEO 相关
+
+---
+
+- **`seo` SEO 相关**
   - `searchEngineValidate` 搜索引擎站点认证，填写搜索引擎站长工具提供的 meta 字符串（一串字母数字的组合）
     - `google`
     - `bing`
     - `baidu`
-  - `siteAnalytics` 网站统计/流量分析，填写分析工具提供的 html 字符串，不要换行
+  - `siteAnalytics` 网站统计/流量分析，填写分析工具提供的 html 字符串，不要换行，部分引号需要添加转义符
     - `google`
     - `cnzz`
     - `cloudflare`
   - `title` 本站点标题（显示在浏览器标签上的）
   - `description` 关于此站点的一些描述
   - `keywords` 关于此站点的一些关键词，逗号隔开
-- **`footer`** 页脚内容
+
+---
+
+- **`footer` 页脚内容**
   - `needFiling` 布尔值。是否需要备案，需要填写 true，否则填写 false。
   - `footerContent` 页脚内容，如果需要备案，则该项需要填写备案号，否则填写其它内容。
 
