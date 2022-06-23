@@ -10,10 +10,10 @@ import PostAuthor from "@/components/layout/content/PostAuthor.vue";
 import ThemeLoading from "@/components/common/ThemeLoading.vue";
 import Catalog from "@/widgets/post-catalog/Catalog.vue";
 import CatalogSwitchButton from "@/widgets/post-catalog/CatalogSwitchButton.vue";
-import catalogComposable from "@/widgets/post-catalog/composable";
+import useCatalog from "@/widgets/post-catalog/useCatalog";
 import Gallery from "@/widgets/post-gallery/Gallery.vue";
-import galleryComposable from "@/widgets/post-gallery/composable";
-import getAncestorCategories from "@/composables/getAncestorCategories";
+import useGallery from "@/widgets/post-gallery/useGallery";
+import useCategoryQuery from "@/composables/useCategoryQuery";
 import { PostDetailTagItemType, PostDetaiAuthorType } from "@/components/props";
 import windowScroll from "@/global/windowScroll";
 import getPostDetail from "@/apis/getPostDetail";
@@ -32,24 +32,22 @@ const route = useRoute(),
     breadcrumbStore = useBreadcrumbStore(),
     pageMetaStore = usePageMetaStore();
 
-const { ancestors, getParent } = getAncestorCategories(
-    categoryStore.categoryList
-);
-const {
-    catalogList,
-    catalogRequired,
-    generateCatalogList,
-    catalogVisible,
-    setClickedCatalogItemStyle,
-    switchCurrentCatalogItem,
-} = catalogComposable();
-const {
-    galleryImageList,
-    galleyRequired,
-    galleryVisible,
-    currentImageIndex,
-    generateGalleryImageList,
-} = galleryComposable();
+const { ancestors, getParent } = useCategoryQuery(categoryStore.categoryList),
+    {
+        catalogList,
+        catalogRequired,
+        catalogVisible,
+        generateCatalogList,
+        setClickedCatalogItemStyle,
+        switchCurrentCatalogItem,
+    } = useCatalog(),
+    {
+        galleryImageList,
+        galleyRequired,
+        galleryVisible,
+        currentImageIndex,
+        generateGalleryImageList,
+    } = useGallery();
 
 const renderTimes = ref(0),
     /**
@@ -90,8 +88,7 @@ const renderView = function (currentPostId: number) {
                     currentCat =
                         categoryStore.getCategoryDetailById(currentCatId);
                 if (currentCat) {
-                    ancestors.value = [];
-                    ancestors.value.push(currentCat);
+                    ancestors.value = [currentCat];
                     getParent(currentCat);
                     breadcrumbStore.storeBreadcrumbList(ancestors.value);
                 }

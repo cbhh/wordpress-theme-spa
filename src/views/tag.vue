@@ -7,16 +7,15 @@ import ThemeLoading from "../components/common/ThemeLoading.vue";
 import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import stores from "@/stores";
-import generatePostList from "../composables/generatePostList";
+import usePostListGenerator from "@/composables/usePostListGenerator";
 import getPostList from "@/apis/getPostList";
 
 const route = useRoute(),
-    { useTagStore, useCategoryStore, usePageMetaStore } = stores,
+    { useTagStore, usePageMetaStore } = stores,
     tagStore = useTagStore(),
-    categoryStore = useCategoryStore(),
     pageMetaStore = usePageMetaStore();
 
-const { postList, generateList } = generatePostList();
+const { postList, generateList } = usePostListGenerator();
 
 const renderTimes = ref(0),
     loadingMaskRequired = ref(true),
@@ -35,12 +34,7 @@ const renderView = function (currentTagSlug: string) {
         //查找当前标签下所有post
         getPostList({ tags: [currentTagId] }).then(function (data) {
             if (data) {
-                postList.value = [];
-                generateList(
-                    categoryStore.categoryList,
-                    tagStore.tagList,
-                    data.result
-                );
+                generateList(data.result);
                 dataLoadingText.value = `标签【${
                     currentTag && currentTag.name
                 }】加载成功`;

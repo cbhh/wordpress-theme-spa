@@ -12,7 +12,7 @@ import SitePrimaryBreadcrumb from "./components/layout/primary/SitePrimaryBreadc
 import Layout from "./components/layout/layout.vue";
 import ThemeLoading from "./components/common/ThemeLoading.vue";
 import BackToTop from "./widgets/back-to-top/BackToTop.vue";
-import backToTopComposable from "./widgets/back-to-top/composable";
+import useBackToTop from "./widgets/back-to-top/useBackToTop";
 import windowScroll from "./global/windowScroll";
 import useRouteListener from "./composables/init/useRouteListener";
 import getSettings from "./composables/init/getSettings";
@@ -35,7 +35,7 @@ const { loadingFlag, loadingText, loadingMaskRequired, landingType } =
         useRouteListener(route, router, resourceCount),
     { siteMeta, getSiteSettings } = getSettings(),
     { dateList, getDates } = getMonthPostDates(),
-    { backToTopVisible, switchBackToTopVisible } = backToTopComposable();
+    { backToTopVisible, switchBackToTopVisible } = useBackToTop();
 
 //注入site meta数据
 provide("site-meta", readonly(siteMeta));

@@ -7,17 +7,15 @@ import ThemeLoading from "../components/common/ThemeLoading.vue";
 import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import stores from "@/stores";
-import generatePostList from "../composables/generatePostList";
+import usePostListGenerator from "@/composables/usePostListGenerator";
 import getPostList from "@/apis/getPostList";
 
 const route = useRoute(),
-    { useTagStore, useCategoryStore, useUserStore, usePageMetaStore } = stores,
-    tagStore = useTagStore(),
-    categoryStore = useCategoryStore(),
+    { useUserStore, usePageMetaStore } = stores,
     userStore = useUserStore(),
     pageMetaStore = usePageMetaStore();
 
-const { postList, generateList } = generatePostList();
+const { postList, generateList } = usePostListGenerator();
 
 const renderTimes = ref(0),
     loadingMaskRequired = ref(true),
@@ -35,12 +33,7 @@ const renderView = function (currentUserId: number) {
         //查找当前作者下所有post
         getPostList({ author: currentUserId }).then(function (data) {
             if (data) {
-                postList.value = [];
-                generateList(
-                    categoryStore.categoryList,
-                    tagStore.tagList,
-                    data.result
-                );
+                generateList(data.result);
                 dataLoadingText.value = `作者【${
                     currentUser && currentUser.name
                 }】加载成功`;

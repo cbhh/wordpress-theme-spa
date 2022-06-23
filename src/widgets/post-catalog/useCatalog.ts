@@ -21,7 +21,7 @@ export default function () {
     /**
      * 上一次选中的目录项对应的数据
      */
-    let lastClickedCatalogItem = {} as CatalogItemType;
+    let lastClickedCatalogItem: CatalogItemType;
     /**
      * 目录项总数
      */
@@ -85,7 +85,9 @@ export default function () {
                 //若当前所处heading与上一个heading不同，则更新样式
                 if (
                     anchor &&
-                    anchor !== lastClickedCatalogItem.headingIndex + ""
+                    anchor !==
+                        (lastClickedCatalogItem &&
+                            lastClickedCatalogItem.headingIndex + "")
                 ) {
                     setClickedCatalogItemStyle(parseInt(anchor));
                 }
@@ -98,7 +100,7 @@ export default function () {
      * @param clickedItemIndex
      */
     const setClickedCatalogItemStyle = function (clickedItemIndex: number) {
-        lastClickedCatalogItem.isCurrent = false;
+        lastClickedCatalogItem && (lastClickedCatalogItem.isCurrent = false);
         const item = catalogList.value[clickedItemIndex];
         item.isCurrent = true;
         lastClickedCatalogItem = item;

@@ -51,7 +51,7 @@ export default defineStore("tag", {
                     /**
                      * 所有count的值列表
                      */
-                    allCountList: number[] = [];
+                    allCountList = new Set<number>();
                 data.forEach(function (t, index) {
                     copy.push({
                         id: t.id,
@@ -60,17 +60,15 @@ export default defineStore("tag", {
                         slug: t.slug,
                         map: index,
                     });
-                    if (!allCountList.includes(t.count)) {
-                        allCountList.push(t.count);
-                    }
+                    allCountList.add(t.count);
                 });
-                if (allCountList.length !== 1) {
+                if (allCountList.size !== 1) {
                     //按照count值从小到大排序
                     copy.sort((a, b) => a.count - b.count);
                     const total = copy.length,
                         minCount = copy[0].count,
                         maxCount = copy[total - 1].count,
-                        step = (max - min) / (allCountList.length - 1),
+                        step = (max - min) / (allCountList.size - 1),
                         /**
                          * 最小值的查找停止位置
                          */

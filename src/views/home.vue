@@ -3,17 +3,12 @@
     lang="ts"
 >
 import { ref, onMounted } from "vue";
-import stores from "@/stores";
 import PostList from "../components/layout/content/PostList.vue";
 import ThemeLoading from "../components/common/ThemeLoading.vue";
-import generatePostList from "../composables/generatePostList";
+import usePostListGenerator from "@/composables/usePostListGenerator";
 import getPostList from "@/apis/getPostList";
 
-const { useTagStore, useCategoryStore } = stores,
-    tagStore = useTagStore(),
-    categoryStore = useCategoryStore();
-
-const { postList, generateList } = generatePostList();
+const { postList, generateList } = usePostListGenerator();
 
 const loadingMaskRequired = ref(true),
     dataLoadingText = ref("");
@@ -23,11 +18,7 @@ onMounted(() => {
     dataLoadingText.value = "正在加载最近文章";
     getPostList().then(function (data) {
         if (data) {
-            generateList(
-                categoryStore.categoryList,
-                tagStore.tagList,
-                data.result
-            );
+            generateList(data.result);
             dataLoadingText.value = "最近文章加载成功";
             setTimeout(() => (loadingMaskRequired.value = false), 500);
         }

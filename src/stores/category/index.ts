@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import getCategoryList from "@/apis/getCategoryList";
 import CategoryStateTypes, {
     CategoryTree,
-    SameParentNodeGroup,
     OriginCategoryListItem,
 } from "./i";
 /**
@@ -41,11 +40,21 @@ export default defineStore("category", {
         storeCategoryList (data: OriginCategoryListItem[]) {
             this.categoryList = data;
             const flat: OriginCategoryListItem[] = data,
+                /**
+                 * 层次列表数组
+                 */
                 hierarchic: CategoryTree[] = [],
-                topNodes: CategoryTree[] = [],
-                //相同parent的节点归为一组
-                group: SameParentNodeGroup = {},
-                //所有子树
+                /**
+                 * 顶层节点集合
+                 */
+                topNodes = new Set<CategoryTree>(),
+                /**
+                 * 相同parent的节点归为一组
+                 */
+                group = new Map<number, CategoryTree[]>(),
+                /**
+                 * 所有子树
+                 */
                 allSubTrees: CategoryTree[] = [];
             flat.forEach(function (item) {
                 const itemCopy = {
@@ -55,37 +64,40 @@ export default defineStore("category", {
                         slug: item.slug,
                         children: [] as CategoryTree[],
                     },
+                    /**
+                     * item parent id
+                     */
                     p = item.parent;
                 if (p === 0) {
-                    topNodes.push(itemCopy);
+                    topNodes.add(itemCopy);
                 } else {
-                    if (group[p]) {
-                        group[p].push(itemCopy);
+                    const specificParentGroup = group.get(p);
+                    if (specificParentGroup) {
+                        specificParentGroup.push(itemCopy);
                     } else {
-                        group[p] = [itemCopy];
+                        const newGroup = [itemCopy];
+                        group.set(p, newGroup);
                     }
                 }
             });
-            //检查topNodes数组，没有子节点的项添加进hierarchic数组
+            //检查topNodes集合，没有子节点的项添加进hierarchic数组
             topNodes.forEach(function (t) {
-                if (!Object.prototype.hasOwnProperty.call(group, t.id)) {
+                if (group.has(t.id)) {
                     hierarchic.push(t);
                 }
             });
-            //迭代group对象生成子树，子树根节点为group对象key值，即共同的parent节点
-            Object.keys(group).forEach(function (k) {
-                const kn = parseInt(k),
-                    rootNode = flat.find((v) => v.id === kn);
+            //迭代group map生成子树，子树根节点为group map key值，即共同的parent节点
+            group.forEach(function (firstLvChildren, pid) {
+                const rootNode = flat.find((v) => v.id === pid);
                 if (rootNode) {
                     const subTree = {
-                            id: kn,
-                            count: rootNode.count,
-                            name: rootNode.name,
-                            slug: rootNode.slug,
-                            children: [] as CategoryTree[],
-                        },
-                        childNodes = group[kn];
-                    childNodes.forEach(function (child) {
+                        id: pid,
+                        count: rootNode.count,
+                        name: rootNode.name,
+                        slug: rootNode.slug,
+                        children: [] as CategoryTree[],
+                    };
+                    firstLvChildren.forEach(function (child) {
                         subTree.children.push({
                             id: child.id,
                             count: child.count,
@@ -100,7 +112,7 @@ export default defineStore("category", {
             //挂载子树至其父节点的children属性下
             allSubTrees.forEach(function (st) {
                 const p = flat.find((v) => v.id === st.id),
-                    pid = p && p["parent"];
+                    pid = p && p.parent;
                 if (pid !== undefined) {
                     //子树不存在父节点，即该子树是顶层节点本身及其所有子节点的集合
                     if (pid === 0) {
@@ -115,10 +127,11 @@ export default defineStore("category", {
                                     (v) => v.id === st.id
                                 );
                             if (specificChild) {
-                                Array.prototype.push.apply(
-                                    specificChild.children,
-                                    st.children
-                                );
+                                // Array.prototype.push.apply(
+                                //     specificChild.children,
+                                //     st.children
+                                // );
+                                specificChild.children.push(...st.children);
                             }
                         }
                     }
