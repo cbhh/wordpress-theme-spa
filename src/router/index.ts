@@ -1,20 +1,24 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import homeVue from "../views/home.vue";
+import categoryVue from "../views/category.vue";
+import tagVue from "../views/tag.vue";
+import authorVue from "../views/author.vue";
 
 const routes: RouteRecordRaw[] = [
     {
         path: "/category/:cat",
         name: "category",
-        component: () => import("../views/category.vue"),
+        component: categoryVue,
     },
     {
         path: "/tag/:tag",
         name: "tag",
-        component: () => import("../views/tag.vue"),
+        component: tagVue,
     },
     {
         path: "/author/:uid",
         name: "author",
-        component: () => import("../views/author.vue"),
+        component: authorVue,
     },
     {
         path: "/post/:pid",
@@ -24,7 +28,7 @@ const routes: RouteRecordRaw[] = [
     {
         path: "/home",
         name: "home",
-        component: () => import("../views/home.vue"),
+        component: homeVue,
     },
 ];
 
