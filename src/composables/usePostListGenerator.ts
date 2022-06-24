@@ -2,14 +2,14 @@ import { ref } from "vue";
 import PostListItem from "@/context/post-list/postListItem";
 import { PostListItemType } from "@/components/props";
 import stores from "@/stores";
+const { useTagStore, useCategoryStore } = stores;
 /**
  * 根据API返回数据生成组件可用的post列表
  */
 export default function () {
     const postList = ref<PostListItemType[]>([]);
     //初始化store
-    const { useTagStore, useCategoryStore } = stores,
-        tagStore = useTagStore(),
+    const tagStore = useTagStore(),
         categoryStore = useCategoryStore();
     /**
      * 生成post列表

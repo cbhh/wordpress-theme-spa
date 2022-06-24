@@ -32,11 +32,16 @@ export default defineConfig({
                 },
             },
         }),
-        viteExternalsPlugin({
-            vue: "Vue",
-            pinia: "Pinia",
-            "vue-router": "VueRouter",
-        }),
+        viteExternalsPlugin(
+            {
+                vue: "Vue",
+                pinia: "Pinia",
+                "vue-router": "VueRouter",
+            },
+            {
+                disableInServe: true,
+            }
+        ),
     ],
     build: {
         rollupOptions: {
