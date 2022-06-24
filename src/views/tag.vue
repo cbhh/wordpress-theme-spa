@@ -3,8 +3,7 @@
     lang="ts"
 >
 import PostList from "../components/layout/content/PostList.vue";
-import ThemeLoading from "../components/common/ThemeLoading.vue";
-import { onMounted, ref, watch } from "vue";
+import { onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import stores from "@/stores";
 import usePostListGenerator from "@/composables/usePostListGenerator";
@@ -17,16 +16,12 @@ const route = useRoute(),
 
 const { postList, generateList } = usePostListGenerator();
 
-const renderTimes = ref(0),
-    loadingMaskRequired = ref(true),
-    dataLoadingText = ref("");
+let renderTimes = 0;
 
 const renderView = function (currentTagSlug: string) {
     const currentTag = tagStore.getTagDetailBySlug(currentTagSlug);
     if (currentTag) {
         const currentTagId = currentTag.id;
-        loadingMaskRequired.value = true;
-        dataLoadingText.value = `正在加载标签【${currentTag.name}】`;
         //landing组件
         pageMetaStore.storeBreadcrumbList({
             title: "标签：" + currentTag.name,
@@ -35,20 +30,16 @@ const renderView = function (currentTagSlug: string) {
         getPostList({ tags: [currentTagId] }).then(function (data) {
             if (data) {
                 generateList(data.result);
-                dataLoadingText.value = `标签【${
-                    currentTag && currentTag.name
-                }】加载成功`;
-                setTimeout(() => (loadingMaskRequired.value = false), 500);
             }
         });
-        renderTimes.value += 1;
+        renderTimes += 1;
     }
 };
 
 watch(
     () => route.params["tag"],
     (n) => {
-        if (renderTimes.value && n) {
+        if (renderTimes && n) {
             renderView(n.toString());
         }
     }
@@ -60,17 +51,5 @@ onMounted(() => {
 </script>
 
 <template>
-    <div
-        class="postListLoadingMask"
-        v-show="loadingMaskRequired"
-    >
-        <ThemeLoading
-            :logo-required="false"
-            :loading-text="dataLoadingText"
-        />
-    </div>
-    <PostList
-        :list="postList"
-        v-show="!loadingMaskRequired"
-    />
+    <PostList :list="postList" />
 </template>

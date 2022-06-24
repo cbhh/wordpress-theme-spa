@@ -65,18 +65,20 @@ onMounted(() => {
 </script>
 
 <template>
-    <div
-        id="loading-mask"
-        v-if="loadingMaskRequired"
-    >
-        <ThemeLoading
-            :logo-required="true"
-            :loading-text="loadingText"
-        />
-        <p v-if="isLowPpi">
-            检测到低分辨率屏幕，主题字体（楷体）将更换为系统默认字体
-        </p>
-    </div>
+    <Transition name="screen-mask">
+        <div
+            class="loading-mask"
+            v-if="loadingMaskRequired"
+        >
+            <ThemeLoading
+                :logo-required="true"
+                :loading-text="loadingText"
+            />
+            <p v-if="isLowPpi">
+                检测到低分辨率屏幕，主题字体（楷体）将更换为系统默认字体
+            </p>
+        </div>
+    </Transition>
     <Layout :landing-type="landingType">
         <template #breadcrumb-nav>
             <SitePrimaryBreadcrumb :list="breadcrumbStore.list" />
@@ -107,7 +109,9 @@ onMounted(() => {
 #app {
     position: relative;
 }
-#loading-mask {
+</style>
+<style scoped>
+.loading-mask {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -116,5 +120,14 @@ onMounted(() => {
     align-items: center;
     justify-content: center;
     z-index: 9999;
+}
+.screen-mask-leave-from {
+    opacity: 1;
+}
+.screen-mask-leave-to {
+    opacity: 0;
+}
+.screen-mask-leave-active {
+    transition: opacity 1s ease;
 }
 </style>

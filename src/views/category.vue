@@ -3,8 +3,7 @@
     lang="ts"
 >
 import PostList from "../components/layout/content/PostList.vue";
-import ThemeLoading from "../components/common/ThemeLoading.vue";
-import { onMounted, ref, onUnmounted, watch } from "vue";
+import { onMounted, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
 import stores from "@/stores";
 import useCategoryQuery from "@/composables/useCategoryQuery";
@@ -22,16 +21,12 @@ const { ancestors, descendants, getParent, getNextLvCats } = useCategoryQuery(
     ),
     { postList, generateList } = usePostListGenerator();
 
-const renderTimes = ref(0),
-    loadingMaskRequired = ref(true),
-    dataLoadingText = ref("");
+let renderTimes = 0;
 
 const renderView = function (currentCatSlug: string) {
     const currentCat = categoryStore.getCategoryDetailBySlug(currentCatSlug);
     if (currentCat) {
         const currentCatId = currentCat.id;
-        loadingMaskRequired.value = true;
-        dataLoadingText.value = `正在加载分类【${currentCat.name}】`;
         //landing组件
         pageMetaStore.storeBreadcrumbList({
             title: "分类：" + currentCat.name,
@@ -47,20 +42,16 @@ const renderView = function (currentCatSlug: string) {
         getPostList({ categories: descendants.value }).then(function (data) {
             if (data) {
                 generateList(data.result);
-                dataLoadingText.value = `分类【${
-                    currentCat && currentCat.name
-                }】加载成功`;
-                setTimeout(() => (loadingMaskRequired.value = false), 500);
             }
         });
-        renderTimes.value += 1;
+        renderTimes += 1;
     }
 };
 
 watch(
     () => route.params["cat"],
     (n) => {
-        if (renderTimes.value && n) {
+        if (renderTimes && n) {
             renderView(n.toString());
         }
     }
@@ -71,17 +62,7 @@ onUnmounted(() => breadcrumbStore.storeBreadcrumbList([]));
 </script>
 
 <template>
-    <div
-        class="postListLoadingMask"
-        v-show="loadingMaskRequired"
-    >
-        <ThemeLoading
-            :logo-required="false"
-            :loading-text="dataLoadingText"
-        />
-    </div>
     <PostList
         :list="postList"
-        v-show="!loadingMaskRequired"
     />
 </template>

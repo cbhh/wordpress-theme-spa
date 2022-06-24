@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+    setup
+    lang="ts"
+>
 import PostListItem from "./PostListItem.vue";
 import { PostListItemType } from "@/components/props";
 
@@ -12,7 +15,11 @@ const props = withDefaults(defineProps<PostListType>(), {
 </script>
 
 <template>
-    <div class="post-list">
+    <TransitionGroup
+        name="post-list"
+        tag="div"
+        class="post-list"
+    >
         <PostListItem
             v-for="post in props.list"
             :key="post.id"
@@ -24,10 +31,13 @@ const props = withDefaults(defineProps<PostListType>(), {
             :title="post.title"
             :excerpt="post.excerpt"
         />
-    </div>
+    </TransitionGroup>
 </template>
 
-<style lang="scss" scoped>
+<style
+    lang="scss"
+    scoped
+>
 @import "@sty/variable.scss";
 .post-list {
     padding: 20px 20px 10px 20px;
@@ -37,5 +47,18 @@ const props = withDefaults(defineProps<PostListType>(), {
     @media (max-width: $media-minier-size) {
         padding: 8px;
     }
+}
+.post-list-move,
+.post-list-enter-active,
+.post-list-leave-active {
+    transition: all 0.5s linear;
+}
+.post-list-leave-active {
+    position: absolute;
+}
+.post-list-enter-from,
+.post-list-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
 }
 </style>
