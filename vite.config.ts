@@ -12,7 +12,7 @@ import {
     loadMoreScripts,
 } from "./generateHead";
 
-const APP_VERSION = ["dev-0.3.2", "20220623"];
+const APP_VERSION = ["dev-0.3.5", "20220628"];
 
 // https://vitejs.dev/config/
 export default defineConfig({
