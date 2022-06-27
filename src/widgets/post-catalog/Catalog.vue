@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+    setup
+    lang="ts"
+>
 import SiteSidebarItem from "@/components/layout/sidebar/SiteSidebarItem.vue";
 import CatalogItem from "./CatalogItem.vue";
 import { CatalogItemType } from "@/widgets/props";
@@ -16,38 +19,45 @@ const emits = defineEmits<{ (e: "getClickedIndex", v: number): void }>();
 /**
  * 将点击项的index传递给父组件
  */
-const getClickedIndex = function (clickedItemIndex: number) {
+function getClickedIndex (clickedItemIndex: number) {
     emits("getClickedIndex", clickedItemIndex);
-};
+}
 </script>
 
 <template>
     <Teleport to="body">
-        <SiteSidebarItem
-            title="文章目录"
-            class="post-catalog"
-            :class="{ hidden: !props.visible }"
+        <Transition
+            name="post-catalog"
+            appear
         >
-            <div class="catalog-body">
-                <CatalogItem
-                    v-for="item in props.list"
-                    :key="item.headingIndex"
-                    :text="item.text"
-                    :heading-level="item.headingLevel"
-                    :heading-index="item.headingIndex"
-                    :href="item.href"
-                    :is-current="item.isCurrent"
-                    @click="getClickedIndex(item.headingIndex)"
-                />
-            </div>
-        </SiteSidebarItem>
+            <SiteSidebarItem
+                title="文章目录"
+                class="post-catalog"
+                v-show="props.visible"
+            >
+                <div class="catalog-body">
+                    <CatalogItem
+                        v-for="item in props.list"
+                        :key="item.headingIndex"
+                        :text="item.text"
+                        :heading-level="item.headingLevel"
+                        :heading-index="item.headingIndex"
+                        :href="item.href"
+                        :is-current="item.isCurrent"
+                        @click="getClickedIndex(item.headingIndex)"
+                    />
+                </div>
+            </SiteSidebarItem>
+        </Transition>
     </Teleport>
 </template>
 
-<style lang="scss" scoped>
+<style
+    lang="scss"
+    scoped
+>
 @import "@sty/variable.scss";
 .post-catalog {
-    transition: var(--theme-transition);
     background: none;
     border: none;
     border-radius: 10px;
@@ -59,10 +69,6 @@ const getClickedIndex = function (clickedItemIndex: number) {
     display: flex;
     max-height: calc(100% - $header-height - 10px);
     max-width: calc($sidebar-width-percentage - 10px);
-    &.hidden {
-        transform: translateX(calc(-100% - 15px));
-        opacity: 0;
-    }
     .catalog-body {
         max-height: 100%;
         max-width: 100%;
@@ -82,5 +88,14 @@ const getClickedIndex = function (clickedItemIndex: number) {
         max-width: 55%;
         min-width: initial;
     }
+}
+.post-catalog-enter-active,
+.post-catalog-leave-active {
+    transition: all 0.5s linear;
+}
+.post-catalog-enter-from,
+.post-catalog-leave-to {
+    transform: translateX(calc(-100% - 15px));
+    opacity: 0;
 }
 </style>

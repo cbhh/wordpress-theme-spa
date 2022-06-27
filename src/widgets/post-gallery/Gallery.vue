@@ -1,4 +1,7 @@
-<script setup lang="ts">
+<script
+    setup
+    lang="ts"
+>
 import GalleryItem from "./GalleryItem.vue";
 import { computed } from "vue";
 import { GalleryItemType } from "../props";
@@ -33,77 +36,82 @@ const currentImageDescription = computed(() => {
         return data ? data.description : "";
     }),
     imageCount = computed(() => props.list.length);
-const clickCloseButton = function () {
+function clickCloseButton () {
     emits("update:visible", false);
-};
-const clickPre = function () {
+}
+function clickPre () {
     if (props.currentImageIndex > 0) {
         emits("update:currentImageIndex", props.currentImageIndex - 1);
     }
-};
-const clickNext = function () {
+}
+function clickNext () {
     if (props.currentImageIndex < imageCount.value - 1) {
         emits("update:currentImageIndex", props.currentImageIndex + 1);
     }
-};
+}
 </script>
 
 <template>
     <Teleport to="body">
-        <div
-            class="post-img-gallery"
-            :class="{ hidden: !props.visible }"
-        >
+        <Transition name="post-img-gallery">
             <div
-                class="gallery-close"
-                title="退出画廊"
-                @click="clickCloseButton"
+                class="post-img-gallery"
+                v-show="props.visible"
             >
-                <i class="fa fa-close" />
-            </div>
-            <div class="gallery-mover">
                 <div
-                    class="icon"
-                    title="前一张"
-                    @click="clickPre"
+                    class="gallery-close"
+                    title="退出画廊"
+                    @click="clickCloseButton"
                 >
-                    <i class="fa fa-chevron-left" />
+                    <i class="fa fa-close" />
+                </div>
+                <div class="gallery-mover">
+                    <div
+                        class="icon"
+                        title="前一张"
+                        @click="clickPre"
+                    >
+                        <i class="fa fa-chevron-left" />
+                    </div>
+                </div>
+                <div class="gallery-content">
+                    <div class="current-img-index">
+                        {{ props.currentImageIndex + 1 }}
+                    </div>
+                    <div class="img-container">
+                        <GalleryItem
+                            v-for="item in props.list"
+                            :key="item.imgIndex"
+                            :is-current="item.isCurrent"
+                            :is-current-pre="item.isCurrentPre"
+                            :is-current-next="item.isCurrentNext"
+                            :img-src="item.imgSrc"
+                            :img-srcset="item.imgSrcset"
+                            :img-index="item.imgIndex"
+                        />
+                    </div>
+                    <div class="current-img-description">
+                        {{ currentImageDescription }}
+                    </div>
+                </div>
+                <div class="gallery-mover">
+                    <div
+                        class="icon"
+                        title="后一张"
+                        @click="clickNext"
+                    >
+                        <i class="fa fa-chevron-right" />
+                    </div>
                 </div>
             </div>
-            <div class="gallery-content">
-                <div class="current-img-index">
-                    {{ props.currentImageIndex + 1 }}
-                </div>
-                <div class="img-container">
-                    <GalleryItem
-                        v-for="item in props.list"
-                        :key="item.imgIndex"
-                        :is-current="item.isCurrent"
-                        :is-current-pre="item.isCurrentPre"
-                        :is-current-next="item.isCurrentNext"
-                        :img-src="item.imgSrc"
-                        :img-srcset="item.imgSrcset"
-                        :img-index="item.imgIndex"
-                    />
-                </div>
-                <div class="current-img-description">
-                    {{ currentImageDescription }}
-                </div>
-            </div>
-            <div class="gallery-mover">
-                <div
-                    class="icon"
-                    title="后一张"
-                    @click="clickNext"
-                >
-                    <i class="fa fa-chevron-right" />
-                </div>
-            </div>
-        </div>
+        </Transition>
     </Teleport>
 </template>
 
-<style lang="scss" scoped>
+<style
+    lang="scss"
+    scoped
+>
 @import "@sty/mixin.scss";
 @import "@sty/variable.scss";
 .post-img-gallery {
@@ -119,12 +127,8 @@ const clickNext = function () {
     box-shadow: 0 0 3px var(--theme-color);
     background: url(@ass/7933259ae51d7b49d5291e7a1759d6f2.jpeg) repeat;
     background-size: 5%;
-    transition: all 0.3s linear;
     --mover-width: 50px;
     --close-side-length: 20px;
-    &.hidden {
-        transform: scale(0);
-    }
     > .gallery-close {
         position: absolute;
         line-height: var(--close-side-length);
@@ -197,5 +201,13 @@ const clickNext = function () {
         height: 50%;
         top: 25%;
     }
+}
+.post-img-gallery-enter-active,
+.post-img-gallery-leave-active {
+    transition: all 0.3s linear;
+}
+.post-img-gallery-enter-from,
+.post-img-gallery-leave-to {
+    transform: scale(0);
 }
 </style>

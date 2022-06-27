@@ -1,24 +1,17 @@
-<script setup lang="ts">
+<script
+    setup
+    lang="ts"
+>
 import { ref } from "vue";
 
-interface T {
-    visible: boolean;
-}
-const props = withDefaults(defineProps<T>(), {
+const props = withDefaults(defineProps<{ visible: boolean }>(), {
     visible: false,
 });
 
-const scrollInterval = 20;
+const scrollInterval = 20,
+    isMouseDown = ref(false);
 
-const isMouseDown = ref(false);
-const mouseDown = function () {
-    isMouseDown.value = true;
-};
-const mouseUp = function () {
-    isMouseDown.value = false;
-};
-
-const move = function () {
+function move () {
     const view = document.documentElement,
         totalScrollTop = view.scrollTop,
         managedScroll = window.innerHeight,
@@ -38,22 +31,28 @@ const move = function () {
             }
         }, scrollInterval);
     }
-};
+}
 </script>
 
 <template>
-    <div
-        class="back-to-top"
-        :class="{ hidden: !props.visible, mousedown: isMouseDown }"
-        @click="move"
-        @mousedown="mouseDown"
-        @mouseup="mouseUp"
-    >
-        <div><i class="fa fa-arrow-up" /></div>
-    </div>
+    <Transition name="back-to-top">
+        <div
+            class="back-to-top"
+            :class="{ mousedown: isMouseDown }"
+            v-show="props.visible"
+            @click="move"
+            @mousedown="isMouseDown = true"
+            @mouseup="isMouseDown = false"
+        >
+            <div><i class="fa fa-arrow-up" /></div>
+        </div>
+    </Transition>
 </template>
 
-<style lang="scss" scoped>
+<style
+    lang="scss"
+    scoped
+>
 @import "@sty/variable.scss";
 .back-to-top {
     --side-length: 50px;
@@ -89,10 +88,6 @@ const move = function () {
     &.mousedown > div {
         box-shadow: var(--theme-shadow);
     }
-    &.hidden {
-        bottom: 0;
-        opacity: 0;
-    }
     @media (max-width: $body-min-width-px) {
         --side-length: 45px;
     }
@@ -106,5 +101,14 @@ const move = function () {
     @media (max-width: $media-minier-size) {
         --side-length: 30px;
     }
+}
+.back-to-top-enter-active,
+.back-to-top-leave-active {
+    transition: var(--theme-transition);
+}
+.back-to-top-enter-from,
+.back-to-top-leave-to {
+    bottom: 0;
+    opacity: 0;
 }
 </style>
