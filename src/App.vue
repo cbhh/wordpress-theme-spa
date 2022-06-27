@@ -60,7 +60,11 @@ onMounted(() => {
     //加载当前月份文章提供给日历数据
     getDates(current);
     //添加切换回到顶部按钮可见性的窗口滚动事件处理器
-    windowScroll.addHandle("back-to-top-visible", null, switchBackToTopVisible);
+    windowScroll.addHandle(
+        Symbol("back-to-top-visible"),
+        null,
+        switchBackToTopVisible
+    );
 });
 </script>
 

@@ -54,7 +54,8 @@ const { ancestors, getAllAncestors } = useCategoryQuery(
         generateGalleryImageList,
     } = useGallery();
 let renderTimes = 0;
-const /**
+const catalogScroller = Symbol("catalog-move"),
+    /**
      * content dom引用
      */
     content = ref<HTMLDivElement>(),
@@ -141,11 +142,11 @@ watch(
 onMounted(() => {
     renderView(parseInt(route.params["pid"].toString()));
     //添加更新目录的窗口滚动事件处理器
-    windowScroll.addHandle("catalog-move", null, switchCurrentCatalogItem);
+    windowScroll.addHandle(catalogScroller, null, switchCurrentCatalogItem);
 });
 onUnmounted(() => {
     //移除更新目录的窗口滚动事件处理器
-    windowScroll.deleteHandle("catalog-move");
+    windowScroll.deleteHandle(catalogScroller);
     breadcrumbStore.storeBreadcrumbList([]);
 });
 </script>

@@ -1,6 +1,13 @@
 import { site, seo, stylePre } from "./app.config.json";
+import { dependencies } from "./package.json";
 
 const cdnPrefix = "https://cdn.staticfile.org/";
+
+function getPackageVersion (npmVerStr: string) {
+    return isNaN(parseInt(npmVerStr.charAt(0)))
+        ? npmVerStr.substring(1)
+        : npmVerStr;
+}
 
 /**
  * 站点标题
@@ -10,8 +17,8 @@ export const siteTitle = seo.title;
  * 生成站点元信息
  * @returns meta标签字符串
  */
-export function generateSiteMeta() {
-    var metaArray = [],
+export function generateSiteMeta () {
+    const metaArray: string[] = [],
         sev = seo.searchEngineValidate;
     if (seo.description) {
         metaArray.push(
@@ -40,8 +47,8 @@ export function generateSiteMeta() {
  * 生成站点link标签
  * @returns link标签字符串
  */
-export function generateSiteLink() {
-    var linkArray = [];
+export function generateSiteLink () {
+    const linkArray = [];
     if (site.icon) {
         linkArray.push(
             `<link rel="icon" href="${site.icon}" sizes="32x32">`,
@@ -71,24 +78,32 @@ export function generateSiteLink() {
  * 使用cdn加载依赖包
  * @returns script标签字符串
  */
-export function loadExternalDependencies() {
+export function loadExternalDependencies () {
     if (process.env.NODE_ENV === "production") {
-        var prefix = `<script src='${cdnPrefix}`,
+        const prefix = `<script src='${cdnPrefix}`,
             suffix = ".min.js'></script>";
         return [
-            `${prefix}vue/3.2.25/vue.runtime.global.prod${suffix}`,
-            `${prefix}vue-router/4.0.14/vue-router.global.prod${suffix}`,
+            `${prefix}vue/${getPackageVersion(
+                dependencies.vue
+            )}/vue.runtime.global.prod${suffix}`,
+            `${prefix}vue-router/${getPackageVersion(
+                dependencies["vue-router"]
+            )}/vue-router.global.prod${suffix}`,
             `${prefix}vue-demi/0.13.1/index.iife${suffix}`,
-            `${prefix}pinia/2.0.14/pinia.iife.prod${suffix}`,
+            `${prefix}pinia/${getPackageVersion(
+                dependencies.pinia
+            )}/pinia.iife.prod${suffix}`,
         ].join("");
-    } else return "";
+    } else {
+        return "";
+    }
 }
 /**
  * 生成背景图CSS
  * @returns style标签字符串
  */
-export function generateBackgroundCss() {
-    var settings = stylePre.background,
+export function generateBackgroundCss () {
+    const settings = stylePre.background,
         isXPosValid = ["left", "center", "right"].includes(
             settings.position.horizontal
         ),
@@ -110,17 +125,19 @@ export function generateBackgroundCss() {
         };background-attachment:${
             settings.scroll ? "scroll" : "fixed"
         }}</style>`;
-    } else return "";
+    } else {
+        return "";
+    }
 }
 /**
  * 加载更多脚本
  * @returns script标签字符串
  */
-export function loadMoreScripts() {
+export function loadMoreScripts () {
     if (process.env.NODE_ENV === "production") {
-        var analytics = seo.siteAnalytics,
-            array = [];
-        for (var a in analytics) {
+        const analytics = seo.siteAnalytics as Record<string, string>,
+            array: string[] = [];
+        for (const a in analytics) {
             array.push(analytics[a]);
         }
         return array.join("");

@@ -1,7 +1,7 @@
 import { deleteSpecificItemFromObjArray } from "@/utils/array";
 
 interface HandleType {
-    name: string;
+    name: string | symbol;
     thisArg: unknown;
     callback: (wsy: number, wh: number) => void;
 }
@@ -28,13 +28,16 @@ function windowScroller () {
      * @param callback 事件处理器函数，wsy为当前窗口垂直方向滚动距离，wh为当前窗口高度，全局scroll事件处理会向每个回调函数自动注入这两个参数
      */
     const addHandle = function (
-        name: string,
+        name: string | symbol,
         thisArg: unknown,
         callback: (wsy: number, wh: number) => void
     ) {
-        const isNameNoRepeated = handles.every(function (item) {
-            return item.name !== name;
-        });
+        let isNameNoRepeated = true;
+        if (typeof name === "string") {
+            isNameNoRepeated = handles.every(function (item) {
+                return item.name !== name;
+            });
+        }
         if (isNameNoRepeated) {
             handles.push({ name: name, thisArg: thisArg, callback: callback });
         }
@@ -43,7 +46,7 @@ function windowScroller () {
      * 根据name移除一个scroll事件处理器
      * @param name
      */
-    const deleteHandle = function (name: string) {
+    const deleteHandle = function (name: string | symbol) {
         deleteSpecificItemFromObjArray(handles, "name", name);
     };
     return {
