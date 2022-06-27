@@ -93,7 +93,7 @@ export interface PostDetailTagItemType {
 /**
  *（文章详情中的）文章作者
  */
-export interface PostDetaiAuthorType {
+export interface PostDetailAuthorType {
     name: string;
     avatar: string;
     id: number;

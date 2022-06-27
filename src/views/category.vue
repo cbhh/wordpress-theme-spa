@@ -16,9 +16,8 @@ const route = useRoute(),
     breadcrumbStore = useBreadcrumbStore(),
     pageMetaStore = usePageMetaStore();
 
-const { ancestors, descendants, getParent, getNextLvCats } = useCategoryQuery(
-        categoryStore.categoryList
-    ),
+const { ancestors, descendants, getAllAncestors, getAllDescendants } =
+        useCategoryQuery(categoryStore.categoryList),
     { postList, generateList } = usePostListGenerator();
 
 let renderTimes = 0;
@@ -32,13 +31,11 @@ const renderView = function (currentCatSlug: string) {
             title: "分类：" + currentCat.name,
         });
         //breadcrumb nav：递归查找父级分类，直到父级分类为0，即达到顶层分类
-        ancestors.value = [currentCat];
-        getParent(currentCat);
+        getAllAncestors(currentCat);
         breadcrumbStore.storeBreadcrumbList(ancestors.value);
         //wordpress api仅会返回当前分类下的post，不会返回后代分类的，需要递归查找当前分类所有后代分类传给wordpress api查询
-        descendants.value = [currentCatId];
-        getNextLvCats(currentCatId);
         //查找当前分类下所有post
+        getAllDescendants(currentCatId);
         getPostList({ categories: descendants.value }).then(function (data) {
             if (data) {
                 generateList(data.result);
@@ -62,7 +59,5 @@ onUnmounted(() => breadcrumbStore.storeBreadcrumbList([]));
 </script>
 
 <template>
-    <PostList
-        :list="postList"
-    />
+    <PostList :list="postList" />
 </template>

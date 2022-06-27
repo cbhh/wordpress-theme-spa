@@ -82,7 +82,7 @@ export default defineStore("category", {
             });
             //检查topNodes集合，没有子节点的项添加进hierarchic数组
             topNodes.forEach(function (t) {
-                if (group.has(t.id)) {
+                if (!group.has(t.id)) {
                     hierarchic.push(t);
                 }
             });

@@ -14,7 +14,10 @@ import useCatalog from "@/widgets/post-catalog/useCatalog";
 import Gallery from "@/widgets/post-gallery/Gallery.vue";
 import useGallery from "@/widgets/post-gallery/useGallery";
 import useCategoryQuery from "@/composables/useCategoryQuery";
-import { PostDetailTagItemType, PostDetaiAuthorType } from "@/components/props";
+import {
+    PostDetailTagItemType,
+    PostDetailAuthorType,
+} from "@/components/props";
 import windowScroll from "@/global/windowScroll";
 import getPostDetail from "@/apis/getPostDetail";
 
@@ -32,7 +35,9 @@ const route = useRoute(),
     breadcrumbStore = useBreadcrumbStore(),
     pageMetaStore = usePageMetaStore();
 
-const { ancestors, getParent } = useCategoryQuery(categoryStore.categoryList),
+const { ancestors, getAllAncestors } = useCategoryQuery(
+        categoryStore.categoryList
+    ),
     {
         catalogList,
         catalogRequired,
@@ -48,15 +53,14 @@ const { ancestors, getParent } = useCategoryQuery(categoryStore.categoryList),
         currentImageIndex,
         generateGalleryImageList,
     } = useGallery();
-
-const renderTimes = ref(0),
-    /**
+let renderTimes = 0;
+const /**
      * content dom引用
      */
     content = ref<HTMLDivElement>(),
     contentHtml = ref(""),
     tagList = ref<PostDetailTagItemType[]>([]),
-    authorMeta = reactive<PostDetaiAuthorType>({
+    authorMeta = reactive<PostDetailAuthorType>({
         name: "",
         id: 0,
         description: "",
@@ -88,8 +92,7 @@ const renderView = function (currentPostId: number) {
                     currentCat =
                         categoryStore.getCategoryDetailById(currentCatId);
                 if (currentCat) {
-                    ancestors.value = [currentCat];
-                    getParent(currentCat);
+                    getAllAncestors(currentCat);
                     breadcrumbStore.storeBreadcrumbList(ancestors.value);
                 }
                 //PostTagList组件
@@ -110,7 +113,7 @@ const renderView = function (currentPostId: number) {
                     authorMeta.name = currentAuthor.name;
                 }
             }
-            renderTimes.value += 1;
+            renderTimes += 1;
         })
         .then(function () {
             nextTick().then(function () {
@@ -129,7 +132,7 @@ const renderView = function (currentPostId: number) {
 watch(
     () => route.params["pid"],
     (n) => {
-        if (renderTimes.value && n) {
+        if (renderTimes && n) {
             renderView(parseInt(n.toString()));
         }
     }
