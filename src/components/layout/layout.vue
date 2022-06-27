@@ -10,18 +10,11 @@ import SiteSidebar from "./sidebar/SiteSidebar.vue";
 import SiteSidebarItem from "./sidebar/SiteSidebarItem.vue";
 import HomeLanding from "./landing/HomeLanding.vue";
 import PostArchiveLanding from "./landing/PostArchiveLanding.vue";
-import {
-    SidebarItemFeature,
-    SidebarPosition,
-    LandingType,
-} from "../props";
+import { SidebarItemFeature, SidebarPosition, LandingType } from "../props";
 
-const props = withDefaults(
-    defineProps<{ landingType?: LandingType }>(),
-    {
-        landingType: LandingType.home,
-    }
-);
+const props = withDefaults(defineProps<{ landingType?: LandingType }>(), {
+    landingType: LandingType.home,
+});
 const landingComponent = computed(() => {
     switch (props.landingType) {
     case LandingType.home:
@@ -38,10 +31,15 @@ const landingComponent = computed(() => {
 <template>
     <SiteHeader />
     <KeepAlive>
-        <Component
-            :is="landingComponent"
-            :landing-type="props.landingType"
-        />
+        <Transition
+            mode="out-in"
+            name="landing-comp-switch"
+        >
+            <Component
+                :is="landingComponent"
+                :landing-type="props.landingType"
+            />
+        </Transition>
     </KeepAlive>
     <div id="primary">
         <SitePrimaryMaskTop />
@@ -91,4 +89,14 @@ const landingComponent = computed(() => {
 
 <style lang="scss">
 @import "@sty/skeleton.scss";
+</style>
+<style scoped>
+.landing-comp-switch-enter-active,
+.landing-comp-switch-leave-active {
+    transition: opacity 0.5s ease;
+}
+.landing-comp-switch-enter-from,
+.landing-comp-switch-leave-to {
+    opacity: 0;
+}
 </style>
