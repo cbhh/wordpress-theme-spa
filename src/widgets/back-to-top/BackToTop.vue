@@ -2,11 +2,14 @@
     setup
     lang="ts"
 >
-import { ref } from "vue";
+import { ref, inject, computed } from "vue";
+import { injectKeyWindowScrollValues } from "@/context/common/provide-inject";
 
-const props = withDefaults(defineProps<{ visible: boolean }>(), {
-    visible: false,
-});
+const scrollValues = inject(injectKeyWindowScrollValues);
+
+const visible = computed(
+    () => scrollValues && scrollValues.h && scrollValues.y > scrollValues.h
+);
 
 const scrollInterval = 20,
     isMouseDown = ref(false);
@@ -39,7 +42,7 @@ function move () {
         <div
             class="back-to-top"
             :class="{ mousedown: isMouseDown }"
-            v-show="props.visible"
+            v-show="visible"
             @click="move"
             @mousedown="isMouseDown = true"
             @mouseup="isMouseDown = false"

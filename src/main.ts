@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
-import "./global/windowScroll";
+//import "./global/windowScroll";
 
 const pinia = createPinia();
 const app = createApp(App);

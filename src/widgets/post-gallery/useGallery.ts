@@ -105,34 +105,29 @@ export default function () {
      * @param contentRef 内容dom的引用
      */
     const generateGalleryImageList = function (contentRef: HTMLDivElement) {
-        if (contentRef && contentRef instanceof HTMLDivElement) {
-            const els = contentRef.getElementsByTagName("img"),
-                count = els.length;
-            for (let i = 0; i < count; i++) {
-                const pImg = els.item(i) as HTMLImageElement;
-                pImg.title = "在画廊中查看";
-                pImg.dataset.imgIndex = i + "";
-                galleryImageList.value.push({
-                    imgIndex: i,
-                    imgSrc: pImg.src,
-                    imgSrcset: pImg.srcset,
-                    isCurrent: false,
-                    isCurrentPre: false,
-                    isCurrentNext: false,
-                    description: findImageDescription(pImg),
-                });
-                //img元素绑定点击事件
-                pImg.addEventListener("click", function () {
-                    if (
-                        !galleryVisible.value &&
-                        currentImageIndex.value === -1
-                    ) {
-                        const link = this.dataset.imgIndex as string;
-                        currentImageIndex.value = parseInt(link);
-                        galleryVisible.value = true;
-                    }
-                });
-            }
+        const els = contentRef.getElementsByTagName("img"),
+            count = els.length;
+        for (let i = 0; i < count; i++) {
+            const pImg = els.item(i) as HTMLImageElement;
+            pImg.title = "在画廊中查看";
+            pImg.dataset.imgIndex = i + "";
+            galleryImageList.value.push({
+                imgIndex: i,
+                imgSrc: pImg.src,
+                imgSrcset: pImg.srcset,
+                isCurrent: false,
+                isCurrentPre: false,
+                isCurrentNext: false,
+                description: findImageDescription(pImg),
+            });
+            //img元素绑定点击事件
+            pImg.addEventListener("click", function () {
+                if (!galleryVisible.value && currentImageIndex.value === -1) {
+                    const link = this.dataset.imgIndex as string;
+                    currentImageIndex.value = parseInt(link);
+                    galleryVisible.value = true;
+                }
+            });
         }
     };
     /**

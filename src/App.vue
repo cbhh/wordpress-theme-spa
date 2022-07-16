@@ -12,12 +12,11 @@ import SitePrimaryBreadcrumb from "./components/layout/primary/SitePrimaryBreadc
 import Layout from "./components/layout/layout.vue";
 import ThemeLoading from "./components/common/ThemeLoading.vue";
 import BackToTop from "./widgets/back-to-top/BackToTop.vue";
-import useBackToTop from "./widgets/back-to-top/useBackToTop";
-import windowScroll from "./global/windowScroll";
 import useRouteListener from "./composables/init/useRouteListener";
+import useWindowScroller from "./composables/init/useWindowScroller";
 import getSettings from "./composables/init/getSettings";
 import getMonthPostDates from "./composables/getMonthPostDates";
-import { injectKeySiteMeta } from "./context/common/provide-inject";
+import { injectKeySiteMeta, injectKeyWindowScrollValues } from "./context/common/provide-inject";
 
 const { useCategoryStore, useTagStore, useUserStore, useBreadcrumbStore } =
         stores,
@@ -36,12 +35,15 @@ const { loadingFlag, loadingText, loadingMaskRequired, landingType } =
         useRouteListener(route, router, resourceCount),
     { siteMeta, getSiteSettings } = getSettings(),
     { dateList, getDates } = getMonthPostDates(),
-    { backToTopVisible, switchBackToTopVisible } = useBackToTop();
+    { winScrollValues, startListener } = useWindowScroller();
 
-//注入site meta数据
+//注入site meta数据、窗口尺寸数据
 provide(injectKeySiteMeta, readonly(siteMeta));
+provide(injectKeyWindowScrollValues, readonly(winScrollValues));
 
 onMounted(() => {
+    //启动 win scroll 侦听器
+    startListener();
     //加载站点设置
     getSiteSettings().then(() => {
         loadingFlag.value += 1;
@@ -60,12 +62,6 @@ onMounted(() => {
     });
     //加载当前月份文章提供给日历数据
     getDates(current);
-    //添加切换回到顶部按钮可见性的窗口滚动事件处理器
-    windowScroll.addHandle(
-        Symbol("back-to-top-visible"),
-        null,
-        switchBackToTopVisible
-    );
 });
 </script>
 
@@ -104,7 +100,7 @@ onMounted(() => {
             />
         </template>
     </Layout>
-    <back-to-top :visible="backToTopVisible" />
+    <back-to-top />
 </template>
 
 <style lang="scss">

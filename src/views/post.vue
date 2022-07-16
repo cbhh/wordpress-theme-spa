@@ -18,7 +18,6 @@ import {
     PostDetailTagItemType,
     PostDetailAuthorType,
 } from "@/components/props";
-import windowScroll from "@/global/windowScroll";
 import getPostDetail from "@/apis/getPostDetail";
 
 const route = useRoute(),
@@ -44,7 +43,6 @@ const { ancestors, getAllAncestors } = useCategoryQuery(
         catalogVisible,
         generateCatalogList,
         setClickedCatalogItemStyle,
-        switchCurrentCatalogItem,
     } = useCatalog(),
     {
         galleryImageList,
@@ -54,11 +52,10 @@ const { ancestors, getAllAncestors } = useCategoryQuery(
         generateGalleryImageList,
     } = useGallery();
 let renderTimes = 0;
-const catalogScroller = Symbol("catalog-move"),
-    /**
-     * content dom引用
-     */
-    content = ref<HTMLDivElement>(),
+/**
+ * content dom引用
+ */
+const content = ref<HTMLDivElement>(),
     contentHtml = ref(""),
     tagList = ref<PostDetailTagItemType[]>([]),
     authorMeta = reactive<PostDetailAuthorType>({
@@ -73,7 +70,7 @@ const catalogScroller = Symbol("catalog-move"),
  * 提供数据渲染视图
  * @param currentPostId
  */
-const renderView = function (currentPostId: number) {
+function renderView (currentPostId: number) {
     loadingMaskRequired.value = true;
     dataLoadingText.value = "正在加载文章数据";
     getPostDetail(currentPostId)
@@ -128,7 +125,7 @@ const renderView = function (currentPostId: number) {
                 setTimeout(() => (loadingMaskRequired.value = false), 500);
             });
         });
-};
+}
 //监听路由变化，加载不同文章
 watch(
     () => route.params["pid"],
@@ -142,11 +139,11 @@ watch(
 onMounted(() => {
     renderView(parseInt(route.params["pid"].toString()));
     //添加更新目录的窗口滚动事件处理器
-    windowScroll.addHandle(catalogScroller, null, switchCurrentCatalogItem);
+    //windowScroll.addHandle(catalogScroller, null, switchCurrentCatalogItem);
 });
 onUnmounted(() => {
     //移除更新目录的窗口滚动事件处理器
-    windowScroll.deleteHandle(catalogScroller);
+    //windowScroll.deleteHandle(catalogScroller);
     breadcrumbStore.storeBreadcrumbList([]);
 });
 </script>
