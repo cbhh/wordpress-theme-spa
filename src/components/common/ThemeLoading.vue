@@ -1,6 +1,9 @@
-<script setup lang="ts">
+<script
+    setup
+    lang="ts"
+>
 import { inject } from "vue";
-import { SiteMeta } from "@/context/common/provide-inject";
+import { injectKeySiteMeta } from "@/context/common/provide-inject";
 
 interface T {
     loadingText: string;
@@ -12,7 +15,7 @@ const props = withDefaults(defineProps<T>(), {
     logoRequired: true,
 });
 
-const siteMeta = inject("site-meta") as SiteMeta;
+const siteMeta = inject(injectKeySiteMeta);
 </script>
 
 <template>
@@ -23,7 +26,7 @@ const siteMeta = inject("site-meta") as SiteMeta;
         <div class="loading-info">
             <img
                 class="site-logo"
-                v-if="props.logoRequired && siteMeta.logo"
+                v-if="props.logoRequired && siteMeta && siteMeta.logo"
                 :src="siteMeta.logo"
             >
             <p class="loading-tip">
@@ -33,7 +36,10 @@ const siteMeta = inject("site-meta") as SiteMeta;
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style
+    lang="scss"
+    scoped
+>
 .theme-loading {
     display: flex;
     align-items: center;

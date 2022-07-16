@@ -4,23 +4,23 @@
 >
 import { inject } from "vue";
 import { RouterLink } from "vue-router";
-import { SiteMeta } from "@/context/common/provide-inject";
+import { injectKeySiteMeta } from "@/context/common/provide-inject";
 
-const siteMeta = inject("site-meta") as SiteMeta;
+const siteMeta = inject(injectKeySiteMeta);
 </script>
 
 <template>
     <div class="site-branding">
         <div class="site-logo">
             <img
-                v-if="siteMeta.logo"
-                :src="siteMeta.logo"
+                v-if="siteMeta && siteMeta.logo"
+                :src="siteMeta && siteMeta.logo"
             >
         </div>
         <div class="site-title">
             <h1>
                 <RouterLink :to="{ name: 'home' }">
-                    {{ siteMeta.title }}
+                    {{ siteMeta && siteMeta.title }}
                 </RouterLink>
             </h1>
         </div>

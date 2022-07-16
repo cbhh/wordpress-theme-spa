@@ -3,16 +3,16 @@
     lang="ts"
 >
 import { inject } from "vue";
-import { SiteMeta } from "@/context/common/provide-inject";
+import { injectKeySiteMeta } from "@/context/common/provide-inject";
 
-const siteMeta = inject("site-meta") as SiteMeta;
+const siteMeta = inject(injectKeySiteMeta);
 </script>
 
 <template>
     <div class="home-landing">
         <div class="landing-content">
             <div class="site-title">
-                {{ siteMeta.title }}
+                {{ siteMeta && siteMeta.title }}
             </div>
             <div class="middle-separate-line">
                 <div />
@@ -20,7 +20,7 @@ const siteMeta = inject("site-meta") as SiteMeta;
                 <div />
             </div>
             <div class="site-tagline">
-                {{ siteMeta.description }}
+                {{ siteMeta && siteMeta.description }}
             </div>
         </div>
     </div>

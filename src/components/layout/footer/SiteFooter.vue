@@ -4,9 +4,9 @@
 >
 import { inject } from "vue";
 import { footer } from "@wpAppConfig";
-import { SiteMeta } from "@/context/common/provide-inject";
+import { injectKeySiteMeta } from "@/context/common/provide-inject";
 
-const siteMeta = inject("site-meta") as SiteMeta;
+const siteMeta = inject(injectKeySiteMeta);
 
 const footerContent = footer.needFiling
     ? `<a href="https://beian.miit.gov.cn/" target="_blank">${footer.footerContent}</a>`
@@ -17,7 +17,7 @@ const footerContent = footer.needFiling
     <footer class="site-footer">
         <div class="footer-wrap">
             <div class="copyright">
-                <span>&copy;</span><span>{{ new Date().getFullYear() }}</span><span>{{ siteMeta.title }}</span>
+                <span>&copy;</span><span>{{ new Date().getFullYear() }}</span><span>{{ siteMeta && siteMeta.title }}</span>
             </div>
             <div class="acknowledgements">
                 <div class="ack-framework">

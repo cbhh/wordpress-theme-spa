@@ -17,6 +17,7 @@ import windowScroll from "./global/windowScroll";
 import useRouteListener from "./composables/init/useRouteListener";
 import getSettings from "./composables/init/getSettings";
 import getMonthPostDates from "./composables/getMonthPostDates";
+import { injectKeySiteMeta } from "./context/common/provide-inject";
 
 const { useCategoryStore, useTagStore, useUserStore, useBreadcrumbStore } =
         stores,
@@ -38,7 +39,7 @@ const { loadingFlag, loadingText, loadingMaskRequired, landingType } =
     { backToTopVisible, switchBackToTopVisible } = useBackToTop();
 
 //注入site meta数据
-provide("site-meta", readonly(siteMeta));
+provide(injectKeySiteMeta, readonly(siteMeta));
 
 onMounted(() => {
     //加载站点设置
