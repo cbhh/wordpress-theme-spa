@@ -7,6 +7,8 @@ import TagStateTypes, {
 } from "./i";
 import { styleRuntime } from "@wpAppConfig";
 
+let attemptTimes = 0;
+
 export default defineStore("tag", {
     state: (): TagStateTypes => ({
         tagList: [],
@@ -125,6 +127,44 @@ export default defineStore("tag", {
             const res = await getTagList();
             if (res) {
                 this.storeTagList(res.result);
+            }
+        },
+        /**
+         * 根据id获取tag详情，本地获取不到时从服务器重新获取完整tag列表，最多支持2次重试次数
+         * @param id
+         */
+        async getTagDetailByIdAsync (id: number) {
+            if (attemptTimes < 2) {
+                const currentResult = this.getTagDetailById(id);
+                if (!currentResult) {
+                    await this.getTagList();
+                    attemptTimes += 1;
+                    await this.getTagDetailByIdAsync(id);
+                } else {
+                    attemptTimes = 0;
+                    return currentResult;
+                }
+            } else {
+                console.error("max attempt times exceed");
+            }
+        },
+        /**
+         * 根据slug获取tag详情，本地获取不到时从服务器重新获取完整tag列表，最多支持2次重试次数
+         * @param slug
+         */
+        async getTagDetailBySlugAsync (slug: string) {
+            if (attemptTimes < 2) {
+                const currentResult = this.getTagDetailBySlug(slug);
+                if (!currentResult) {
+                    await this.getTagList();
+                    attemptTimes += 1;
+                    await this.getTagDetailBySlugAsync(slug);
+                } else {
+                    attemptTimes = 0;
+                    return currentResult;
+                }
+            } else {
+                console.error("get tag: max attempt times exceed");
             }
         },
     },

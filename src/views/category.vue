@@ -22,8 +22,10 @@ const { ancestors, descendants, getAllAncestors, getAllDescendants } =
 
 let renderTimes = 0;
 
-const renderView = function (currentCatSlug: string) {
-    const currentCat = categoryStore.getCategoryDetailBySlug(currentCatSlug);
+async function renderView (currentCatSlug: string) {
+    const currentCat = await categoryStore.getCategoryDetailBySlugAsync(
+        currentCatSlug
+    );
     if (currentCat) {
         const currentCatId = currentCat.id;
         //landing组件
@@ -43,7 +45,7 @@ const renderView = function (currentCatSlug: string) {
         });
         renderTimes += 1;
     }
-};
+}
 
 watch(
     () => route.params["cat"],

@@ -18,8 +18,8 @@ const { postList, generateList } = usePostListGenerator();
 
 let renderTimes = 0;
 
-const renderView = function (currentTagSlug: string) {
-    const currentTag = tagStore.getTagDetailBySlug(currentTagSlug);
+async function renderView (currentTagSlug: string) {
+    const currentTag = await tagStore.getTagDetailBySlugAsync(currentTagSlug);
     if (currentTag) {
         const currentTagId = currentTag.id;
         //landing组件
@@ -34,7 +34,7 @@ const renderView = function (currentTagSlug: string) {
         });
         renderTimes += 1;
     }
-};
+}
 
 watch(
     () => route.params["tag"],

@@ -1,6 +1,9 @@
 import { defineStore } from "pinia";
 import getUserList from "@/apis/getUserList";
 import UserStateTypes, { User } from "./i";
+
+let attemptTimes = 0;
+
 /**
  * Category存储
  */
@@ -26,6 +29,25 @@ export default defineStore("user", {
             const res = await getUserList();
             if (res) {
                 this.userList = res.result;
+            }
+        },
+        /**
+         * 根据id获取user详情，本地获取不到时从服务器重新获取完整user列表，最多支持2次重试次数
+         * @param id
+         */
+        async getUserDetailByIdAsync (id: number) {
+            if (attemptTimes < 2) {
+                const currentResult = this.getUserDetailById(id);
+                if (!currentResult) {
+                    await this.getUserlist();
+                    attemptTimes += 1;
+                    await this.getUserDetailByIdAsync(id);
+                } else {
+                    attemptTimes = 0;
+                    return currentResult;
+                }
+            } else {
+                console.error("get user: max attempt times exceed");
             }
         },
     },

@@ -18,8 +18,8 @@ const { postList, generateList } = usePostListGenerator();
 
 let renderTimes = 0;
 
-const renderView = function (currentUserId: number) {
-    const currentUser = userStore.getUserDetailById(currentUserId);
+async function renderView (currentUserId: number) {
+    const currentUser = await userStore.getUserDetailByIdAsync(currentUserId);
     if (currentUser) {
         //landing组件
         pageMetaStore.storeBreadcrumbList({
@@ -33,7 +33,7 @@ const renderView = function (currentUserId: number) {
         });
         renderTimes += 1;
     }
-};
+}
 
 watch(
     () => route.params["uid"],
