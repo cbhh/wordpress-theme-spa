@@ -4,7 +4,7 @@ import { TagListResponse } from "@/context/tag-list/tagListResponse";
 
 const baseEndpoint = `tags${
     api.backendPrettyUrlEnabled ? "?" : "&"
-}_fields=id,count,name,slug&hide_empty=${styleRuntime.hideEmptyTag}`;
+}_fields=id,count,name&hide_empty=${styleRuntime.hideEmptyTag}`;
 
 /**
  * 获取tag列表

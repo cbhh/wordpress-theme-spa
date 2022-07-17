@@ -5,7 +5,6 @@ interface T {
     id: number;
     count: number;
     name: string;
-    slug: string;
     children?: T[];
 }
 
@@ -13,14 +12,13 @@ const props = withDefaults(defineProps<T>(), {
     id: 0,
     count: 0,
     name: "",
-    slug: "",
     children: () => [],
 });
 </script>
 
 <template>
     <li class="cat-item">
-        <RouterLink :to="{ name: 'category', params: { cat: props.slug } }">
+        <RouterLink :to="{ name: 'category', params: { cid: props.id } }">
             {{ props.name }}
         </RouterLink>
         ({{ props.count }})
@@ -31,7 +29,6 @@ const props = withDefaults(defineProps<T>(), {
             <CategoryItem
                 v-for="subItem in props.children"
                 :key="subItem.id"
-                :slug="subItem.slug"
                 :count="subItem.count"
                 :id="subItem.id"
                 :name="subItem.name"

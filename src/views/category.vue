@@ -22,10 +22,8 @@ const { ancestors, descendants, getAllAncestors, getAllDescendants } =
 
 let renderTimes = 0;
 
-async function renderView (currentCatSlug: string) {
-    const currentCat = await categoryStore.getCategoryDetailBySlugAsync(
-        currentCatSlug
-    );
+function renderView (currentCatId: number) {
+    const currentCat = categoryStore.getCategoryDetailById(currentCatId);
     if (currentCat) {
         const currentCatId = currentCat.id;
         //landing组件
@@ -43,20 +41,24 @@ async function renderView (currentCatSlug: string) {
                 generateList(data.result);
             }
         });
-        renderTimes += 1;
+    } else {
+        pageMetaStore.storeBreadcrumbList({
+            title: "该分类已被移除",
+        });
     }
+    renderTimes += 1;
 }
 
 watch(
-    () => route.params["cat"],
+    () => route.params["cid"],
     (n) => {
         if (renderTimes && n) {
-            renderView(n.toString());
+            renderView(parseInt(n.toString()));
         }
     }
 );
 
-onMounted(() => renderView(route.params["cat"].toString()));
+onMounted(() => renderView(parseInt(route.params["cid"].toString())));
 onUnmounted(() => breadcrumbStore.storeBreadcrumbList([]));
 </script>
 

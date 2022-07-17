@@ -14,7 +14,6 @@ const props = withDefaults(defineProps<T>(), {
     <CategoryItem
         v-for="item in props.list"
         :key="item.id"
-        :slug="item.slug"
         :count="item.count"
         :id="item.id"
         :name="item.name"

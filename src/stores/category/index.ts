@@ -16,16 +16,6 @@ export default defineStore("category", {
     //https://pinia.vuejs.org/core-concepts/getters.html#passing-arguments-to-getters
     getters: {
         /**
-         * 根据slug获取category详情
-         * @param state
-         */
-        getCategoryDetailBySlug: (
-            state
-        ): ((slug: string) => OriginCategoryListItem | undefined) => {
-            return (categorySlug: string) =>
-                state.categoryList.find((item) => item.slug === categorySlug);
-        },
-        /**
          * 根据id获取category详情
          * @param state
          */
@@ -61,7 +51,6 @@ export default defineStore("category", {
                         id: item.id,
                         count: item.count,
                         name: item.name,
-                        slug: item.slug,
                         children: [] as CategoryTree[],
                     },
                     /**
@@ -94,7 +83,6 @@ export default defineStore("category", {
                         id: pid,
                         count: rootNode.count,
                         name: rootNode.name,
-                        slug: rootNode.slug,
                         children: [] as CategoryTree[],
                     };
                     firstLvChildren.forEach(function (child) {
@@ -102,7 +90,6 @@ export default defineStore("category", {
                             id: child.id,
                             count: child.count,
                             name: child.name,
-                            slug: child.slug,
                             children: [],
                         });
                     });
@@ -177,25 +164,6 @@ export default defineStore("category", {
                 }
             } else {
                 console.error("max attempt times exceed");
-            }
-        },
-        /**
-         * 根据slug获取category详情，本地获取不到时从服务器重新获取完整category列表，最多支持2次重试次数
-         * @param slug
-         */
-        async getCategoryDetailBySlugAsync (slug: string) {
-            if (attemptTimes < 2) {
-                const currentResult = this.getCategoryDetailBySlug(slug);
-                if (!currentResult) {
-                    await this.getCategorylist();
-                    attemptTimes += 1;
-                    await this.getCategoryDetailBySlugAsync(slug);
-                } else {
-                    attemptTimes = 0;
-                    return currentResult;
-                }
-            } else {
-                console.error("get category: max attempt times exceed");
             }
         },
     },

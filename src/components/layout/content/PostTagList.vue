@@ -20,7 +20,7 @@ const tagListLength = computed(() => (props.list ? props.list.length : 0));
             <PostTagListItem
                 v-for="(item, index) in props.list"
                 :key="item.id"
-                :slug="item.slug"
+                :id="item.id"
                 :name="item.name"
                 :divider="index !== tagListLength - 1"
             />

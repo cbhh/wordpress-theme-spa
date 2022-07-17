@@ -8,10 +8,6 @@ export interface PostListItemCategoryItemType {
      */
     id: number;
     /**
-     * 别名
-     */
-    slug: string;
-    /**
      * 名称
      */
     name: string;
@@ -24,10 +20,6 @@ export interface PostListItemTagItemType {
      * tag id
      */
     id: number;
-    /**
-     * 别名
-     */
-    slug: string;
     /**
      * 名称
      */
@@ -46,7 +38,7 @@ export interface PostAuthorType {
     description: string;
 }
 /**
- * 文章列表项
+ * （提供给组件使用的）文章列表项
  */
 export interface PostListItemType {
     /**
@@ -83,7 +75,6 @@ export interface PostListItemType {
  */
 export interface PostDetailTagItemType {
     id: number;
-    slug: string;
     name: string;
     /**
      * 是否启用分隔符
@@ -107,10 +98,6 @@ export interface BreadcrumbItemType {
      * category id
      */
     id: number;
-    /**
-     * 别名
-     */
-    slug: string;
     /**
      * 名称
      */

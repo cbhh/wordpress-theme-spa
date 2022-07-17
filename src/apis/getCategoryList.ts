@@ -4,7 +4,7 @@ import { CategoryListResponse } from "@/context/category-list/categoryListRespon
 
 const baseEndpoint = `categories${
     api.backendPrettyUrlEnabled ? "?" : "&"
-}_fields=id,count,name,slug,parent&per_page=100&hide_empty=${
+}_fields=id,count,name,parent&per_page=100&hide_empty=${
     styleRuntime.hideEmptyCategory
 }`;
 

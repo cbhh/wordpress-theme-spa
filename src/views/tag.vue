@@ -18,10 +18,9 @@ const { postList, generateList } = usePostListGenerator();
 
 let renderTimes = 0;
 
-async function renderView (currentTagSlug: string) {
-    const currentTag = await tagStore.getTagDetailBySlugAsync(currentTagSlug);
+function renderView (currentTagId: number) {
+    const currentTag = tagStore.getTagDetailById(currentTagId);
     if (currentTag) {
-        const currentTagId = currentTag.id;
         //landing组件
         pageMetaStore.storeBreadcrumbList({
             title: "标签：" + currentTag.name,
@@ -32,21 +31,25 @@ async function renderView (currentTagSlug: string) {
                 generateList(data.result);
             }
         });
-        renderTimes += 1;
+    } else {
+        pageMetaStore.storeBreadcrumbList({
+            title:  "该标签已被移除",
+        });
     }
+    renderTimes += 1;
 }
 
 watch(
-    () => route.params["tag"],
+    () => route.params["tid"],
     (n) => {
         if (renderTimes && n) {
-            renderView(n.toString());
+            renderView(parseInt(n.toString()));
         }
     }
 );
 
 onMounted(() => {
-    renderView(route.params["tag"].toString());
+    renderView(parseInt(route.params["tid"].toString()));
 });
 </script>
 

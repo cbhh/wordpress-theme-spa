@@ -7,10 +7,6 @@ interface T {
      */
     id: number;
     /**
-     * 别名
-     */
-    slug: string;
-    /**
      * 名称
      */
     name: string;
@@ -18,7 +14,6 @@ interface T {
 
 const props = withDefaults(defineProps<T>(), {
     name: "",
-    slug: "",
     id: 0,
 });
 </script>
@@ -28,7 +23,7 @@ const props = withDefaults(defineProps<T>(), {
         <i class="fa fa-angle-right" />
     </span>
     <RouterLink
-        :to="{ name: 'category', params: { cat: props.slug } }"
+        :to="{ name: 'category', params: { cid: props.id } }"
         class="breadcrumb-category"
     >
         {{ props.name }}

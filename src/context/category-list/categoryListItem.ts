@@ -16,10 +16,6 @@ export default interface CategoryListItem {
      */
     name: string;
     /**
-     * 别名
-     */
-    slug: string;
-    /**
      * 父级分类ID
      */
     parent: number;

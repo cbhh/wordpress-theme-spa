@@ -98,7 +98,6 @@ function renderView (currentPostId: number) {
                     const tagMeta = tagStore.getTagDetailById(t);
                     return {
                         id: t,
-                        slug: (tagMeta && tagMeta.slug) || "",
                         name: (tagMeta && tagMeta.name) || "",
                     };
                 });

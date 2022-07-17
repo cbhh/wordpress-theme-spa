@@ -2,7 +2,7 @@
 import { RouterLink } from "vue-router";
 
 interface T {
-    slug: string;
+    id: number;
     name: string;
     /**
      * 是否启用分隔符
@@ -12,14 +12,14 @@ interface T {
 
 const props = withDefaults(defineProps<T>(), {
     name: "",
-    slug: "",
+    id: 0,
     divider: true,
 });
 </script>
 
 <template>
     <li class="post-tag-item">
-        <RouterLink :to="{ name: 'tag', params: { tag: props.slug } }">
+        <RouterLink :to="{ name: 'tag', params: { tid: props.id } }">
             {{ props.name }}
         </RouterLink>
         <span v-if="props.divider">/</span>

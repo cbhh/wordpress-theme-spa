@@ -15,8 +15,4 @@ export default interface TagListItem {
      * 名称
      */
     name: string;
-    /**
-     * 别名
-     */
-    slug: string;
 }

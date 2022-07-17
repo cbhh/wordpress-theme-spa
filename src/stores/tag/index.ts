@@ -15,16 +15,6 @@ export default defineStore("tag", {
     }),
     getters: {
         /**
-         * 根据slug获取tag详情
-         * @param state
-         */
-        getTagDetailBySlug: (
-            state
-        ): ((slug: string) => OriginTagListItem | undefined) => {
-            return (tagSlug: string) =>
-                state.tagList.find((item) => item.slug === tagSlug);
-        },
-        /**
          * 根据id获取tag详情
          * @param state
          */
@@ -59,7 +49,6 @@ export default defineStore("tag", {
                         id: t.id,
                         count: t.count,
                         name: t.name,
-                        slug: t.slug,
                         map: index,
                     });
                     allCountList.add(t.count);
@@ -146,25 +135,6 @@ export default defineStore("tag", {
                 }
             } else {
                 console.error("max attempt times exceed");
-            }
-        },
-        /**
-         * 根据slug获取tag详情，本地获取不到时从服务器重新获取完整tag列表，最多支持2次重试次数
-         * @param slug
-         */
-        async getTagDetailBySlugAsync (slug: string) {
-            if (attemptTimes < 2) {
-                const currentResult = this.getTagDetailBySlug(slug);
-                if (!currentResult) {
-                    await this.getTagList();
-                    attemptTimes += 1;
-                    await this.getTagDetailBySlugAsync(slug);
-                } else {
-                    attemptTimes = 0;
-                    return currentResult;
-                }
-            } else {
-                console.error("get tag: max attempt times exceed");
             }
         },
     },

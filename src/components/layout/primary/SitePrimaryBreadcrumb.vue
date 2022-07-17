@@ -24,7 +24,6 @@ const props = withDefaults(defineProps<BreadcrumbListType>(), {
             <SitePrimaryBreadcrumbItem
                 v-for="item in props.list"
                 :key="item.id"
-                :slug="item.slug"
                 :id="item.id"
                 :name="item.name"
             />

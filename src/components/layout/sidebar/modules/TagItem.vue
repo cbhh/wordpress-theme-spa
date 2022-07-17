@@ -2,14 +2,12 @@
 import { RouterLink } from "vue-router";
 
 interface T {
-    slug: string;
     count: number;
     name: string;
     id: number;
     size?: number;
 }
 const props = withDefaults(defineProps<T>(), {
-    slug: "",
     count: 0,
     name: "",
     id: 0,
@@ -20,7 +18,7 @@ const props = withDefaults(defineProps<T>(), {
 <template>
     <RouterLink
         class="tag-cloud-link"
-        :to="{ name: 'tag', params: { tag: props.slug } }"
+        :to="{ name: 'tag', params: { tid: props.id } }"
         :style="{ 'font-size': props.size ? props.size + 'rem' : 'unset' }"
     >
         {{ props.name }}

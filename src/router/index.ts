@@ -6,12 +6,12 @@ import authorVue from "../views/author.vue";
 
 const routes: RouteRecordRaw[] = [
     {
-        path: "/category/:cat",
+        path: "/category/:cid",
         name: "category",
         component: categoryVue,
     },
     {
-        path: "/tag/:tag",
+        path: "/tag/:tid",
         name: "tag",
         component: tagVue,
     },

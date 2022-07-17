@@ -71,7 +71,7 @@ const props = withDefaults(defineProps<T>(), {
                                     <RouterLink
                                         :to="{
                                             name: 'category',
-                                            params: { cat: cat.slug },
+                                            params: { cid: cat.id },
                                         }"
                                     >
                                         {{ cat.name }}
@@ -89,7 +89,7 @@ const props = withDefaults(defineProps<T>(), {
                                     <RouterLink
                                         :to="{
                                             name: 'tag',
-                                            params: { tag: t.slug },
+                                            params: { tid: t.id },
                                         }"
                                     >
                                         {{ t.name }}

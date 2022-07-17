@@ -29,7 +29,6 @@ export default function () {
                 const catMeta = await categoryStore.getCategoryDetailByIdAsync(c);
                 return {
                     id: c,
-                    slug: (catMeta && catMeta.slug) || "",
                     name: (catMeta && catMeta.name) || "",
                 };
             }),
@@ -37,7 +36,6 @@ export default function () {
                 const tagMeta = await tagStore.getTagDetailByIdAsync(t);
                 return {
                     id: t,
-                    slug: (tagMeta && tagMeta.slug) || "",
                     name: (tagMeta && tagMeta.name) || "",
                 };
             });

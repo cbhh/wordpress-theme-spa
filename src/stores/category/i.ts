@@ -17,7 +17,6 @@ export interface CategoryTree {
     id: number;
     count: number;
     name: string;
-    slug: string;
     children: CategoryTree[];
 }
 /**
