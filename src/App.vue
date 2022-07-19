@@ -17,6 +17,7 @@ import useWindowScroller from "./composables/init/useWindowScroller";
 import getSettings from "./composables/init/getSettings";
 import getMonthPostDates from "./composables/getMonthPostDates";
 import { injectKeySiteMeta, injectKeyWindowScrollValues } from "./context/common/provide-inject";
+import printVersion from "./utils/printVersion";
 
 const { useCategoryStore, useTagStore, useUserStore, useBreadcrumbStore } =
         stores,
@@ -40,6 +41,9 @@ const { loadingFlag, loadingText, loadingMaskRequired, landingType } =
 //注入site meta数据、窗口尺寸数据
 provide(injectKeySiteMeta, readonly(siteMeta));
 provide(injectKeyWindowScrollValues, readonly(winScrollValues));
+
+//打印版本号到控制台
+printVersion();
 
 onMounted(() => {
     //启动 win scroll 侦听器

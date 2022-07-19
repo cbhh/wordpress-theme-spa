@@ -1,6 +1,7 @@
 import { site, seo, stylePre } from "./app.config.json";
 import { dependencies } from "./package.json";
 
+const isPro = process.env.NODE_ENV === "production";
 const cdnPrefix = "https://cdn.staticfile.org/";
 
 function getPackageVersion (npmVerStr: string) {
@@ -10,14 +11,10 @@ function getPackageVersion (npmVerStr: string) {
 }
 
 /**
- * 站点标题
- */
-export const siteTitle = seo.title;
-/**
  * 生成站点元信息
  * @returns meta标签字符串
  */
-export function generateSiteMeta () {
+function generateSiteMeta () {
     const metaArray: string[] = [],
         sev = seo.searchEngineValidate;
     if (seo.description) {
@@ -47,7 +44,7 @@ export function generateSiteMeta () {
  * 生成站点link标签
  * @returns link标签字符串
  */
-export function generateSiteLink () {
+function generateSiteLink () {
     const linkArray = [];
     if (site.icon) {
         linkArray.push(
@@ -57,7 +54,7 @@ export function generateSiteLink () {
         );
     }
     //加载icon样式表
-    if (process.env.NODE_ENV === "production") {
+    if (isPro) {
         linkArray.push(
             `<link rel='stylesheet' id='fontawesome-css' href='${cdnPrefix}font-awesome/4.7.0/css/font-awesome.min.css' type='text/css' media='all'>`
         );
@@ -78,8 +75,8 @@ export function generateSiteLink () {
  * 使用cdn加载依赖包
  * @returns script标签字符串
  */
-export function loadExternalDependencies () {
-    if (process.env.NODE_ENV === "production") {
+function loadExternalDependencies () {
+    if (isPro) {
         const prefix = `<script src='${cdnPrefix}`,
             suffix = ".min.js'></script>";
         return [
@@ -102,7 +99,7 @@ export function loadExternalDependencies () {
  * 生成背景图CSS
  * @returns style标签字符串
  */
-export function generateBackgroundCss () {
+function generateBackgroundCss () {
     const settings = stylePre.background,
         isXPosValid = ["left", "center", "right"].includes(
             settings.position.horizontal
@@ -130,11 +127,11 @@ export function generateBackgroundCss () {
     }
 }
 /**
- * 加载更多脚本
+ * 加载站点分析脚本
  * @returns script标签字符串
  */
-export function loadMoreScripts () {
-    if (process.env.NODE_ENV === "production") {
+function loadAnalyticScripts () {
+    if (isPro) {
         const analytics = seo.siteAnalytics as Record<string, string>,
             array: string[] = [];
         for (const a in analytics) {
@@ -145,3 +142,12 @@ export function loadMoreScripts () {
         return "";
     }
 }
+
+export default {
+    title: seo.title,
+    injectMeta: generateSiteMeta(),
+    injectLink: generateSiteLink(),
+    injectStyle: generateBackgroundCss(),
+    injectScript: loadExternalDependencies(),
+    injectMoreScripts: loadAnalyticScripts(),
+};

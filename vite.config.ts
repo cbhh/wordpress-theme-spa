@@ -3,16 +3,7 @@ import vue from "@vitejs/plugin-vue";
 import { viteExternalsPlugin } from "vite-plugin-externals";
 import { createHtmlPlugin } from "vite-plugin-html";
 import { resolve } from "path";
-import {
-    siteTitle,
-    generateSiteMeta,
-    generateSiteLink,
-    generateBackgroundCss,
-    loadExternalDependencies,
-    loadMoreScripts,
-} from "./generateHead";
-
-const APP_VERSION = ["dev-0.3.5", "20220628"];
+import blocks from "./generateHead";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -21,15 +12,7 @@ export default defineConfig({
         createHtmlPlugin({
             minify: true,
             inject: {
-                data: {
-                    appVersionMeta: `<meta name="app-version" content=version:${APP_VERSION[0]},build:${APP_VERSION[1]}>`,
-                    title: siteTitle,
-                    injectMeta: generateSiteMeta(),
-                    injectLink: generateSiteLink(),
-                    injectStyle: generateBackgroundCss(),
-                    injectScript: loadExternalDependencies(),
-                    injectMoreScripts: loadMoreScripts(),
-                },
+                data: blocks,
             },
         }),
         viteExternalsPlugin(

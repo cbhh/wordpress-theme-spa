@@ -6,7 +6,6 @@
             name="viewport"
             content="width=device-width, initial-scale=1.0"
         />
-        <%- appVersionMeta %>
         <title><%- title %></title>
         <!-- browser platform check start -->
         <script>!function(a){const n=navigator.oscpu,i=navigator.platform,o=navigator.userAgentData&&navigator.userAgentData.platform;n&&n.includes("Windows")||i&&i.includes("Win32")||o&&o.includes("Windows")?a.add("platform-win"):(n&&n.includes("Mac OS")||i&&i.includes("MacIntel")||o&&o.includes("macOS"))&&a.add("platform-macos"),"Apple Computer, Inc."===navigator.vendor&&a.add("browser-safari"),window.devicePixelRatio<1.5&&a.add("pixel-ratio-low")}(document.documentElement.classList);</script>
@@ -20,9 +19,6 @@
             type="module"
             src="/src/main.ts"
         ></script>
-        <!-- log version info start -->
-        <script>!function(){const o=Array.prototype.slice.apply(document.head.getElementsByTagName("meta")).find((o=>"app-version"===o.name));console.log(`%c梦回长安 WordPress SPA 主题%c${o&&o.content}`,"display:inline-block;color:#96655c;background:#f7f1e5;padding:1px 3px;border-top-left-radius:3px;border-bottom-left-radius:3px","display:inline-block;color:#f7f1e5;background:#96655c;padding:1px 3px;border-top-right-radius:3px;border-bottom-right-radius:3px")}();</script>
-        <!-- log version info end -->
         <%- injectMoreScripts %>
     </body>
 </html>
