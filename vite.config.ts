@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { viteExternalsPlugin } from "vite-plugin-externals";
 import { createHtmlPlugin } from "vite-plugin-html";
+import prismjs from "vite-plugin-prismjs";
 import { resolve } from "path";
 import blocks from "./generateHead";
 
@@ -20,11 +21,22 @@ export default defineConfig({
                 vue: "Vue",
                 pinia: "Pinia",
                 "vue-router": "VueRouter",
+                prismjs: "Prism"
             },
             {
                 disableInServe: true,
             }
         ),
+        prismjs({
+            languages: ["javascript", "css", "markup", "typescript"],
+            plugins: [
+                "line-numbers",
+                "autoloader",
+                "show-language",
+                "copy-to-clipboard",
+            ],
+            css: true,
+        }),
     ],
     build: {
         rollupOptions: {

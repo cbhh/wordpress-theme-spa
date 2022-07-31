@@ -21,6 +21,12 @@
             "size": "cover",
             "repeat": false,
             "scroll": false
+        },
+        "codeHighlight": {
+            "theme": "default",
+            "showLineNumber": true,
+            "showLanguage": true,
+            "showCopyButton": true
         }
     },
     "styleRuntime": {

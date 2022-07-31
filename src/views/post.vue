@@ -19,6 +19,7 @@ import {
     PostDetailAuthorType,
 } from "@/components/props";
 import getPostDetail from "@/apis/getPostDetail";
+import Prism from "prismjs";
 
 const route = useRoute(),
     {
@@ -119,6 +120,8 @@ function renderView (currentPostId: number) {
                     generateCatalogList(content.value);
                     //生成文章图片画廊
                     generateGalleryImageList(content.value);
+                    //高亮语法
+                    Prism.highlightAllUnder(content.value);
                 }
                 dataLoadingText.value = "文章数据加载成功";
                 setTimeout(() => (loadingMaskRequired.value = false), 500);
