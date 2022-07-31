@@ -36,8 +36,10 @@
 ---
 
 - **`stylePre` 预处理样式，将添加进 index.html 文件中**
+
   - `gutenbergEditorStylesheet` 古腾堡编辑器（区块编辑器）样式表文件 URL，格式为：`http(s)://wordpress网站地址/wp-includes/css/dist/block-library/style.min.css`。如果若在 wordpress 后台写文章时采用的是旧版富文本编辑器，则将该项置为空字符串。
   - `background` 背景图片设置
+
     - `image` 图片地址
     - `position` 图片位置
       - `horizontal` 图片在水平方向的位置，可选值：left，center，right。
@@ -45,6 +47,13 @@
     - `size` 图片尺寸，可选值：unset（原始）、contain（适合屏幕）、cover（填满屏幕）。
     - `repeat` 布尔值。重复背景图片，重复填写 true，否则 false。
     - `scroll` 布尔值。图片随页面滚动，滚动填写 true，否则 false。
+
+  - `codeHighlight`: 代码语法高亮（prism.js）设置
+
+    - `theme` 默认值："default"，即默认主题，使用Prism官方主题时只需填写主题名称，使用其它主题时需提供一个css文件URL。
+    - `showLineNumber` 布尔值。是否显示行数。
+    - `showLanguage` 布尔值。是否显示语言名称。
+    - `showCopyButton` 布尔值。是否显示拷贝代码按钮。
 
 ---
 
@@ -121,7 +130,11 @@ pinia 重构完成。
 
 ### dev-0.31(2022-07-19)
 
-1. 用transition组件升级了过渡效果
-2. tag和category页面采用ID参数取代了之前的slug
-3. 使用json站点配置文件取代了之前的js配置文件
+1. 用 transition 组件升级了过渡效果
+2. tag 和 category 页面采用 ID 参数取代了之前的 slug
+3. 使用 json 站点配置文件取代了之前的 js 配置文件
 4. 其它一些改进
+
+### dev-0.31.2(2022-08-01)
+
+该版本带来了代码语法高亮功能，由 prism.js 提供支持
